@@ -5,7 +5,7 @@ Um projeto sobre restaurante
 
 * Gabriel da Silveira
 * Gustavo Rodrigo
-* GabriellY de Fatima
+* Gabrielly de Fatima
 * Arthur Miranda
 * Lucas Cerqueira
 * Pedro Pope
