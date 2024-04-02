@@ -17,7 +17,7 @@ public class Restaurante {
      */
     public Restaurante(int numMesas, int capacidade) {
         // Inicializa o array de mesas com o número especificado de mesas
-        mesas = new Mesa[numMesas];
+        mesas = Mesa.capacidade;
         // Instancia cada mesa com a capacidade especificada
         for (int i = 0; i < numMesas; i++) {
             mesas[i] = new Mesa(capacidade);
