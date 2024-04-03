@@ -17,7 +17,7 @@ public class Restaurante {
      */
     public Restaurante(int numMesas, int capacidade) {
         // Inicializa o array de mesas com o número especificado de mesas
-        mesas = Mesa.capacidade;
+        mesas = new Mesa[numMesas];
         // Instancia cada mesa com a capacidade especificada
         for (int i = 0; i < numMesas; i++) {
             mesas[i] = new Mesa(capacidade);
@@ -41,7 +41,7 @@ public class Restaurante {
         if (numMesa < 0 || numMesa >= mesas.length) {
             return -1; // Mesa inválida
         }
-        if (filaEspera.isEmpty()) {
+        if (filaEspera.isEmpty() || filaEspera.isEmpty()) {
             return 0; 
         mesas[numMesa].adicionarClientes(filaEspera.get(0).getNumeroClientes());
         historicoRequisicao.add(filaEspera.get(0));
