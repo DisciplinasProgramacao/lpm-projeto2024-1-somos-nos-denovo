@@ -47,7 +47,7 @@ public class Restaurante {
         historicoRequisicao.add(filaEspera.get(0));
         filaEspera.remove(0);
         return 1; // Alocado na mesa com sucesso
-    }
+    }}
 
     /**
      * Método para adicionar uma requisição à fila de espera.
