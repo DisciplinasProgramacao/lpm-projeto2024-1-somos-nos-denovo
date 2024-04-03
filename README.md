@@ -1,15 +1,15 @@
 # Projeto restaurante
-Um projeto sobre restaurante
+Nesse Projeto buscamos desenvolver um software para o gerenciamento da alocação do cliente em Mesas dentro do restaurante a partir de Requisições
 
 ## Alunos integrantes da equipe
 
-* Gabriel da Silveira
-* Gustavo Rodrigo
-* Gabrielly de Fatima
-* Arthur Miranda
-* Lucas Cerqueira
-* Pedro Pope
+* [Arthur Miranda](https://github.com/art1544)
+* [Gabrielly de fatima](https://github.com/gabrieellyf)
+* [Gabriel Silveira](https://github.com/gs10111)
+* [Gustavo Rodrigo](https://github.com/GUS74V0)
+* [Lucas Cerqueira Azevedo](https://github.com/LucasCAzevedo)
+* [Pedro Braga](https://github.com/bragxxa)
 
 ## Professores responsáveis
 
-* João Caram
+* [João Caram](https://github.com/joaocaram)
