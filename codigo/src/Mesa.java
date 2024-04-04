@@ -23,6 +23,7 @@ public class Mesa {
         this.requisicao = null; // Sem requisição inicialmente
     }
 
+    // DESOCUPAR E OCUPAR É DA MESA
     /**
      * Método para ocupar a mesa com uma determinada requisição, se estiver disponível.
      *
