@@ -3,11 +3,10 @@ import java.util.ArrayList;
 
 public class Restaurante {
 
-    // Atributos da classe Restaurante
-    private Mesa[] mesas; // Array de mesas
-    private ArrayList<Requisicao> filaDeEspera; // Lista de requisições na fila de espera
-    private Requisicao requisicao; // Requisição atualmente sendo processada
-    private ArrayList<Requisicao> historicoRequisicao; // Lista de todas as requisições atendidas pelo restaurante
+    private Mesa[] mesas; 
+    private ArrayList<Requisicao> filaDeEspera; 
+    private Requisicao requisicao; 
+    private ArrayList<Requisicao> historicoRequisicao; 
 
     /**
      * Construtor da classe Restaurante.
@@ -41,7 +40,7 @@ public class Restaurante {
         if (numMesa < 0 || numMesa >= mesas.length) {
             return -1; // Mesa inválida
         }
-        if (filaEspera.isEmpty() || filaEspera.isEmpty()) {
+        if (filaEspera.isEmpty() || filaEspera != '\0') {
             return 0; 
         mesas[numMesa].adicionarClientes(filaEspera.get(0).getNumeroClientes());
         historicoRequisicao.add(filaEspera.get(0));
