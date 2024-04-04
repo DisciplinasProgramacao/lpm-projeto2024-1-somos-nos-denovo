@@ -8,6 +8,7 @@ public class Mesa {
     private int id;
     private Requisicao requisicao;
 
+    //Gerar os ids dentro da classe Mesa 
     /**
      * Construtor da classe Mesa.
      *
