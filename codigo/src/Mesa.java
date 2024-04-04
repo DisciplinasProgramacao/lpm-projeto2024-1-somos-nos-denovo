@@ -18,6 +18,7 @@ public class Mesa {
         this.capacidade = capacidade;
         this.id = id;
         this.disponibilidade = true; // A mesa está disponível inicialmente
+        //A mesa não vai ter a informação da requisição, a requisição que vai ter o id da mesa
         this.requisicao = null; // Sem requisição inicialmente
     }
 
