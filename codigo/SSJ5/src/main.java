@@ -1,8 +1,7 @@
-package codigo;
 
 import java.util.Scanner;
 
-public class Main {
+public class main {
     static Scanner teclado = new Scanner(System.in);
     private static int proximoIdMesa = 1;
 
