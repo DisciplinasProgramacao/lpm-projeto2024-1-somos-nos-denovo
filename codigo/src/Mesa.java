@@ -1,57 +1,97 @@
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Classe que representa uma Mesa com atributos de capacidade, disponibilidade, id e requisição.
  */
 public class Mesa {
+    private static final AtomicInteger count = new AtomicInteger(0);
     private int capacidade;
     private boolean disponibilidade;
     private int id;
     private Requisicao requisicao;
 
-    //Gerar os ids dentro da classe Mesa 
     /**
      * Construtor da classe Mesa.
      *
      * @param capacidade A capacidade da mesa.
      * @param id O identificador da mesa.
      */
-    public Mesa(int capacidade, int id) {
+    public Mesa(int capacidade, boolean disponibilidade) {
         this.capacidade = capacidade;
-        this.id = id;
-        this.disponibilidade = true; // A mesa está disponível inicialmente
-        //A mesa não vai ter a informação da requisição, a requisição que vai ter o id da mesa
-        this.requisicao = null; // Sem requisição inicialmente
-    }
-
-    // DESOCUPAR E OCUPAR É DA MESA
-    /**
-     * Método para ocupar a mesa com uma determinada requisição, se estiver disponível.
-     *
-     * @param requisicao A requisição para ocupar a mesa.
-     * @return Verdadeiro se a mesa foi ocupada com sucesso, falso caso contrário.
-     */
-    public boolean ocupar(Requisicao requisicao) {
-        if (disponibilidade) {
-            this.requisicao = requisicao;
-            disponibilidade = false;
-            return true;
-        }
-        return false;
+        this.id = generateId;
+        this.disponibilidade = disponibilidade; 
     }
 
     /**
-     * Método para desocupar a mesa de uma determinada requisição, se estiver ocupada.
+    * Gera um ID único para cada objeto Mesa.
+    *
+    * @return Um ID único.
+    */
+    private static int generateId() {
+        return count.incrementAndGet();
+    }
+
+    /**
+     * Retorna a capacidade da mesa.
      *
-     * @param requisicao A requisição para desocupar a mesa.
-     * @return Verdadeiro se a mesa foi desocupada com sucesso, falso caso contrário.
+     * @return A capacidade da mesa.
      */
-    public boolean desocupar(Requisicao requisicao) {
-        if (!disponibilidade && this.requisicao.equals(requisicao)) {
-            disponibilidade = true;
-            this.requisicao = null;
-            return true;
-        }
-        return false;
+    public int getCapacidade() {
+        return capacidade;
+    }
+
+    /**
+     * Define a capacidade da mesa.
+     *
+     * @param capacidade A nova capacidade da mesa.
+     */
+    public void setCapacidade(int capacidade) {
+        this.capacidade = capacidade;
+    }
+
+    /**
+     * Retorna a disponibilidade da mesa.
+     *
+     * @return A disponibilidade da mesa.
+     */
+    public boolean isDisponibilidade() {
+        return disponibilidade;
+    }
+
+    /**
+     * Define a disponibilidade da mesa.
+     *
+     * @param disponibilidade A nova disponibilidade da mesa.
+     */
+    public void setDisponibilidade(boolean disponibilidade) {
+        this.disponibilidade = disponibilidade;
+    }
+    
+    /**
+     * Retorna o ID da mesa.
+     *
+     * @return O ID da mesa.
+     */
+    public int getId() {
+        return id;
+    }
+
+    /**
+     * Retorna a requisição da mesa.
+     *
+     * @return A requisição da mesa.
+     */
+    public Requisicao getRequisicao() {
+        return requisicao;
+    }
+    
+    /**
+     * Define a requisição da mesa.
+     *
+     * @param requisicao A nova requisição da mesa.
+     */
+    public void setRequisicao(Requisicao requisicao) {
+        this.requisicao = requisicao;
     }
 }
 
