@@ -3,10 +3,10 @@ import java.util.ArrayList;
 
 public class Restaurante {
 
-    private Mesa[] mesas; 
-    private ArrayList<Requisicao> filaDeEspera; 
-    private Requisicao requisicao; 
-    private ArrayList<Requisicao> historicoRequisicao; 
+    private Mesa[] mesas;
+    private ArrayList<Requisicao> filaDeEspera;
+    private Requisicao requisicao;
+    private ArrayList<Requisicao> historicoRequisicao;
 
     /**
      * Construtor da classe Restaurante.
@@ -41,12 +41,13 @@ public class Restaurante {
             return -1; // Mesa inválida
         }
         if (filaEspera.isEmpty() || filaEspera != '\0') {
-            return 0; 
-        mesas[numMesa].adicionarClientes(filaEspera.get(0).getNumeroClientes());
-        historicoRequisicao.add(filaEspera.get(0));
-        filaEspera.remove(0);
-        return 1; // Alocado na mesa com sucesso
-    }}
+            return 0;
+            mesas[numMesa].adicionarClientes(filaEspera.get(0).getNumeroClientes());
+            historicoRequisicao.add(filaEspera.get(0));
+            filaEspera.remove(0);
+            return 1; // Alocado na mesa com sucesso
+        }
+    }
 
     /**
      * Método para adicionar uma requisição à fila de espera.
@@ -70,4 +71,52 @@ public class Restaurante {
         return filaDeEspera.size();
 
     }
+
+    /**
+     * Método para fechar uma requisição.
+     * 
+     * @param requisicao Requisição a ser fechada
+     * @return true se a requisição foi fechada com sucesso, false caso contrário
+     */
+    public boolean fecharRequisicao(Requisicao requisicao) {
+        // Verifica se a requisição está no histórico
+        if (historicoRequisicao.contains(requisicao)) {
+            historicoRequisicao.remove(requisicao); // Remove a requisição do histórico
+            return true;
+        } else {
+            return false; // Requisição não encontrada no histórico
+        }
+    }
+
+    /**
+     * Método para desocupar uma mesa.
+     * 
+     * @param requisicao Requisição associada à mesa a ser desocupada
+     * @return true se a mesa foi desocupada com sucesso, false caso contrário
+     */
+    public boolean desocupar(Requisicao requisicao) {
+        for (Mesa mesa : mesas) {
+            if (mesa.getRequisicao().equals(requisicao)) {
+                mesa.desocupar();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Método para localizar um cliente no restaurante.
+     * 
+     * @param cliente Cliente a ser localizado
+     * @return Retorna o indice do array onde o cliente foi encontrado, caso cliente nao encontrado retorna -1
+     */
+    public int localizarCliente(Cliente cliente) {
+        for (int i = 0; i < clientes.length; i++) {
+            if (clientes[i] != null && clientes[i].equals(cliente)) {
+                return i; // Retorna o índice onde o cliente foi encontrado no array
+            }
+        }
+        return -1; // Cliente não encontrado no array
+    }
+
 }
