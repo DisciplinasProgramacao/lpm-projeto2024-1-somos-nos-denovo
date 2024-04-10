@@ -49,4 +49,27 @@ public class RestauranteTest {
         int novoTamanho = restaurante.removerDaFilaDeEspera(requisicao);
         assertEquals(tamanhoAnterior - 1, novoTamanho);
     }
+
+
+    @Test
+    void testFecharRequisicao() {
+        restaurante.entrarNaFilaDeEspera(requisicao);
+        assertTrue(restaurante.fecharRequisicao(requisicao));
+        assertFalse(restaurante.getHistoricoRequisicao().contains(requisicao));
+    }
+
+    @Test
+    void testDesocupar() {
+        restaurante.entrarNaFilaDeEspera(requisicao);
+        restaurante.alocarNaMesa(restaurante.getFilaDeEspera(), 0);
+        assertTrue(restaurante.desocupar(requisicao));
+    }
+
+    @Test
+    void testLocalizarCliente() {
+        Cliente cliente = new Cliente("João");
+        assertEquals(-1, restaurante.localizarCliente(cliente));
+        restaurante.getMesas()[0].adicionarClientes(3);
+        assertEquals(0, restaurante.localizarCliente(cliente));
+    }
 }
