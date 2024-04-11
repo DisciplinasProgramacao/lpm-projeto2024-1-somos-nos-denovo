@@ -7,22 +7,12 @@ public class Main {
     private static int proximoIdMesa = 1;
 
     /**
-     * Método pra gerar os IDs para as mesas criadas.
-     * 
-     * @return Id de cada mesa na ordem (Ex: 1, 2, 3, 4, 5...).
-     */
-    private static int gerarProximoIdMesa() {
-        return proximoIdMesa++;
-    }
-
-    /**
      * Método para criar uma nova mesa 
      * 
      * @param capacidade  A capacidade da mesa (quantidade de pessoas).
      */
     private static void criarMesa(int capacidade) {
-        int novoId = gerarProximoIdMesa();
-        Mesa.criarMesa(novoId, capacidade);
+        Mesa.criarMesa(capacidade);
         System.out.println("Mesa criada com sucesso.");
     }
 
