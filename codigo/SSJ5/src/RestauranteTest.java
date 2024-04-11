@@ -11,7 +11,8 @@ public class RestauranteTest {
     @BeforeEach
     public void setUp(){
         Restaurante restaurante = new Restaurante(5, 4);
-        Requisicao requisicao = new Requisicao(5, João, 10.04, 20.00, 22.00, 9);
+        Cliente cliente = new Cliente(João);
+        Requisicao requisicao = new Requisicao(5, "João", 10.04, 20.00, 22.00, 9);
     }
 
     @Test
@@ -19,7 +20,6 @@ public class RestauranteTest {
         ArrayList<Requisicao> filaEspera = new ArrayList<>();
         filaEspera.add(requisicao); // Adiciona uma requisição à fila de espera
 
-        // Testa a alocação em uma mesa válida
         int resultado = restaurante.alocarNaMesa(filaEspera, 0);
         assertEquals(1, resultado);
         assertEquals(0, filaEspera.size()); 
