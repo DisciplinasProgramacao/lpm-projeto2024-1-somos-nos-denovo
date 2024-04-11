@@ -3,6 +3,76 @@ import java.util.Scanner; //classe Scanner
 public class Main {
   static Scanner sc = new Scanner(System.in); // objeto sc do tipo Scanner
 
+  private static int proximoIdMesa = 1;
+
+    /**
+     * Método para criar uma nova mesa 
+     * 
+     * @param capacidade  A capacidade da mesa (quantidade de pessoas).
+     */
+    private static void criarMesa(int capacidade) {
+        Mesa novaMesa = new Mesa(capacidade);
+        System.out.println("Mesa criada com sucesso.");
+    }
+
+    public static void main(String[] args) {
+        System.out.println("Escolha uma opção:\n1 - Criar Mesa\n2 - Desocupar Mesa");
+        int opcao = teclado.nextInt();
+
+        switch (opcao) {
+            case 1:
+                System.out.println("Insira a capacidade da mesa:");
+                int capacidade = teclado.nextInt();
+                criarMesa(capacidade);
+                break;
+            case 2:
+                System.out.println("Insira o id da mesa que deseja desocupar:");
+                int idMesa = teclado.nextInt();
+              
+                restaurante.fecharRequisicao(idMesa);
+                
+                private static int proximoIdMesa = 1;
+
+    /**
+     * Método para criar uma nova mesa 
+     * 
+     * @param capacidade  A capacidade da mesa (quantidade de pessoas).
+     */
+    private static void criarMesa(int capacidade) {
+        Mesa.criarMesa(capacidade);
+        System.out.println("Mesa criada com sucesso.");
+    }
+
+    public static void main(String[] args) {
+        System.out.println("Escolha uma opção:\n1 - Criar Mesa\n2 - Desocupar Mesa");
+        int opcao = teclado.nextInt();
+
+        switch (opcao) {
+            case 1:
+                System.out.println("Insira a capacidade da mesa:");
+                int capacidade = teclado.nextInt();
+                criarMesa(capacidade);
+                break;
+            case 2:
+                System.out.println("Insira o id da mesa que deseja desocupar:");
+                int requisicao = teclado.nextInt();
+                Mesa.desocupar(requisicao);
+                break;
+            default:
+                System.out.println("Opção inválida.");
+        }
+
+        teclado.close();
+    }
+}
+                break;
+            default:
+                System.out.println("Opção inválida.");
+        }
+
+        teclado.close();
+    }
+}
   public static void main(String[] args) {
     Cliente cliente1 = null; // objeto cliente1 do tipo Cliente
     while (true){ // Loop infinito para manter o sistema em execução até que o usuário escolha sair
@@ -44,6 +114,7 @@ public class Main {
         default:
           System.out.println("Opção inválida"); // Mensagem de opção inválida caso o usuário escolha uma opção desconhecida
           break;
+
       }
     }
   }
