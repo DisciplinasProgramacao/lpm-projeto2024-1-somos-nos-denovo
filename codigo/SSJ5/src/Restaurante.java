@@ -20,8 +20,7 @@ public class Restaurante {
         for (int i = 0; i < numMesas; i++) {
             mesas[i] = new Mesa(capacidade);
         }
-        // Inicializa a lista de requisições na fila de espera e o histórico de
-        // requisições
+        
         filaDeEspera = new ArrayList<>();
         historicoRequisicao = new ArrayList<>();
     }
@@ -34,12 +33,12 @@ public class Restaurante {
      * @return 1 se os clientes foram alocados com sucesso, 0 se a fila de espera
      *         estiver vazia e -1 se o número da mesa for inválido
      */
-    public int alocarNaMesa(ArrayList<Requisicao> filaEspera, int numMesa) {
+    public int alocarNaMesa(ArrayList<Requisicao> filaEspera, int numMesa) {s
         // Verifica se o número da mesa é válido
         if (numMesa < 0 || numMesa >= mesas.length) {
             return -1; // Mesa inválida
         }
-        if (filaEspera.isEmpty() || filaEspera != '\0') {
+        if (filaEspera.isEmpty()) {
             return 0;
             mesas[numMesa].adicionarClientes(filaEspera.get(0).getNumeroClientes());
             historicoRequisicao.add(filaEspera.get(0));

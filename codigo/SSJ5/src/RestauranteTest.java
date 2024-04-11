@@ -1,5 +1,8 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -7,8 +10,8 @@ public class RestauranteTest {
 
     @BeforeEach
     public void setUp(){
-        restaurante = new Restaurante(5, 4);
-        requisicao = new Requisicao(5);
+        Restaurante restaurante = new Restaurante(5, 4);
+        Requisicao requisicao = new Requisicao(5, João, 10.04, 20.00, 22.00, 9);
     }
 
     @Test
@@ -19,43 +22,47 @@ public class RestauranteTest {
         // Testa a alocação em uma mesa válida
         int resultado = restaurante.alocarNaMesa(filaEspera, 0);
         assertEquals(1, resultado);
-        assertEquals(0, filaEspera.size()); // Verifica se a requisição foi removida da fila de espera
+        assertEquals(0, filaEspera.size()); 
 
-        // Testa a alocação em uma mesa inválida
-        resultado = restaurante.alocarNaMesa(filaEspera, 10);
+    }
+
+    @Test
+    void testAlocarEmMesaInvalida(){
+        int resultado = restaurante.alocarNaMesa(filaEspera, 10);
         assertEquals(-1, resultado);
 
-        // Testa a alocação com fila de espera vazia
-        resultado = restaurante.alocarNaMesa(new ArrayList<>(), 0);
+    }
+
+    @Test
+    void testAlocarNaMesaComFilaDeEsperaVazia(){
+        
+        int resultado = Restaurante.alocarNaMesa(new ArrayList<>(), 0);
         assertEquals(0, resultado);
     }
 
     @Test
     void testEntrarNaFilaDeEspera() {
-        int tamanhoAnterior = restaurante.getFilaDeEspera().size();
-
-        // Testa se a requisição é adicionada corretamente à fila de espera
-        int novoTamanho = restaurante.entrarNaFilaDeEspera(requisicao);
+        int tamanhoAnterior = Restaurante.getFilaDeEspera().size();
+        int novoTamanho = Restaurante.entrarNaFilaDeEspera(requisicao);
         assertEquals(tamanhoAnterior + 1, novoTamanho);
-        assertTrue(restaurante.getFilaDeEspera().contains(requisicao));
+        assertTrue(Restaurante.getFilaDeEspera().contains(requisicao));
     }
 
     @Test
     void testRemoverDaFilaDeEspera() {
-        restaurante.entrarNaFilaDeEspera(requisicao);
-        int tamanhoAnterior = restaurante.getFilaDeEspera().size();
+        Restaurante.entrarNaFilaDeEspera(requisicao);
+        int tamanhoAnterior = Restaurante.getFilaDeEspera().size();
 
         // Testa se a requisição é removida corretamente da fila de espera
-        int novoTamanho = restaurante.removerDaFilaDeEspera(requisicao);
+        int novoTamanho = Restaurante.removerDaFilaDeEspera(requisicao);
         assertEquals(tamanhoAnterior - 1, novoTamanho);
     }
 
-
     @Test
     void testFecharRequisicao() {
-        restaurante.entrarNaFilaDeEspera(requisicao);
-        assertTrue(restaurante.fecharRequisicao(requisicao));
-        assertFalse(restaurante.getHistoricoRequisicao().contains(requisicao));
+        Restaurante.entrarNaFilaDeEspera(requisicao);
+        assertTrue(Restaurante.fecharRequisicao(requisicao));
+        assertFalse(Restaurante.getHistoricoRequisicao().contains(requisicao));
     }
 
     @Test
