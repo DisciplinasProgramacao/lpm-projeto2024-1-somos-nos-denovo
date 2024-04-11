@@ -1,7 +1,6 @@
 public class MainJuntoTeste {
     Aqui está o código combinado com os dois switchs juntos:
 
-```java
 import java.util.Scanner; //classe Scanner
 
 public class Main {
