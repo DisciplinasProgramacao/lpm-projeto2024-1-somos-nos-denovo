@@ -1,6 +1,3 @@
-public class MainJuntoTeste {
-    Aqui está o código combinado com os dois switchs juntos:
-
 import java.util.Scanner; //classe Scanner
 
 public class Main {
@@ -14,13 +11,13 @@ public class Main {
      * @param capacidade  A capacidade da mesa (quantidade de pessoas).
      */
     private static void criarMesa(int capacidade) {
-        Mesa novaMesa = new Mesa(capacidade);
+        Mesa novaMesa = new Mesa(4, true);
         System.out.println("Mesa criada com sucesso.");
     }
 
     public static void main(String[] args) {
         Cliente cliente1 = null; // objeto cliente1 do tipo Cliente
-        Restaurante restaurante = new Restaurante(); // objeto restaurante do tipo Restaurante
+        Restaurante restaurante = new Restaurante(4,2); // objeto restaurante do tipo Restaurante
 
         while (true) { // Loop infinito para manter o sistema em execução até que o usuário escolha sair
             System.out.println("\nEscolha uma opção:"); // Exibe as opções disponíveis para o usuário
@@ -78,6 +75,4 @@ public class Main {
             }
         }
     }
-}
-```
 }

@@ -18,7 +18,7 @@ public class Mesa {
      */
     public Mesa(int capacidade, boolean disponibilidade) {
         this.capacidade = capacidade;
-        this.id = generateId;
+        this.id = generateId();
         this.disponibilidade = disponibilidade; 
     }
 

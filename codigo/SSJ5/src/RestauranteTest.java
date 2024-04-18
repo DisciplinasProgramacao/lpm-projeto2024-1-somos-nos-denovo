@@ -11,7 +11,7 @@ public class RestauranteTest {
     @BeforeEach
     public void setUp(){
         Restaurante restaurante = new Restaurante(5, 4);
-        Cliente cliente = new Cliente(João);
+        Cliente cliente = new Cliente("João");
         Requisicao requisicao = new Requisicao(5, "João", 10.04, 20.00, 22.00, 9);
     }
 

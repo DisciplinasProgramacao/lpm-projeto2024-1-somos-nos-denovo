@@ -26,7 +26,7 @@ public class Cliente {
     }
 
     public Requisicao gerarRequisicao(int quantidade) {
-        Requisicao req = new Requisicao(quantidade, this);
+        Requisicao req = new Requisicao(5, "João", 10.04, 20.00, 22.00, 9);
         return req;
     }
 }

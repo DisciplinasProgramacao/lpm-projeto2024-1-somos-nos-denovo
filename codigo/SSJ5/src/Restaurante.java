@@ -18,7 +18,7 @@ public class Restaurante {
         mesas = new Mesa[numMesas];
         // Instancia cada mesa com a capacidade especificada
         for (int i = 0; i < numMesas; i++) {
-            mesas[i] = new Mesa(capacidade);
+            mesas[i] = new Mesa(4, true);
         }
         
         filaDeEspera = new ArrayList<>();
@@ -33,7 +33,7 @@ public class Restaurante {
      * @return 1 se os clientes foram alocados com sucesso, 0 se a fila de espera
      *         estiver vazia e -1 se o número da mesa for inválido
      */
-    public int alocarNaMesa(ArrayList<Requisicao> filaEspera, int numMesa) {s
+    public int alocarNaMesa(ArrayList<Requisicao> filaEspera, int numMesa) {
         // Verifica se o número da mesa é válido
         if (numMesa < 0 || numMesa >= mesas.length) {
             return -1; // Mesa inválida
