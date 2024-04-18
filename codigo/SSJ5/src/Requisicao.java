@@ -88,7 +88,7 @@ public class Requisicao {
           // Verifica se a mesa em que a requisição está foi encontrada
           boolean mesaEncontrada = false;
           for (Mesa mesa : mesas) {
-              if (mesa.getRequisicoes().contains(this)) {
+              if (mesa.getRequisicao().contains()) {
                   mesaEncontrada = true;
 
                   Duration duracaoRefeicao = Duration.ofHours(1);
