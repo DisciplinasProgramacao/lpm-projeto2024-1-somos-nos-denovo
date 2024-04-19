@@ -1,3 +1,4 @@
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -99,6 +100,7 @@ public class Requisicao {
 
                 this.setHoraSaida(horaSaida);
                 mesa.removerRequisicao(this);
+                Restaurante.removerRequisicao(this);
 
                 return horaSaida;
             }

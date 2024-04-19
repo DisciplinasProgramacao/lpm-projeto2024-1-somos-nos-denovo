@@ -41,7 +41,7 @@ public class Main {
                 case 2:
                     System.out.print("Qual o nome do cliente? ");
                     String nomeClie = teclado.nextLine();
-                    Cliente clienteAtual = localizarCliente();
+                    Cliente clienteAtual = Restaurante.localizarCliente();
 
                     if (clienteAtual == null) {
                         System.out.println("Nenhum cliente encontrado");
@@ -50,7 +50,7 @@ public class Main {
                     System.out.println("Quantas pessoas? "); // Solicita a quantidade de pessoas
                     int qtdePessoas = teclado.nextInt(); // Lê a quantidade de pessoas
                     Requisicao novaReq = clienteAtual.gerarRequisicao(qtdePessoas); // Gera uma nova requisição com a quantidade de pessoas fornecida
-                    restaurante.alocarNaMesa(novaReq);
+                    Restaurante.alocarNaMesa(novaReq);
                     break;
 
                 case 3:
@@ -62,7 +62,7 @@ public class Main {
                 case 4:
                     System.out.println("Insira o id da mesa que deseja desocupar:");
                     int requisicao = teclado.nextInt();
-                    Mesa.desocupar(requisicao);
+                    Restaurante.desocupar(requisicao);
                     break;
 
                 case 5:

@@ -2,6 +2,7 @@
 public class Cliente {
 
     private String nome;
+    private int id;
 
     public Cliente(String nome) {
         this.nome = tratarNome(nome);

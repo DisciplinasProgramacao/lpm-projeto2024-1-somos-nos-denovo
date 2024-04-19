@@ -15,7 +15,7 @@ public class RequisicaoTest {
     public void setUp() {
         // Configuração inicial das mesas
         mesas = new Mesa[1];
-        mesas[0] = new Mesa(4); // Uma mesa com capacidade para 4 pessoas
+        mesas[0] = new Mesa(4,true); // Uma mesa com capacidade para 4 pessoas
     }
 
     @Test
@@ -41,7 +41,7 @@ public class RequisicaoTest {
     @Test
     void testFecharConta_comMesaCheia() {
         // Preenche a mesa com clientes
-        mesas[0].adicionarClientes(4);
+        Restaurante.alocarNaMesa(5, 4);
 
         Requisicao requisicao = new Requisicao(3, null, null, LocalTime.of(12, 0), null, 1);
 
