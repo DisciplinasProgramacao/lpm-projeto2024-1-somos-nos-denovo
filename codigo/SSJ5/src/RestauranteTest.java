@@ -8,22 +8,27 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class RestauranteTest {
 
+    private Restaurante restaurante;
+    private Cliente cliente;
+    private Requisicao requisicao;
+    private ArrayList<Requisicao> filaEspera ;
+
     @BeforeEach
     public void setUp(){
         Restaurante restaurante = new Restaurante(5, 4);
         Cliente cliente = new Cliente("João");
         Requisicao requisicao = new Requisicao(5, "João", 10.04, 20.00, 22.00, 9);
+        ArrayList<Requisicao> filaEspera = new ArrayList<Requisicao>();
     }
 
     @Test
     void testAlocarNaMesa() {
-        ArrayList<Requisicao> filaEspera = new ArrayList<>();
+        
         filaEspera.add(requisicao); // Adiciona uma requisição à fila de espera
 
-        int resultado = restaurante.alocarNaMesa(filaEspera, 0);
+        int resultado = restaurante.alocarNaMesa(filaEspera, 0); // Call the alocarNaMesa method on the instance
         assertEquals(1, resultado);
         assertEquals(0, filaEspera.size()); 
-
     }
 
     @Test
