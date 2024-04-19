@@ -99,7 +99,6 @@ public class Requisicao {
                 LocalTime horaSaida = horaEntrada.plus(duracaoRefeicao);
 
                 this.setHoraSaida(horaSaida);
-                mesa.removerRequisicao(this);
                 Restaurante.removerRequisicao(this);
 
                 return horaSaida;
