@@ -43,6 +43,6 @@ public class Cliente {
      */
     public Requisicao gerarRequisicao(int quantidade) {
         // Utilize o construtor de Requisicao diretamente
-        return new Requisicao(5, cliente2, LocalDate.of(2024, 4, 11), LocalTime.of(20, 0), LocalTime.of(22, 0));
+        return new Requisicao(5, "joao", LocalDate.of(2024, 4, 11), LocalTime.of(20, 0), LocalTime.of(22, 0));
     }
 }
