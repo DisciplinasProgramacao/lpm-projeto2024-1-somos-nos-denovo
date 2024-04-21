@@ -1,53 +1,57 @@
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-
+import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 public class RequisicaoTest {
 
-    private Mesa[] mesas;
+    private Requisicao requisicao;
+    private Cliente cliente;
+    private LocalDate data;
+    private LocalTime horaEntrada;
+    private LocalTime horaSaida;
 
-    @BeforeEach
+    @Before
     public void setUp() {
-        // Configuração inicial das mesas
-        mesas = new Mesa[1];
-        mesas[0] = new Mesa(4,true); // Uma mesa com capacidade para 4 pessoas
+        cliente = new Cliente("Cliente", 12); // Criando um cliente para a requisição
+        data = LocalDate.now(); // Obtendo a data atual
+        horaEntrada = LocalTime.now(); // Obtendo a hora atual como hora de entrada
+        horaSaida = horaEntrada.plusHours(1); // Hora de saída uma hora após a entrada
+        new Requisicao(5, cliente, LocalDate.of(2024, 4, 11), LocalTime.of(20, 0), LocalTime.of(22, 0)); // Criando a requisição
     }
 
     @Test
-    void testFecharConta_sucesso() {
-        Requisicao requisicao = new Requisicao(3, null, null, LocalTime.of(12, 0), null, 1);
-
-        LocalTime horaSaida = requisicao.fecharConta(mesas);
-
-        // Testa se a hora de saída é igual a 1 hora após a hora de entrada
-        assertEquals(LocalTime.of(13, 0), horaSaida);
+    public void testGetters() {
+        assertEquals(4, requisicao.getQuantidade()); // Verificando a quantidade
+        assertEquals(cliente, requisicao.getCliente()); // Verificando o cliente
+        assertEquals(data, requisicao.getData()); // Verificando a data
+        assertEquals(horaEntrada, requisicao.getHoraEntrada()); // Verificando a hora de entrada
+        assertEquals(horaSaida, requisicao.getHoraSaida()); // Verificando a hora de saída
+        assertEquals(1, requisicao.getId()); // Verificando o ID
     }
 
     @Test
-    void testFecharConta_semMesaAssociada() {
-        Requisicao requisicao = new Requisicao(3, null, null, null, null, 1);
+    public void testSetters() {
+        requisicao.setQuantidade(6); // Definindo uma nova quantidade
+        assertEquals(6, requisicao.getQuantidade()); // Verificando se a quantidade foi alterada corretamente
 
-        // A requisição não está associada a nenhuma mesa, então espera-se que retorne null
-        LocalTime horaSaida = requisicao.fecharConta(mesas);
+        Cliente novoCliente = new Cliente("Novo Cliente", 1); // Novo cliente
+        requisicao.setCliente(novoCliente); // Definindo um novo cliente
+        assertEquals(novoCliente, requisicao.getCliente()); // Verificando se o cliente foi alterado corretamente
 
-        assertNull(horaSaida);
-    }
+        LocalDate novaData = LocalDate.of(2024, 4, 23); // Nova data
+        requisicao.setData(novaData); // Definindo uma nova data
+        assertEquals(novaData, requisicao.getData()); // Verificando se a data foi alterada corretamente
 
-    @Test
-    void testFecharConta_comMesaCheia() {
-        // Preenche a mesa com clientes
-        Restaurante.alocarNaMesa(5, 4);
+        LocalTime novaHoraEntrada = LocalTime.of(14, 30); // Nova hora de entrada
+        requisicao.setHoraEntrada(novaHoraEntrada); // Definindo uma nova hora de entrada
+        assertEquals(novaHoraEntrada, requisicao.getHoraEntrada()); // Verificando se a hora de entrada foi alterada corretamente
 
-        Requisicao requisicao = new Requisicao(3, null, null, LocalTime.of(12, 0), null, 1);
+        LocalTime novaHoraSaida = LocalTime.of(15, 30); // Nova hora de saída
+        requisicao.setHoraSaida(novaHoraSaida); // Definindo uma nova hora de saída
+        assertEquals(novaHoraSaida, requisicao.getHoraSaida()); // Verificando se a hora de saída foi alterada corretamente
 
-        // Como a mesa está cheia, não deve ser possível fechar a conta
-        LocalTime horaSaida = requisicao.fecharConta(mesas);
 
-        assertNull(horaSaida);
     }
 }

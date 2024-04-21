@@ -1,4 +1,7 @@
 import java.util.ArrayList;
+import java.time.Duration;
+import java.time.LocalTime;
+
 
 public class Restaurante {
 
@@ -165,4 +168,45 @@ public class Restaurante {
         }
         return -1; // Requisição não encontrada em nenhuma mesa
     }
+
+    /**
+     * Método para fechar a conta e calcular a hora de saída.
+     * 
+     * @param mesas Um array de objetos Mesa que representam as mesas do restaurante
+     * @param requisicao A requisição a ser fechada
+     * @return A hora de saída após fechar a conta ou null se a requisição não
+     *         estiver associada a nenhuma mesa
+     */
+    public LocalTime fecharConta(Mesa[] mesas, Requisicao requisicao) {
+        // Verifica se a mesa em que a requisição está foi encontrada
+        boolean mesaEncontrada = false;
+        for (Mesa mesa : mesas) {
+            // Verifica se a requisição está associada à mesa atual
+            if (mesa.getRequisicao() != null && mesa.getRequisicao().equals(requisicao)) {
+                mesaEncontrada = true;
+
+                // Define a duração padrão da refeição (1 hora)
+                Duration duracaoRefeicao = Duration.ofHours(1);
+
+                // Calcula o horário de saída com base no horário de entrada e na duração da refeição
+                LocalTime horaSaida = requisicao.getHoraEntrada().plus(duracaoRefeicao);
+
+                // Define o horário de saída da requisição
+                requisicao.setHoraSaida(horaSaida);
+
+                // Fecha a requisição no restaurante
+                fecharRequisicao(requisicao);
+
+                // Retorna o horário de saída
+                return horaSaida;
+            }
+        }
+
+        // Retorna null se a requisição não estiver associada a nenhuma mesa
+        if (!mesaEncontrada) {
+            return null;
+        }
+        return null;
+    }
+
 }
