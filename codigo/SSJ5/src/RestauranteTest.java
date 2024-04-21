@@ -1,87 +1,79 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class RestauranteTest {
 
     private Restaurante restaurante;
-    private Cliente cliente;
-    private Requisicao requisicao;
-    private ArrayList<Requisicao> filaEspera ;
 
     @BeforeEach
-    public void setUp(){
-        Restaurante restaurante = new Restaurante(5, 4);
-        Cliente cliente = new Cliente("João");
-        Requisicao requisicao = new Requisicao(5, "João", 10.04, 20.00, 22.00, 9);
-        ArrayList<Requisicao> filaEspera = new ArrayList<Requisicao>();
+    public void setUp() {
+        restaurante = new Restaurante(5, 4); // Inicializa o restaurante com 5 mesas, cada uma com capacidade para 4 pessoas
     }
 
     @Test
-    void testAlocarNaMesa() {
-        
-        filaEspera.add(requisicao); // Adiciona uma requisição à fila de espera
+    public void testAlocarNaMesa() {
+        Requisicao requisicao = new Requisicao(3, new Cliente("Cliente Teste"), null, null, null, 1);
+        int result = restaurante.alocarNaMesa(requisicao, 0); // Aloca na primeira mesa (índice 0)
 
-        int resultado = restaurante.alocarNaMesa(filaEspera, 0); // Call the alocarNaMesa method on the instance
-        assertEquals(1, resultado);
-        assertEquals(0, filaEspera.size()); 
+        assertEquals(1, result); // Espera-se que a alocação seja bem-sucedida
     }
 
     @Test
-    void testAlocarEmMesaInvalida(){
-        int resultado = restaurante.alocarNaMesa(filaEspera, 10);
-        assertEquals(-1, resultado);
+    public void testEntrarNaFilaDeEspera() {
+        Requisicao requisicao = new Requisicao(3, new Cliente("Cliente Teste"), null, null, null, 1);
+        int tamanhoAntes = restaurante.entrarNaFilaDeEspera(requisicao); // Tamanho da fila antes de adicionar a requisição
+        int tamanhoDepois = restaurante.entrarNaFilaDeEspera(requisicao); // Tamanho da fila após adicionar a requisição novamente
 
+        assertEquals(1, tamanhoDepois - tamanhoAntes); // Espera-se que o tamanho da fila aumente em 1 após adicionar uma requisição
     }
 
     @Test
-    void testAlocarNaMesaComFilaDeEsperaVazia(){
-        
-        int resultado = Restaurante.alocarNaMesa(new ArrayList<>(), 0);
-        assertEquals(0, resultado);
+    public void testRemoverDaFilaDeEspera() {
+        Requisicao requisicao = new Requisicao(3, new Cliente("Cliente Teste"), null, null, null, 1);
+        restaurante.entrarNaFilaDeEspera(requisicao); // Adiciona uma requisição à fila de espera
+        int tamanhoAntes = restaurante.removerDaFilaDeEspera(requisicao); // Tamanho da fila antes de remover a requisição
+        int tamanhoDepois = restaurante.removerDaFilaDeEspera(requisicao); // Tamanho da fila após remover a requisição novamente
+
+        assertEquals(1, tamanhoAntes - tamanhoDepois); // Espera-se que o tamanho da fila diminua em 1 após remover uma requisição
     }
 
     @Test
-    void testEntrarNaFilaDeEspera() {
-        int tamanhoAnterior = Restaurante.getFilaDeEspera().size();
-        int novoTamanho = Restaurante.entrarNaFilaDeEspera(requisicao);
-        assertEquals(tamanhoAnterior + 1, novoTamanho);
-        assertTrue(Restaurante.getFilaDeEspera().contains(requisicao));
+    public void testFecharRequisicao() {
+        Requisicao requisicao = new Requisicao(3, new Cliente("Cliente Teste"), null, null, null, 1);
+        restaurante.entrarNaFilaDeEspera(requisicao); // Adiciona uma requisição à fila de espera
+        boolean result = restaurante.fecharRequisicao(requisicao); // Fecha a requisição
+
+        assertTrue(result); // Espera-se que a requisição seja fechada com sucesso
     }
 
     @Test
-    void testRemoverDaFilaDeEspera() {
-        Restaurante.entrarNaFilaDeEspera(requisicao);
-        int tamanhoAnterior = Restaurante.getFilaDeEspera().size();
+    public void testDesocupar() {
+        Requisicao requisicao = new Requisicao(3, new Cliente("Cliente Teste"), null, null, null, 1);
+        restaurante.alocarNaMesa(requisicao, 0); // Aloca a requisição em uma mesa
+        boolean result = restaurante.desocupar(requisicao); // Desocupa a mesa associada à requisição
 
-        // Testa se a requisição é removida corretamente da fila de espera
-        int novoTamanho = Restaurante.removerDaFilaDeEspera(requisicao);
-        assertEquals(tamanhoAnterior - 1, novoTamanho);
+        assertTrue(result); // Espera-se que a mesa seja desocupada com sucesso
     }
 
     @Test
-    void testFecharRequisicao() {
-        Restaurante.entrarNaFilaDeEspera(requisicao);
-        assertTrue(Restaurante.fecharRequisicao(requisicao));
-        assertFalse(Restaurante.getHistoricoRequisicao().contains(requisicao));
+    public void testLocalizarCliente() {
+        Cliente cliente = new Cliente("Cliente Teste");
+        Requisicao requisicao = new Requisicao(3, cliente, null, null, null, 1);
+        restaurante.alocarNaMesa(requisicao, 0); // Aloca a requisição em uma mesa
+
+        int index = restaurante.localizarCliente(cliente); // Localiza o cliente no restaurante
+
+        assertEquals(0, index); // Espera-se que o cliente seja encontrado na primeira mesa
     }
 
     @Test
-    void testDesocupar() {
-        restaurante.entrarNaFilaDeEspera(requisicao);
-        restaurante.alocarNaMesa(restaurante.getFilaDeEspera(), 0);
-        assertTrue(restaurante.desocupar(requisicao));
-    }
+    public void testLocalizarRequisicao() {
+        Requisicao requisicao = new Requisicao(3, new Cliente("Cliente Teste"), null, null, null, 1);
+        restaurante.alocarNaMesa(requisicao, 0); // Aloca a requisição em uma mesa
 
-    @Test
-    void testLocalizarCliente() {
-        Cliente cliente = new Cliente("João");
-        assertEquals(-1, restaurante.localizarCliente(cliente));
-        restaurante.getMesas()[0].adicionarClientes(3);
-        assertEquals(0, restaurante.localizarCliente(cliente));
+        int index = restaurante.localizarRequisicao(requisicao); // Localiza a requisição no restaurante
+
+        assertEquals(0, index); // Espera-se que a requisição seja encontrada na primeira mesa
     }
 }

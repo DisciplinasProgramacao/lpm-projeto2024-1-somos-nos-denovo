@@ -4,7 +4,6 @@ public class Restaurante {
 
     private Mesa[] mesas;
     private ArrayList<Requisicao> filaDeEspera;
-    private Requisicao requisicao;
     private ArrayList<Requisicao> historicoRequisicao;
 
     /**
@@ -18,32 +17,61 @@ public class Restaurante {
         mesas = new Mesa[numMesas];
         // Instancia cada mesa com a capacidade especificada
         for (int i = 0; i < numMesas; i++) {
-            mesas[i] = new Mesa(4, true);
+            mesas[i] = new Mesa(capacidade, true);
         }
-        
+
         filaDeEspera = new ArrayList<>();
         historicoRequisicao = new ArrayList<>();
     }
 
     /**
+     * Método para obter o número da mesa da requisição.
+     * 
+     * @param numMesa Número da mesa
+     * @return O número da mesa da requisição
+     */
+    public int getNumeroMesa(int numMesa) {
+        return numMesa;
+    }
+
+    /**
+     * Método para obter o número de clientes da requisição.
+     * 
+     * @param requisicao Requisição
+     * @return O número de clientes da requisição
+     */
+    public int getNumeroClientes(Requisicao requisicao) {
+        return requisicao.getQuantidade();
+    }
+
+    /**
      * Método para alocar clientes em uma mesa a partir da fila de espera.
      * 
-     * @param filaEspera Lista de requisições na fila de espera
-     * @param numMesa    Número da mesa onde os clientes serão alocados
+     * @param requisicao Requisição na fila de espera
+     * @param numMesa    Número da mesa
      * @return 1 se os clientes foram alocados com sucesso, 0 se a fila de espera
      *         estiver vazia e -1 se o número da mesa for inválido
      */
-    public int alocarNaMesa(ArrayList<Requisicao> filaEspera, int numMesa) {
+    public int alocarNaMesa(Requisicao requisicao, int numMesa) {
+        // Verifica se a requisição é nula
+        if (requisicao == null) {
+            return -1;
+        }
+
+        int mesaNumber = getNumeroMesa(numMesa); // Obtém o número da mesa da requisição
+
         // Verifica se o número da mesa é válido
-        if (numMesa < 0 || numMesa >= mesas.length) {
+        if (mesaNumber < 0 || mesaNumber >= mesas.length) {
             return -1; // Mesa inválida
         }
-        if (filaEspera.isEmpty()) {
-            return 0;
-            mesas[numMesa].adicionarClientes(filaEspera.get(0).getNumeroClientes());
-            historicoRequisicao.add(filaEspera.get(0));
-            filaEspera.remove(0);
+
+        if (!filaDeEspera.isEmpty()) {
+            mesas[numMesa].setRequisicao(requisicao);
+            historicoRequisicao.add(requisicao);
+            filaDeEspera.remove(requisicao);
             return 1; // Alocado na mesa com sucesso
+        } else {
+            return 0; // Fila de espera está vazia
         }
     }
 
@@ -67,7 +95,6 @@ public class Restaurante {
     public int removerDaFilaDeEspera(Requisicao requisicao) {
         filaDeEspera.remove(requisicao);
         return filaDeEspera.size();
-
     }
 
     /**
@@ -93,28 +120,49 @@ public class Restaurante {
      * @return true se a mesa foi desocupada com sucesso, false caso contrário
      */
     public boolean desocupar(Requisicao requisicao) {
+        if (requisicao == null) {
+            return false; // Se a requisição fornecida for nula, não é possível desocupar a mesa
+        }
+
         for (Mesa mesa : mesas) {
-            if (mesa.getRequisicao().equals(requisicao)) {
-                mesa.desocupar();
+            if (mesa.getRequisicao() != null && mesa.getRequisicao().equals(requisicao)) {
+                mesa.setRequisicao(null); // Desocupar a mesa atribuindo null à requisição associada
                 return true;
             }
         }
-        return false;
+        return false; // Mesa não encontrada ou requisição nula
     }
 
     /**
      * Método para localizar um cliente no restaurante.
      * 
      * @param cliente Cliente a ser localizado
-     * @return Retorna o indice do array onde o cliente foi encontrado, caso cliente nao encontrado retorna -1
+     * @return O índice do array de mesas onde o cliente foi encontrado, -1 se não
+     *         encontrado
      */
     public int localizarCliente(Cliente cliente) {
-        for (int i = 0; i < clientes.length; i++) {
-            if (clientes[i] != null && clientes[i].equals(cliente)) {
-                return i; // Retorna o índice onde o cliente foi encontrado no array
+        for (int i = 0; i < mesas.length; i++) {
+            if (mesas[i].getRequisicao() != null && mesas[i].getRequisicao().getCliente().equals(cliente)) {
+                return i; // Retorna o índice onde o cliente foi encontrado no array de mesas
             }
         }
-        return -1; // Cliente não encontrado no array
+        return -1; // Cliente não encontrado no restaurante
     }
 
+    /**
+     * Método para localizar uma requisição no restaurante.
+     * 
+     * @param requisicao Requisição a ser localizada
+     * @return O índice do array de mesas onde a requisição foi encontrada, -1 se não
+     *         encontrada
+     */
+    public int localizarRequisicao(Requisicao requisicao) {
+        // Verifica em cada mesa se a requisição está alocada
+        for (int i = 0; i < mesas.length; i++) {
+            if (mesas[i].getRequisicao() != null && mesas[i].getRequisicao().equals(requisicao)) {
+                return i; // Retorna o índice onde a requisição foi encontrada no array de mesas
+            }
+        }
+        return -1; // Requisição não encontrada em nenhuma mesa
+    }
 }

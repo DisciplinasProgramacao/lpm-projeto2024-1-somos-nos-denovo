@@ -21,8 +21,7 @@ public class Requisicao {
      * @param id          ID do cliente associado à requisição
      */
 
-    public Requisicao(int quantidade, Cliente cliente, LocalDate data, LocalTime horaEntrada, LocalTime horaSaida,
-            int id) {
+     public Requisicao(int quantidade, Cliente cliente, LocalDate data, LocalTime horaEntrada, LocalTime horaSaida, int id) {
         this.quantidade = quantidade;
         this.cliente = cliente;
         this.data = data;
@@ -99,7 +98,7 @@ public class Requisicao {
                 LocalTime horaSaida = horaEntrada.plus(duracaoRefeicao);
 
                 this.setHoraSaida(horaSaida);
-                Restaurante.removerRequisicao(this);
+                Restaurante.fecharRequisicao(this);
 
                 return horaSaida;
             }
