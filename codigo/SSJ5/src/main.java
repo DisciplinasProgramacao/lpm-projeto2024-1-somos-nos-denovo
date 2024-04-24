@@ -77,7 +77,7 @@ public class Main {
         int qtdePessoas = scanner.nextInt();
         scanner.nextLine(); // Consumir nova linha
         Requisicao novaReq = clienteAtual.gerarRequisicao(qtdePessoas);
-        Restaurante.alocarNaMesa(novaReq);
+        Restaurante.alocarNaMesa(novaReq,1);
     }
 
     /**
