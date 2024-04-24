@@ -12,8 +12,9 @@ public class ClienteTest {
     }
 
     @Test
-    public void retornarNomeTratado() {
-        Cliente cliente = new Cliente("lucas cerqueira azevedo");
-        assertEquals("Lucas Cerqueira Azevedo", cliente.getNome());
+    public void testGerarRequisicao() {
+        Cliente cliente = new Cliente("Nome do Cliente");
+        Requisicao requisicao = cliente.gerarRequisicao(8);
+        assertEquals(8, requisicao.getQuantidade());
     }
 }
