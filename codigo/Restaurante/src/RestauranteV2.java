@@ -1,26 +1,21 @@
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class RestauranteV2 {
     
     private ArrayList<Mesa> mesas;
-    private Queue<Requisicao> filaDeEspera;
+    private ArrayList<Requisicao> filaDeEspera ;
     private ArrayList<Requisicao> requisicoesAtendidas;
     private ArrayList<Requisicao> requisicoesFinalizadas;
     private ArrayList<Cliente> clientes;
     
     private int MAX_CLIENTES = 56;
     private int MAX_MESAS = 10;
-    
 
    public RestauranteV2() {
         mesas = new ArrayList<>();
-        filaDeEspera = new LinkedList<>();
+        filaDeEspera = new ArrayList<>();;
         requisicoesAtendidas = new ArrayList<>();
         requisicoesFinalizadas = new ArrayList<>();
         clientes = new ArrayList<>();
@@ -42,7 +37,7 @@ public class RestauranteV2 {
         return -1; // "Todas as mesas estão ocupadas ou não têm capacidade suficiente"
     }
 
-    public boolean desocupar(Mesa mesa) {
+    public boolean desocuparMesa(Mesa mesa) {
         if (!mesa.isDisponibilidade()) {
             mesa.setRequisicao(null);
             return true;
@@ -54,13 +49,19 @@ public class RestauranteV2 {
         if(clientes.contains(cliente)) {
             Requisicao requisicao = new Requisicao(8, cliente, LocalDate.now(), LocalTime.now(), LocalTime.now());
             filaDeEspera.add(requisicao);
+            System.out.println("Requisição criada e adicionada à fila de espera: " + requisicao);
+            
             int mesaIndex = alocarNaMesa(requisicao);
             if(mesaIndex != -1) {
                 return true;
+            } else {
+                System.out.println("Falha ao alocar a mesa para a requisição: " + requisicao);
             }
+        } else {
+            System.out.println("Cliente não encontrado: " + cliente);
         }
-        return false; // "Cliente não encontrado ou não foi possível alocar uma mesa"
-    }        
+        return false;
+    }       
 
     public boolean removerDaFilaDeEspera(Requisicao requisicao) {
         if(filaDeEspera.contains(requisicao)) {
@@ -76,7 +77,7 @@ public class RestauranteV2 {
             requisicoesFinalizadas.add(requisicao);
             for (Mesa mesa : mesas) {
                 if (mesa.getRequisicao() != null && mesa.getRequisicao().equals(requisicao)) {
-                    desocupar(mesa);
+                    desocuparMesa(mesa);
                     break;
                 }
             }
@@ -111,11 +112,31 @@ public class RestauranteV2 {
         return "Requisição não encontrada"; // "Requisição não está na fila de espera nem em uma mesa"
     }
     
-    public LocalTime fecharConta(Requisicao requisicao) {
-        if(requisicoesAtendidas.contains(requisicao)) {
-            fecharRequisicao(requisicao);
+    public boolean fecharConta(Cliente cliente) {
+        for (Requisicao requisicao : requisicoesAtendidas) {
+            if (requisicao.getCliente().equals(cliente)) {
+                requisicoesFinalizadas.add(requisicao);
+                requisicoesAtendidas.remove(requisicao);
+                return true;
+            }
         }
-        return null; // "Requisição não encontrada na lista de requisições atendidas"
-    }       
+        return false;
+    }     
+
+    public ArrayList<Mesa> getMesas() {
+        return this.mesas;
+    }
+
+    public ArrayList<Requisicao> getFilaDeEspera() {
+        return this.filaDeEspera;
+    }
+
+    public ArrayList<Requisicao> getRequisicoesAtendidas() {
+        return this.requisicoesAtendidas;
+    }
+
+    public ArrayList<Requisicao> getRequisicoesFinalizadas() {
+        return this.requisicoesFinalizadas;
+    }
 
 }
