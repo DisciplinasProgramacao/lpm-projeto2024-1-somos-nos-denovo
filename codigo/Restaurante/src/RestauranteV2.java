@@ -89,16 +89,16 @@ public class RestauranteV2 {
     public String localizarCliente(Cliente cliente) {
         for (Requisicao requisicao : filaDeEspera) {
             if (requisicao.getCliente().equals(cliente)) {
-                return "Cliente na fila de espera na posição: " + (filaDeEspera.indexOf(requisicao) + 1);
+                return "Cliente " + cliente.getNome() + " encontrado na fila de espera na posição: " + (filaDeEspera.indexOf(requisicao) + 1);
             }
         }
         for (Mesa mesa : mesas) {
             if (mesa.getRequisicao() != null && mesa.getRequisicao().getCliente().equals(cliente)) {
-                return "Cliente na mesa de ID: " + mesa.getId();
+                return "Cliente " + cliente.getNome() + " encontrado na mesa de ID: " + mesa.getId();
             }
         }
-        return "Cliente não esta no Restaurante"; // "Cliente não está na fila de espera nem em uma mesa"
-    }        
+        return "Cliente " + cliente.getNome() + " não está na fila de espera nem em uma mesa.";
+    }       
     
     public String localizarRequisicao(Requisicao requisicao) {
         if (filaDeEspera.contains(requisicao)) {
