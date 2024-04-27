@@ -6,11 +6,12 @@ public class Main {
     private static RestauranteV2 restaurante = new RestauranteV2();
 
     public static void main(String[] args) {
-        while (true) {
+        int opcao;
+        do {
             exibirMenu();
-            int opcao = scanner.nextInt();
+            opcao = scanner.nextInt();
             scanner.nextLine(); // Consumir nova linha
-
+    
             switch (opcao) {
                 case 1 -> cadastrarCliente();
                 case 2 -> gerarRequisicao(restaurante, clienteAtual);
@@ -22,7 +23,7 @@ public class Main {
                 case 8 -> System.out.println("Saindo do sistema...");
                 default -> System.out.println("Opção inválida");
             }
-        }
+        } while (opcao != 8);
     }
 
     private static void exibirMenu() {
