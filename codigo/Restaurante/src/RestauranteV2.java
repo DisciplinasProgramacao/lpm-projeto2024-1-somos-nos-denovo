@@ -3,6 +3,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class RestauranteV2 {
@@ -25,13 +26,13 @@ public class RestauranteV2 {
         clientes = new ArrayList<>();
         
         for(int i = 0; i < MAX_MESAS; i++) {
-            mesas.add(new Mesa());
+            mesas.add(new Mesa(true));
         }
     }
 
     public int alocarNaMesa(Requisicao requisicao) {
         for (Mesa mesa : mesas) {
-            if (!mesa.isOcupada() && mesa.getCapacidade() >= requisicao.getQuantidadePessoas()) {
+            if (mesa.isDisponibilidade() && mesa.getCapacidade() >= requisicao.getQuantidade()) {
                 mesa.setRequisicao(requisicao);
                 filaDeEspera.remove(requisicao);
                 requisicoesAtendidas.add(requisicao);
@@ -42,16 +43,16 @@ public class RestauranteV2 {
     }
 
     public boolean desocupar(Mesa mesa) {
-        if (mesa.isOcupada()) {
+        if (!mesa.isDisponibilidade()) {
             mesa.setRequisicao(null);
             return true;
         }
         return false; // "A mesa já está desocupada"
     }
 
-    public boolean gerarRequisicao(Cliente cliente, int quantidadePessoas) {
+    public boolean gerarRequisicao(Cliente cliente) {
         if(clientes.contains(cliente)) {
-            Requisicao requisicao = new Requisicao(cliente, quantidadePessoas);
+            Requisicao requisicao = new Requisicao(8, cliente, LocalDate.now(), LocalTime.now(), LocalTime.now());
             filaDeEspera.add(requisicao);
             int mesaIndex = alocarNaMesa(requisicao);
             if(mesaIndex != -1) {
