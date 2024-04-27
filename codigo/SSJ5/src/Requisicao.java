@@ -1,27 +1,41 @@
+package codigo.SSJ5.src;
+import java.util.List;
+import java.util.ArrayList;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class Requisicao {
-    private static final AtomicInteger idCounter = new AtomicInteger();
-    private int id;
+
     private int quantidade;
     private Cliente cliente;
     private LocalDate data;
     private LocalTime horaEntrada;
     private LocalTime horaSaida;
+    private static int nextId = 0;
+    private int id;
+    private Mesa mesa;
+    private boolean status;
+    private Restaurante restaurante;
 
-    public Requisicao(int quantidade, Cliente cliente, LocalDate data, LocalTime horaEntrada, LocalTime horaSaida) {
-        this.id = idCounter.incrementAndGet();
+public Requisicao(int quantidade, Cliente cliente, LocalDate data, LocalTime horaEntrada, LocalTime horaSaida, Restaurante restaurante) {
         this.quantidade = quantidade;
         this.cliente = cliente;
         this.data = data;
         this.horaEntrada = horaEntrada;
         this.horaSaida = horaSaida;
+        this.id = nextId++;
+        this.status = true;
+        this.restaurante = restaurante;
     }
 
-    public int getId() {
-        return id;
+
+    public LocalTime fecharRequisicao(Requisicao requisicao, List<Requisicao> historicoRequisicao){
+        LocalTime horadaSaida = LocalTime.now();
+        restaurante.fecharConta(requisicao);
+        restaurante.desocuparMesa(requisicao, mesa);
+
+
+        return horaSaida;
     }
 
     public int getQuantidade() {
@@ -36,8 +50,16 @@ public class Requisicao {
         return cliente;
     }
 
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
     public LocalDate getData() {
         return data;
+    }
+
+    public void setData(LocalDate data) {
+        this.data = data;
     }
 
     public LocalTime getHoraEntrada() {
@@ -55,4 +77,26 @@ public class Requisicao {
     public void setHoraSaida(LocalTime horaSaida) {
         this.horaSaida = horaSaida;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public Mesa getMesa() {
+        return mesa;
+    }
+
+    public void setMesa(Mesa mesa) {
+        this.mesa = mesa;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
+
 }

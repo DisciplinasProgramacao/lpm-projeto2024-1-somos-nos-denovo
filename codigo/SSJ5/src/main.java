@@ -1,78 +1,82 @@
+package codigo.SSJ5.src;
+
 import java.util.Scanner;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Main {
-    static Scanner teclado = new Scanner(System.in);
-    static HashMap<String, Cliente> clientes = new HashMap<>();
-
-    
-    
-
-    private static Cliente localizarCliente(String nome) {
-        return clientes.getOrDefault(nome, null);
+public class main {
+    /**
+     * "Limpa" a tela (códigos de terminal VT-100)
+     */
+    public static void limparTela() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
     }
-
     public static void main(String[] args) {
-        Restaurante restaurante = new Restaurante();
+       Restaurante restaurante = new Restaurante();
+        List<Requisicao> historicoRequisicoes = new ArrayList<>();
+        List<Mesa> listaDeMesas = new ArrayList<>();
+        Scanner scanner = new Scanner(System.in);
+        int opcao;
 
-        while (true) {
-            System.out.println("\nEscolha uma opção:");
-            System.out.println("1. Cadastrar Cliente");
-            System.out.println("2. Atender Cliente/Criar Requisição");
-            System.out.println("3. Criar Mesa");
-            System.out.println("4. Desocupar Mesa");
-            System.out.println("5. Sair");
-            System.out.println("6. Listar mesas cadastradas no sistema");
-            int opcao = teclado.nextInt(); 
-            teclado.nextLine();
+        do {
+            System.out.println("1 - Cadastrar Cliente");
+            System.out.println("2 - Criar requisição");
+            System.out.println("3 - Fechar conta");
+            System.out.println("4 - Exibir histórico de requisições");
+            System.out.println("5 - Exibir lista de espera");
+            System.out.println("6 - Sair");
+            System.out.print("Escolha uma opção: ");
+            opcao = scanner.nextInt();
 
             switch (opcao) {
                 case 1:
-                    System.out.println("Insira seu nome:");
-                    String nome = teclado.nextLine();
+                    System.out.print("Digite o nome do cliente: ");
+                    String nome = scanner.next();
                     Cliente novoCliente = new Cliente(nome);
-                    clientes.put(nome, novoCliente);
-                    System.out.println(novoCliente + " foi cadastrado com sucesso!");
+                    restaurante.listaDeClientes.add(novoCliente);
+                    System.out.println("Cliente cadastrado com sucesso!");
                     break;
                 case 2:
-                    System.out.println("Qual o nome do cliente?");
-                    nome = teclado.nextLine();
-                    Cliente clienteAtual = localizarCliente(nome);
-                    if (clienteAtual == null) {
-                        System.out.println("Nenhum cliente encontrado com esse nome.");
-                        break;
+                    System.out.print("Digite o nome do cliente: ");
+                    nome = scanner.next();
+                    System.out.print("Digite a quantidade de pessoas: ");
+                    int quantidade = scanner.nextInt();
+                    restaurante.gerarRequisicao(quantidade, nome);
+                    System.out.println("Requisicao criada com sucesso!");
+                    break;
+                case 3:
+                    System.out.print("Digite o ID da mesa: ");
+                    int idMesa = scanner.nextInt();
+                    Requisicao requisicao = null;
+                    for (Requisicao r : restaurante.historicoDeRequisicao) {
+                        if (r.getMesa().getId() == idMesa) {
+                            requisicao = r;
+                            break;
+                        }
                     }
-                    System.out.println("Quantas pessoas?");
-                    int qtdePessoas = teclado.nextInt();
-                    Requisicao novaReq = clienteAtual.gerarRequisicao(qtdePessoas);
-                    boolean alocado = restaurante.alocarNaMesa(novaReq);
-                    if (!alocado) {
-                        System.out.println("Não foi possível alocar uma mesa. Tente novamente mais tarde ou reduza o número de pessoas.");
+                    if (requisicao != null) {
+                        restaurante.fecharConta(requisicao);
+                        System.out.println("Conta fechada com sucesso!");
+                    } else {
+                        System.out.println("Requisição não encontrada.");
                     }
                     break;
-                    case 3:
-                    System.out.println("Insira a capacidade da mesa:");
-                    int capacidade = teclado.nextInt();
-                    restaurante.criarMesa(capacidade);
-                    break;
-                
                 case 4:
-                    System.out.println("Insira o id da mesa que deseja desocupar:");
-                    int idMesa = teclado.nextInt();
-                    restaurante.desocuparMesa(idMesa);
+                    restaurante.exibirHistoricoDeRequisicoes();
                     break;
                 case 5:
-                    System.out.println("Saindo do sistema. Obrigado por usar nosso serviço.");
-                    teclado.close();
-                    return;
-                    case 6:
-                    restaurante.listarMesas();
+                    restaurante.exibirListaDeEspera();
                     break;
-                
+                case 6:
+                    System.out.println("Saindo...");
+                    break;
                 default:
                     System.out.println("Opção inválida. Tente novamente.");
                     break;
             }
-        }
+        } while (opcao != 6);
+
+        scanner.close();
     }
 }
