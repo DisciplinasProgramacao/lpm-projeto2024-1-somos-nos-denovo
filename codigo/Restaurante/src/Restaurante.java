@@ -78,6 +78,26 @@ public class Restaurante {
         }
     }
 
+     /**
+     * Método para desocupar uma mesa.
+     * 
+     * @param requisicao Requisição associada à mesa a ser desocupada
+     * @return true se a mesa foi desocupada com sucesso, false caso contrário
+     */
+    public boolean desocupar(Requisicao requisicao) {
+        if (requisicao == null) {
+            return false; // Se a requisição fornecida for nula, não é possível desocupar a mesa
+        }
+
+        for (Mesa mesa : mesas) {
+            if (mesa.getRequisicao() != null && mesa.getRequisicao().equals(requisicao)) {
+                mesa.setRequisicao(null); // Desocupar a mesa atribuindo null à requisição associada
+                return true;
+            }
+        }
+        return false; // Mesa não encontrada ou requisição nula
+    }
+
     /**
      * Método para adicionar uma requisição à fila de espera.
      * 
@@ -115,27 +135,7 @@ public class Restaurante {
             return false; // Requisição não encontrada no histórico
         }
     }
-
-    /**
-     * Método para desocupar uma mesa.
-     * 
-     * @param requisicao Requisição associada à mesa a ser desocupada
-     * @return true se a mesa foi desocupada com sucesso, false caso contrário
-     */
-    public boolean desocupar(Requisicao requisicao) {
-        if (requisicao == null) {
-            return false; // Se a requisição fornecida for nula, não é possível desocupar a mesa
-        }
-
-        for (Mesa mesa : mesas) {
-            if (mesa.getRequisicao() != null && mesa.getRequisicao().equals(requisicao)) {
-                mesa.setRequisicao(null); // Desocupar a mesa atribuindo null à requisição associada
-                return true;
-            }
-        }
-        return false; // Mesa não encontrada ou requisição nula
-    }
-
+   
     /**
      * Método para localizar um cliente no restaurante.
      * 
