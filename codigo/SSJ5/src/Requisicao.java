@@ -1,37 +1,50 @@
+package codigo.SSJ5.src;
+import java.util.List;
+import java.util.ArrayList;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.concurrent.atomic.AtomicInteger;
+
 
 public class Requisicao {
-    private static final AtomicInteger idCounter = new AtomicInteger(0);
-    private int id;
+
     private int quantidade;
     private Cliente cliente;
     private LocalDate data;
     private LocalTime horaEntrada;
     private LocalTime horaSaida;
+    private static int nextId = 0;
+    private int id;
+    private Mesa mesa;
+    private boolean status;
+    private Restaurante restaurante;
 
     /**
      * Construtor da classe Requisicao.
-     * 
-     * @param quantidade  Quantidade de pessoas na requisição
-     * @param cliente     Cliente associado à requisição
-     * @param data        Data da requisição
-     * @param horaEntrada Hora de entrada da requisição
-     * @param horaSaida   Hora de saída da requisição
      */
-    public Requisicao(int quantidade, Cliente cliente, LocalDate data, LocalTime horaEntrada, LocalTime horaSaida) {
-        this.id = idCounter.incrementAndGet();
+    public Requisicao(int quantidade, Cliente cliente, LocalDate data, LocalTime horaEntrada, LocalTime horaSaida, Restaurante restaurante) {
         this.quantidade = quantidade;
         this.cliente = cliente;
         this.data = data;
         this.horaEntrada = horaEntrada;
         this.horaSaida = horaSaida;
+        this.id = nextId++;
+        this.status = true;
+        this.restaurante = restaurante;
     }
 
-    // Getters e Setters
-    public int getId() {
-        return id;
+    /**
+     * Fecha uma requisição, desocupa a mesa e adiciona a requisição ao histórico.
+     * @param requisicao A requisição que vai ser fechada.
+     * @param historicoRequisicao A lista de historico das requisicoes.
+     * @return A hora de saída.
+     */
+    public LocalTime fecharRequisicao(Requisicao requisicao, List<Requisicao> historicoRequisicao){
+        LocalTime horadaSaida = LocalTime.now();
+        restaurante.fecharConta(requisicao);
+        restaurante.desocuparMesa(requisicao, mesa);
+
+
+        return horaSaida;
     }
 
     public int getQuantidade() {
@@ -74,7 +87,25 @@ public class Requisicao {
         this.horaSaida = horaSaida;
     }
 
-    public static int getNextID() {
-        return idCounter.incrementAndGet();
+    public int getId() {
+        return id;
     }
+
+    public Mesa getMesa() {
+        return mesa;
+    }
+
+    public void setMesa(Mesa mesa) {
+        this.mesa = mesa;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
+
 }
