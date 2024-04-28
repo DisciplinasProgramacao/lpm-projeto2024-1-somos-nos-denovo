@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="50977c00-63c0-48ad-8343-43c1e067e9af" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/codigo/SSJ5/src/Cliente.java" beforeDir="false" afterPath="$PROJECT_DIR$/codigo/SSJ5/src/Cliente.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/codigo/SSJ5/src/Mesa.java" beforeDir="false" afterPath="$PROJECT_DIR$/codigo/SSJ5/src/Mesa.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/codigo/SSJ5/src/Requisicao.java" beforeDir="false" afterPath="$PROJECT_DIR$/codigo/SSJ5/src/Requisicao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/codigo/SSJ5/src/Restaurante.java" beforeDir="false" afterPath="$PROJECT_DIR$/codigo/SSJ5/src/Restaurante.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/codigo/SSJ5/src/main.java" beforeDir="false" afterPath="$PROJECT_DIR$/codigo/SSJ5/src/Main.java" afterDir="false" />
+    </list>
+    <list id="08047629-bf91-499a-9937-670f79b12a8f" name="Changes by gsilv" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="Classe-Main" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="ProjectErrors" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
+  <component name="ProjectId" id="2ff2mC3p3PaOcwhf64Xu2NgOflr" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+    &quot;Application.MinhaClasse.executor&quot;: &quot;Run&quot;,
+    &quot;Application.main.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;GUSTAVONAOAPAGAPFF&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;proofread&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="codigo.SSJ5.src" />
+    </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9f38398b9061-18abd8497189-intellij.indexing.shared.core-IU-241.14494.240" />
+        <option value="bundled-js-predefined-1d06a55b98c1-74d2a5396914-JavaScript-IU-241.14494.240" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="50977c00-63c0-48ad-8343-43c1e067e9af" name="Changes" comment="" />
+      <created>1714177969615</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1714177969615</updated>
+      <workItem from="1714177972252" duration="21557000" />
+      <workItem from="1714263809555" duration="2111000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
