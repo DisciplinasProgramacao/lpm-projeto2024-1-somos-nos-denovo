@@ -1,11 +1,16 @@
-package codigo;
+package codigo.SSJ5.src;
 
 public class Cliente {
-
     private String nome;
+    private static int nextId = 0;
+    private int id;
 
+    /**
+     * Construtor da classe Cliente.
+     */
     public Cliente(String nome) {
-        this.nome = tratarNome(nome);
+        this.nome = nome;
+        this.id = nextId++;
     }
 
     public String getNome() {
@@ -13,11 +18,10 @@ public class Cliente {
     }
 
     public void setNome(String nome) {
-        this.nome = tratarNome(nome);
+        this.nome = nome;
     }
 
-    public Requisicao gerarRequisicao(int quantidade) {
-        Requisicao req = new Requisicao(this.quantidade);
-        return req;
+    public int getId() {
+        return id;
     }
 }
