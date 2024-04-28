@@ -4,7 +4,7 @@ import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
 
-public class main {
+public class Main {
     /**
      * "Limpa" a tela (códigos de terminal VT-100)
      */
@@ -13,7 +13,7 @@ public class main {
         System.out.flush();
     }
     public static void main(String[] args) {
-       Restaurante restaurante = new Restaurante();
+        Restaurante restaurante = new Restaurante();
         List<Requisicao> historicoRequisicoes = new ArrayList<>();
         List<Mesa> listaDeMesas = new ArrayList<>();
         Scanner scanner = new Scanner(System.in);
@@ -27,6 +27,11 @@ public class main {
             System.out.println("5 - Exibir lista de espera");
             System.out.println("6 - Sair");
             System.out.print("Escolha uma opção: ");
+
+            while (!scanner.hasNextInt()) {
+                System.out.println("Entrada inválida. Por favor, insira um número.");
+                scanner.next();
+            }
             opcao = scanner.nextInt();
 
             switch (opcao) {
@@ -57,7 +62,6 @@ public class main {
                     }
                     if (requisicao != null) {
                         restaurante.fecharConta(requisicao);
-                        System.out.println("Conta fechada com sucesso!");
                     } else {
                         System.out.println("Requisição não encontrada.");
                     }
@@ -69,7 +73,7 @@ public class main {
                     restaurante.exibirListaDeEspera();
                     break;
                 case 6:
-                    System.out.println("Saindo...");
+                    System.out.println("Fechando sistema!");
                     break;
                 default:
                     System.out.println("Opção inválida. Tente novamente.");

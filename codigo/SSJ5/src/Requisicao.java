@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+
 public class Requisicao {
 
     private int quantidade;
@@ -17,7 +18,10 @@ public class Requisicao {
     private boolean status;
     private Restaurante restaurante;
 
-public Requisicao(int quantidade, Cliente cliente, LocalDate data, LocalTime horaEntrada, LocalTime horaSaida, Restaurante restaurante) {
+    /**
+     * Construtor da classe Requisicao.
+     */
+    public Requisicao(int quantidade, Cliente cliente, LocalDate data, LocalTime horaEntrada, LocalTime horaSaida, Restaurante restaurante) {
         this.quantidade = quantidade;
         this.cliente = cliente;
         this.data = data;
@@ -28,7 +32,12 @@ public Requisicao(int quantidade, Cliente cliente, LocalDate data, LocalTime hor
         this.restaurante = restaurante;
     }
 
-
+    /**
+     * Fecha uma requisição, desocupa a mesa e adiciona a requisição ao histórico.
+     * @param requisicao A requisição que vai ser fechada.
+     * @param historicoRequisicao A lista de historico das requisicoes.
+     * @return A hora de saída.
+     */
     public LocalTime fecharRequisicao(Requisicao requisicao, List<Requisicao> historicoRequisicao){
         LocalTime horadaSaida = LocalTime.now();
         restaurante.fecharConta(requisicao);

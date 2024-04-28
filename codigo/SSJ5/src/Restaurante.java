@@ -4,6 +4,9 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
 
+/**
+ * Construtor da classe Restaurante.
+ */
 public class Restaurante {
     private  Requisicao requisicao;
     private List<Mesa> listaDeMesas;
@@ -15,22 +18,26 @@ public class Restaurante {
         listaDeClientes = new ArrayList<>();
         historicoDeRequisicao = new ArrayList<>();
         listaDeMesas = new ArrayList<>();
-// Adiciona 4 mesas com capacidade para 4 pessoas
+        // Adiciona 4 mesas com capacidade para 4 pessoas
         for (int i = 0; i < 4; i++) {
             listaDeMesas.add(new Mesa(4 , true));
         }
-// Adiciona 4 mesas com capacidade para 6 pessoas
+        // Adiciona 4 mesas com capacidade para 6 pessoas
         for (int i = 0; i < 4; i++) {
             listaDeMesas.add(new Mesa(6 , true));
         }
-// Adiciona 2 mesas com capacidade para 8 pessoas
+        // Adiciona 2 mesas com capacidade para 8 pessoas
         for (int i = 0; i < 2; i++) {
             listaDeMesas.add(new Mesa(8, true));
         }
 
     }
 
-    // Método para alocar uma mesa em uma Requisicao
+    /**
+     * Aloca uma mesa para uma requisição se uma mesa adequada estiver disponível.
+     * @param requisicao A requisição que vai ser alocada.
+     * @return true para conseguirmos testar.
+     */
     public boolean alocarNaRequisicao(Requisicao requisicao) {
         for (Mesa mesaDisponivel : listaDeMesas) {
             if (mesaDisponivel.getCapacidade() >= requisicao.getQuantidade() && mesaDisponivel.isDisponibilidade()) {
@@ -44,12 +51,19 @@ public class Restaurante {
         return false;
     }
 
-    // Método para adicionar um cliente à lista de espera
+    /**
+     * Adiciona uma requisição à fila de espera.
+     * @param requisicao A requisição que vai ser adicionada à fila de espera.
+     * @return true para conseguirmos testar.
+     */
     public boolean entrarNaFilaDeEspera(Requisicao requisicao) {
         filaDeEspera.offer(requisicao);
         return true;
     }
-    
+
+    /**
+     * Exibe a lista de espera.
+     */
     public void exibirListaDeEspera() {
         if (filaDeEspera.isEmpty()) {
             System.out.println("Não há clientes na lista de espera.");
@@ -61,14 +75,24 @@ public class Restaurante {
         }
     }
 
-    public  boolean desocuparMesa(Requisicao requisicao, Mesa mesa){
+    /**
+     * Desocupa uma mesa.
+     * @param requisicao A requisição associada à mesa que vai ser desocupada.
+     * @param mesa A mesa a ser desocupada.
+     * @return true para conseguirmos testar.
+     */
+    public boolean desocuparMesa(Requisicao requisicao, Mesa mesa){
         if (!mesa.isDisponibilidade()) {
             mesa.setDisponibilidade(true);
         }
         return true;
     }
 
-
+    /**
+     * Fecha a conta de uma requisição e tenta alocar a próxima requisição na fila de espera na mesa.
+     * @param requisicao A requisição da conta que será fechada.
+     * @return true para conseguirmos testar.
+     */
     public boolean fecharConta(Requisicao requisicao) {
         System.out.println("Sua conta da requisicao: "+requisicao.getId()+" foi fechada com sucesso!");
         Mesa mesa = requisicao.getMesa();
@@ -89,6 +113,12 @@ public class Restaurante {
         return true;
     }
 
+    /**
+     * Gera uma nova requisição.
+     * @param quantidade A quantidade de pessoas na requisição.
+     * @param nome O nome do cliente responsavel por gerar a requisição.
+     * @return A nova requisição.
+     */
     public Requisicao gerarRequisicao(int quantidade, String nome){
         Cliente clienteExistente = null;
         for (Cliente cliente : listaDeClientes) {
@@ -101,7 +131,7 @@ public class Restaurante {
         if (clienteExistente != null) {
             requisicao = new Requisicao(quantidade, clienteExistente, LocalDate.now(), LocalTime.now(), null, this);
         } else {
-            System.out.println("Cliente nao cadastrado, favor digitar o nome do novo cliente:");
+            System.out.println("Cliente previamente nao cadastrado, novo cliente cadastrado de acordo com o nome inserido!");
             Cliente novoCliente = new Cliente(nome);
             listaDeClientes.add(novoCliente);
             requisicao = new Requisicao(quantidade, novoCliente, LocalDate.now(), LocalTime.now(), null, this);
@@ -115,15 +145,17 @@ public class Restaurante {
         return requisicao;
     }
 
+    /**
+     * Exibe o histórico de requisições.
+     */
     public void exibirHistoricoDeRequisicoes() {
         if (historicoDeRequisicao.isEmpty()) {
             System.out.println("O histórico de requisições está vazio.");
         } else {
             System.out.println("Histórico de requisições:");
             for (Requisicao requisicao : historicoDeRequisicao) {
-                System.out.println("Cliente: " + requisicao.getCliente().getNome() + ", Quantidade: " + requisicao.getQuantidade() + ", Mesa: " + requisicao.getMesa().getId());
+                System.out.println("Requisicao: "+requisicao.getId()+" Cliente: " + requisicao.getCliente().getNome() + ", Quantidade: " + requisicao.getQuantidade() + ", Mesa: " + requisicao.getMesa().getId());
             }}}
-
 
 }
 
