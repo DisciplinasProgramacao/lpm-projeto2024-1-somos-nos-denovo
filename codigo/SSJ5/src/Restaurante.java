@@ -154,7 +154,7 @@ public class Restaurante {
         } else {
             System.out.println("Histórico de requisições:");
             for (Requisicao requisicao : historicoDeRequisicao) {
-                System.out.println("Requisicao: "+requisicao.getId()+" Cliente: " + requisicao.getCliente().getNome() + ", Quantidade: " + requisicao.getQuantidade() + ", Mesa: " + requisicao.getMesa().getId());
+                System.out.println("Requisicao: "+requisicao.getId()+" Cliente: " + requisicao.getCliente().getNome() + ", Quantidade: " + requisicao.getQuantidade() + ", Mesa: " + requisicao.getMesa().getId() + ", Hora entrada: " + requisicao.getHoraEntrada() + ", Hora saida: " + requisicao.getHoraSaida());
             }}}
 
 }

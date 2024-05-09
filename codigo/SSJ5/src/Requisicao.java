@@ -39,7 +39,7 @@ public class Requisicao {
      * @return A hora de saída.
      */
     public LocalTime fecharRequisicao(Requisicao requisicao, List<Requisicao> historicoRequisicao){
-        LocalTime horadaSaida = LocalTime.now();
+        this.horaSaida = LocalTime.now();
         restaurante.fecharConta(requisicao);
         restaurante.desocuparMesa(requisicao, mesa);
 

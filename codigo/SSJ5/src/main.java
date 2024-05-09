@@ -39,7 +39,7 @@ public class main {
                     System.out.print("Digite o nome do cliente: ");
                     String nome = scanner.next();
                     Cliente novoCliente = new Cliente(nome);
-                    restaurante.listaDeClientes.add(novoCliente);
+                    restaurante.addCliente(novoCliente);
                     System.out.println("Cliente cadastrado com sucesso!");
                     break;
                 case 2:
@@ -61,16 +61,17 @@ public class main {
                         }
                     }
                     if (requisicao != null) {
-                        restaurante.fecharConta(requisicao);
+                        requisicao.fecharRequisicao(requisicao, historicoRequisicoes);
                     } else {
                         System.out.println("Requisição não encontrada.");
                     }
                     break;
                 case 4:
-                    restaurante.exibirHistoricoDeRequisicoes();
+                   System.out.println(restaurante.exibirHistoricoDeRequisicoes());
                     break;
                 case 5:
-                    restaurante.exibirListaDeEspera();
+
+                   System.out.println(restaurante.exibirListaDeEspera();
                     break;
                 case 6:
                     System.out.println("Fechando sistema!");
