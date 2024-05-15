@@ -34,6 +34,38 @@ public class Restaurante {
     }
 
     /**
+     * Retorna a lista de mesas do restaurante.
+     * @return A lista de mesas.
+     */
+    public List<Mesa> getListaDeMesas() {
+        return listaDeMesas;
+    }
+
+    /**
+     * Retorna a fila de espera de requisições do restaurante.
+     * @return A fila de espera de requisições.
+     */
+    public Queue<Requisicao> getFilaDeEspera() {
+        return filaDeEspera;
+    }
+
+    /**
+     * Retorna o histórico de requisições do restaurante.
+     * @return A lista de requisições que foram processadas.
+     */
+    public List<Requisicao> getHistoricoDeRequisicao() {
+        return historicoDeRequisicao;
+    }
+
+    /**
+     * Retorna a lista de clientes do restaurante.
+     * @return A lista de clientes.
+     */
+    public List<Cliente> getListaDeClientes() {
+        return listaDeClientes;
+    }
+
+    /**
      * Aloca uma mesa para uma requisição se uma mesa adequada estiver disponível.
      * @param requisicao A requisição que vai ser alocada.
      * @return true para conseguirmos testar.

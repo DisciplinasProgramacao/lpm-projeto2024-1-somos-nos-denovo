@@ -40,12 +40,15 @@ public class Requisicao {
      */
     public LocalTime fecharRequisicao(Requisicao requisicao, List<Requisicao> historicoRequisicao){
         this.horaSaida = LocalTime.now();
-        restaurante.fecharConta(requisicao);
-        restaurante.desocuparMesa(requisicao, mesa);
-
-
+        if (mesa != null) {
+            restaurante.fecharConta(requisicao);
+            restaurante.desocuparMesa(requisicao, mesa);
+        } else {
+            System.out.println("Erro: A mesa associada à requisição não foi definida.");
+        }
         return horaSaida;
     }
+    
 
     public int getQuantidade() {
         return quantidade;
