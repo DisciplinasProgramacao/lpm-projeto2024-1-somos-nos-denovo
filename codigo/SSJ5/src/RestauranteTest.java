@@ -24,7 +24,6 @@ public class RestauranteTest {
 
     @Test
     public void testAlocarNaRequisicaoNotEquals() {
-        // Criar uma mesa e setar a disponibilidade para false para testar a alocação incorreta
         restaurante.getListaDeMesas().forEach(mesa -> mesa.setDisponibilidade(false));
         Requisicao requisicao = restaurante.gerarRequisicao(4, "Zico");
         boolean result = restaurante.alocarNaRequisicao(requisicao);
