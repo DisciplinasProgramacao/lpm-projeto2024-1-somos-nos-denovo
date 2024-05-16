@@ -48,7 +48,7 @@ public class Requisicao {
         }
         return horaSaida;
     }
-    
+
 
     public int getQuantidade() {
         return quantidade;

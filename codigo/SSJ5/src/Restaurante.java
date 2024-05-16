@@ -10,7 +10,7 @@ import java.util.*;
 public class Restaurante {
     private  Requisicao requisicao;
     private List<Mesa> listaDeMesas;
-    private Queue<Requisicao> filaDeEspera;
+    public Queue<Requisicao> filaDeEspera;
     public List<Requisicao> historicoDeRequisicao;
     public List<Cliente> listaDeClientes;
     public Restaurante() {
@@ -176,19 +176,6 @@ public class Restaurante {
 
         return requisicao;
     }
-
-    /**
-     * Exibe o histórico de requisições.
-     */
-    public void exibirHistoricoDeRequisicoes() {
-        if (historicoDeRequisicao.isEmpty()) {
-            System.out.println("O histórico de requisições está vazio.");
-        } else {
-            System.out.println("Histórico de requisições:");
-            for (Requisicao requisicao : historicoDeRequisicao) {
-                System.out.println("Requisicao: "+requisicao.getId()+" Cliente: " + requisicao.getCliente().getNome() + ", Quantidade: " + requisicao.getQuantidade() + ", Mesa: " + requisicao.getMesa().getId() + ", Hora entrada: " + requisicao.getHoraEntrada() + ", Hora saida: " + requisicao.getHoraSaida());
-            }}}
-
 }
 
 
