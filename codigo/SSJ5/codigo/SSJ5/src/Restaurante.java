@@ -18,7 +18,6 @@ public class Restaurante {
         historicoDeRequisicoes = new ArrayList<>();
         listaDeMesas = new ArrayList<>();
 
-        // Adiciona 4 mesas com capacidade para 4 pessoas
         adicionarMesas(4, 4);
         adicionarMesas(4, 6);
         adicionarMesas(2, 8);
@@ -40,7 +39,7 @@ public class Restaurante {
      * @param requisicao Requisição do cliente.
      * @return true se a mesa foi alocada com sucesso, false caso contrário.
      */
-    public boolean alocarMesa(Requisicao requisicao) {
+    public boolean alocarNaRequisicao(Requisicao requisicao) {
         for (Mesa mesa : listaDeMesas) {
             if (mesa.isDisponibilidade() && mesa.getCapacidade() >= requisicao.getQuantidade()) {
                 mesa.setDisponibilidade(false);
@@ -105,7 +104,7 @@ public class Restaurante {
             desocuparMesa(mesa);
             if (!filaDeEspera.isEmpty()) {
                 Requisicao proxRequisicao = filaDeEspera.poll();
-                return alocarMesa(proxRequisicao);
+                return alocarNaRequisicao(proxRequisicao);
             }
             return true;
         }

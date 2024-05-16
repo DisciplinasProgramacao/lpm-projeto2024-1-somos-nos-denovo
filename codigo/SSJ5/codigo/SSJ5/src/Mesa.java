@@ -38,11 +38,11 @@ public class Mesa {
         return id;
     }
 
-    public Requisicao getRequisicao() { // Getter para o campo Requisicao
+    public Requisicao getRequisicao() { 
         return requisicao;
     }
 
-    public void setRequisicao(Requisicao requisicao) { // Setter para o campo Requisicao
+    public void setRequisicao(Requisicao requisicao) { 
         this.requisicao = requisicao;
     }
 

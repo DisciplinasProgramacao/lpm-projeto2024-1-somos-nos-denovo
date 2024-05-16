@@ -20,7 +20,7 @@ public class RestauranteTest {
     @Test
     public void testAlocarMesa() {
         Requisicao requisicao = restaurante.gerarRequisicao(4, new Cliente("João"), LocalDate.now(), LocalTime.now(), LocalTime.now().plusHours(2));
-        assertTrue(restaurante.alocarMesa(requisicao));
+        assertTrue(restaurante.alocarNaRequisicao(requisicao));
     }
 
     @Test
@@ -49,14 +49,14 @@ public class RestauranteTest {
     @Test
     public void testDesocuparMesa() {
         Requisicao requisicao = restaurante.gerarRequisicao(2, new Cliente("Laura"), LocalDate.now(), LocalTime.now(), LocalTime.now().plusHours(2));
-        restaurante.alocarMesa(requisicao);
+        restaurante.alocarNaRequisicao(requisicao);
         assertTrue(restaurante.desocuparMesa(restaurante.listaDeMesas.get(0)));
     }
 
     @Test
     public void testFecharConta() {
         Requisicao requisicao = restaurante.gerarRequisicao(4, new Cliente("Mariana"), LocalDate.now(), LocalTime.now(), LocalTime.now().plusHours(2));
-        restaurante.alocarMesa(requisicao);
+        restaurante.alocarNaRequisicao(requisicao);
         assertTrue(restaurante.fecharConta(requisicao));
     }
 }
