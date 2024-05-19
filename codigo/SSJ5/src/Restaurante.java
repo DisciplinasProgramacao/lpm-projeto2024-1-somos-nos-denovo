@@ -8,12 +8,12 @@ import java.util.*;
  * Construtor da classe Restaurante.
  */
 public class Restaurante {
-    private  Requisicao requisicao;
     private List<Mesa> listaDeMesas;
     public Queue<Requisicao> filaDeEspera;
     public List<Requisicao> historicoDeRequisicao;
     public List<Cliente> listaDeClientes;
     public Restaurante() {
+
         filaDeEspera = new LinkedList<>();
         listaDeClientes = new ArrayList<>();
         historicoDeRequisicao = new ArrayList<>();
@@ -72,7 +72,7 @@ public class Restaurante {
      */
     public boolean alocarNaRequisicao(Requisicao requisicao) {
         for (Mesa mesaDisponivel : listaDeMesas) {
-            if (mesaDisponivel.getCapacidade() >= requisicao.getQuantidade() && mesaDisponivel.isDisponibilidade()) {
+            if (mesaDisponivel.getCapacidade() >= requisicao.getQuantidadePessoas() && mesaDisponivel.isDisponibilidade()) {
                 mesaDisponivel.setDisponibilidade(false);
                 requisicao.setMesa(mesaDisponivel);
                 System.out.println("Requisição alocada na mesa ID: " + mesaDisponivel.getId());
@@ -134,7 +134,7 @@ public class Restaurante {
         }
         // Verifica a fila de espera e aloca a próxima requisição na mesa se possível
         for (Requisicao r : filaDeEspera) {
-            if (mesa.getCapacidade() >= r.getQuantidade()) {
+            if (mesa.getCapacidade() >= r.getQuantidadePessoas()) {
                 r.setMesa(mesa);
                 mesa.setDisponibilidade(false);
                 filaDeEspera.remove(r);
@@ -175,6 +175,25 @@ public class Restaurante {
         }
 
         return requisicao;
+    }
+
+    /**
+     * Cria um pedido se não houver, e atribui uma lista de produtos a uma requisição;.
+     * @param produtos Lista de produtos
+     * @param requisicao Requisição que fez o pedido
+     * @return
+     */
+    public Pedido fazerPedido(List<Produto> produtos, Requisicao requisicao){
+        if(requisicao.getPedido().calcularValorFinal() == 0){
+            Pedido pedido = new Pedido();
+            pedido.setProdutos(produtos);
+            requisicao.setPedido(pedido);
+            return pedido;
+        }
+        else{
+            requisicao.getPedido().addProdutos(produtos);
+            return requisicao.getPedido();
+        }
     }
 }
 
