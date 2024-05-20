@@ -7,7 +7,7 @@ import java.time.LocalTime;
 
 public class Requisicao {
 
-    private int quantidade;
+    private int quantidadePessoas;
     private Cliente cliente;
     private LocalDate data;
     private LocalTime horaEntrada;
@@ -17,12 +17,13 @@ public class Requisicao {
     private Mesa mesa;
     private boolean status;
     private Restaurante restaurante;
-
+    private Pedido pedido;
+    
     /**
      * Construtor da classe Requisicao.
      */
-    public Requisicao(int quantidade, Cliente cliente, LocalDate data, LocalTime horaEntrada, LocalTime horaSaida, Restaurante restaurante) {
-        this.quantidade = quantidade;
+    public Requisicao(int quantidadePessoas, Cliente cliente, LocalDate data, LocalTime horaEntrada, LocalTime horaSaida, Restaurante restaurante) {
+        this.quantidadePessoas = quantidadePessoas;
         this.cliente = cliente;
         this.data = data;
         this.horaEntrada = horaEntrada;
@@ -30,6 +31,7 @@ public class Requisicao {
         this.id = nextId++;
         this.status = true;
         this.restaurante = restaurante;
+        this.pedido = new Pedido();
     }
 
     /**
@@ -39,20 +41,23 @@ public class Requisicao {
      * @return A hora de saída.
      */
     public LocalTime fecharRequisicao(Requisicao requisicao, List<Requisicao> historicoRequisicao){
-        LocalTime horadaSaida = LocalTime.now();
-        restaurante.fecharConta(requisicao);
-        restaurante.desocuparMesa(requisicao, mesa);
-
-
+        this.horaSaida = LocalTime.now();
+        if (mesa != null) {
+            restaurante.fecharConta(requisicao);
+            restaurante.desocuparMesa(requisicao, mesa);
+        } else {
+            System.out.println("Erro: A mesa associada à requisição não foi definida.");
+        }
         return horaSaida;
     }
 
-    public int getQuantidade() {
-        return quantidade;
+
+    public int getQuantidadePessoas() {
+        return quantidadePessoas;
     }
 
-    public void setQuantidade(int quantidade) {
-        this.quantidade = quantidade;
+    public void setquantidadePessoas(int quantidadePessoas) {
+        this.quantidadePessoas = quantidadePessoas;
     }
 
     public Cliente getCliente() {
@@ -107,5 +112,16 @@ public class Requisicao {
         this.status = status;
     }
 
+    public Pedido getPedido() {
+        return pedido;
+    }
 
+    public void setPedido(Pedido pedido) {
+        this.pedido = pedido;
+    }
+
+    public char[] exibirHistoricoDeRequisicoes() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'exibirHistoricoDeRequisicoes'");
+    }
 }
