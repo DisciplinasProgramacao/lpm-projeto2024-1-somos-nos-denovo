@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -117,19 +118,48 @@ public void testFecharRequisicao() {
     }
 
     @Test
-    public void testExibirHistoricoDeRequisicoes() {
+    public void testExibirHistoricoDeRequisicoesVazio() {
         Restaurante restaurante = new Restaurante();
-        Cliente cliente1 = new Cliente("Zico");
-        Cliente cliente2 = new Cliente("Pele");
+        Requisicao requisicao = new Requisicao(4, new Cliente("Zico"), LocalDate.now(), LocalTime.now(), null, restaurante);
+        String resultado = requisicao.exibirHistoricoDeRequisicoes();
+        assertEquals("Não há requisições no histórico.", resultado);
+    }
 
-        Requisicao requisicao1 = restaurante.gerarRequisicao(4, cliente1.getNome());
-        requisicao1.fecharRequisicao(requisicao1, restaurante.getHistoricoDeRequisicao());
+    @Test
+    public void testExibirHistoricoDeRequisicoesComDados() {
+        Restaurante restaurante = new Restaurante();
+        Cliente cliente = new Cliente("Zico");
+        Requisicao requisicao = new Requisicao(4, cliente, LocalDate.now(), LocalTime.now(), null, restaurante);
+        restaurante.getHistoricoDeRequisicao().add(requisicao);
+        String resultado = requisicao.exibirHistoricoDeRequisicoes();
+        assertTrue(resultado.contains("Histórico de Requisições:"));
+        assertTrue(resultado.contains("ID: " + requisicao.getId()));
+        assertTrue(resultado.contains("Cliente: " + cliente.getNome()));
+        assertTrue(resultado.contains("Quantidade: " + requisicao.getQuantidadePessoas()));
+        assertTrue(resultado.contains("Data: " + requisicao.getData()));
+        assertTrue(resultado.contains("Hora de Entrada: " + requisicao.getHoraEntrada()));
+    }
 
-        Requisicao requisicao2 = restaurante.gerarRequisicao(2, cliente2.getNome());
-        requisicao2.fecharRequisicao(requisicao2, restaurante.getHistoricoDeRequisicao());
+    @Test
+    public void testAdicionarPedidoNovo() {
+        Requisicao requisicao = new Requisicao(4, new Cliente("Zico"), LocalDate.now(), LocalTime.now(), null, null);
+        List<Produto> produtos = Arrays.asList(new Produto("Produto1", 10.0), new Produto("Produto2", 15.0));
+        requisicao.adicionarPedido(produtos);
 
-        requisicao1.exibirHistoricoDeRequisicoes();  
+        assertNotNull(requisicao.getPedido());
+        assertEquals(2, requisicao.getPedido().getProdutos().size());
+    }
 
+    @Test
+    public void testAdicionarPedidoExistente() {
+        Requisicao requisicao = new Requisicao(4, new Cliente("Zico"), LocalDate.now(), LocalTime.now(), null, null);
+        List<Produto> produtos1 = Arrays.asList(new Produto("Produto1", 10.0));
+        List<Produto> produtos2 = Arrays.asList(new Produto("Produto2", 15.0));
+        requisicao.adicionarPedido(produtos1);
+        requisicao.adicionarPedido(produtos2);
+
+        assertNotNull(requisicao.getPedido());
+        assertEquals(2, requisicao.getPedido().getProdutos().size());
     }
 
 }

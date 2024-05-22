@@ -128,22 +128,48 @@ public class Requisicao {
         return this.quantidadePessoas = quantidade;
     }
 
+    public List<Produto> getProdutos() {
+        return this.pedido.getProdutos();
+    }
+
     /**
      * Exibe o histórico de requisições.
+     * 
+     * @return Uma string contendo o histórico de requisições ou uma mensagem
+     * indicando que não há requisições no histórico.
      */
-    public void exibirHistoricoDeRequisicoes() {
+    public String exibirHistoricoDeRequisicoes() {
         List<Requisicao> historicoDeRequisicao = restaurante.getHistoricoDeRequisicao();
         if (historicoDeRequisicao.isEmpty()) {
-            System.out.println("Não há requisições no histórico.");
+            return "Não há requisições no histórico.";
         } else {
-            System.out.println("Histórico de Requisições:");
+            StringBuilder sb = new StringBuilder();
+            sb.append("Histórico de Requisições:\n");
             for (Requisicao requisicao : historicoDeRequisicao) {
-                System.out.println("ID: " + requisicao.getId() + ", Cliente: " + requisicao.getCliente().getNome()
-                        + ", Quantidade: " + requisicao.getQuantidadePessoas() + ", Data: "
-                        + requisicao.getData() + ", Hora de Entrada: " + requisicao.getHoraEntrada()
-                        + ", Hora de Saída: " + requisicao.getHoraSaida());
+                sb.append("ID: ").append(requisicao.getId())
+                  .append(", Cliente: ").append(requisicao.getCliente().getNome())
+                  .append(", Quantidade: ").append(requisicao.getQuantidadePessoas())
+                  .append(", Data: ").append(requisicao.getData())
+                  .append(", Hora de Entrada: ").append(requisicao.getHoraEntrada())
+                  .append(", Hora de Saída: ").append(requisicao.getHoraSaida())
+                  .append("\n");
             }
+            return sb.toString();
         }
     }
 
+     /**
+     * Adiciona um pedido à requisição. Se já houver um pedido, os produtos
+     * são adicionados ao pedido existente. Caso contrário, um novo pedido é
+     * criado.
+     *
+     * @param produtos A lista de produtos a serem adicionados ao pedido.
+     */
+    public void adicionarPedido(List<Produto> produtos) {
+        if (this.pedido == null) {
+            this.pedido = new Pedido();
+        }
+        this.pedido.addProdutos(produtos);
+    }
 }
+ 
