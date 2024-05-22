@@ -115,4 +115,21 @@ public void testFecharRequisicao() {
         requisicao.setStatus(false);
         assertFalse(requisicao.isStatus());
     }
+
+    @Test
+    public void testExibirHistoricoDeRequisicoes() {
+        Restaurante restaurante = new Restaurante();
+        Cliente cliente1 = new Cliente("Zico");
+        Cliente cliente2 = new Cliente("Pele");
+
+        Requisicao requisicao1 = restaurante.gerarRequisicao(4, cliente1.getNome());
+        requisicao1.fecharRequisicao(requisicao1, restaurante.getHistoricoDeRequisicao());
+
+        Requisicao requisicao2 = restaurante.gerarRequisicao(2, cliente2.getNome());
+        requisicao2.fecharRequisicao(requisicao2, restaurante.getHistoricoDeRequisicao());
+
+        requisicao1.exibirHistoricoDeRequisicoes();  
+
+    }
+
 }

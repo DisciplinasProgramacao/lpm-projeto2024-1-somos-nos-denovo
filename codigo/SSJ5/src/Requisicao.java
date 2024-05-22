@@ -1,9 +1,8 @@
 package codigo.SSJ5.src;
+
 import java.util.List;
-import java.util.ArrayList;
 import java.time.LocalDate;
 import java.time.LocalTime;
-
 
 public class Requisicao {
 
@@ -18,11 +17,12 @@ public class Requisicao {
     private boolean status;
     private Restaurante restaurante;
     private Pedido pedido;
-    
+
     /**
      * Construtor da classe Requisicao.
      */
-    public Requisicao(int quantidadePessoas, Cliente cliente, LocalDate data, LocalTime horaEntrada, LocalTime horaSaida, Restaurante restaurante) {
+    public Requisicao(int quantidadePessoas, Cliente cliente, LocalDate data, LocalTime horaEntrada,
+            LocalTime horaSaida, Restaurante restaurante) {
         this.quantidadePessoas = quantidadePessoas;
         this.cliente = cliente;
         this.data = data;
@@ -36,11 +36,12 @@ public class Requisicao {
 
     /**
      * Fecha uma requisição, desocupa a mesa e adiciona a requisição ao histórico.
-     * @param requisicao A requisição que vai ser fechada.
+     * 
+     * @param requisicao          A requisição que vai ser fechada.
      * @param historicoRequisicao A lista de historico das requisicoes.
      * @return A hora de saída.
      */
-    public LocalTime fecharRequisicao(Requisicao requisicao, List<Requisicao> historicoRequisicao){
+    public LocalTime fecharRequisicao(Requisicao requisicao, List<Requisicao> historicoRequisicao) {
         this.horaSaida = LocalTime.now();
         if (mesa != null) {
             restaurante.fecharConta(requisicao);
@@ -50,7 +51,6 @@ public class Requisicao {
         }
         return horaSaida;
     }
-
 
     public int getQuantidadePessoas() {
         return quantidadePessoas;
@@ -120,8 +120,30 @@ public class Requisicao {
         this.pedido = pedido;
     }
 
-    public char[] exibirHistoricoDeRequisicoes() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'exibirHistoricoDeRequisicoes'");
+    public int getQuantidade() {
+        return this.quantidadePessoas;
     }
+
+    public int setQuantidade(int quantidade) {
+        return this.quantidadePessoas = quantidade;
+    }
+
+    /**
+     * Exibe o histórico de requisições.
+     */
+    public void exibirHistoricoDeRequisicoes() {
+        List<Requisicao> historicoDeRequisicao = restaurante.getHistoricoDeRequisicao();
+        if (historicoDeRequisicao.isEmpty()) {
+            System.out.println("Não há requisições no histórico.");
+        } else {
+            System.out.println("Histórico de Requisições:");
+            for (Requisicao requisicao : historicoDeRequisicao) {
+                System.out.println("ID: " + requisicao.getId() + ", Cliente: " + requisicao.getCliente().getNome()
+                        + ", Quantidade: " + requisicao.getQuantidadePessoas() + ", Data: "
+                        + requisicao.getData() + ", Hora de Entrada: " + requisicao.getHoraEntrada()
+                        + ", Hora de Saída: " + requisicao.getHoraSaida());
+            }
+        }
+    }
+
 }
