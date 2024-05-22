@@ -43,17 +43,16 @@ public class RequisicaoTest {
     }
 
     @Test
-public void testFecharRequisicao() {
-    Restaurante restaurante = new Restaurante();
-    Cliente jogador = new Cliente("Zico");
-    Mesa mesa = new Mesa(4, true); 
-    Requisicao requisicao = new Requisicao(4, jogador, LocalDate.now(), LocalTime.now(), null, restaurante);
-    requisicao.setMesa(mesa); 
-    List<Requisicao> historicoRequisicao = new ArrayList<>();
-    LocalTime horaSaida = requisicao.fecharRequisicao(requisicao, historicoRequisicao);
-    assertNotNull(horaSaida);
-}
-
+    public void testFecharRequisicao() {
+        Restaurante restaurante = new Restaurante();
+        Cliente jogador = new Cliente("Zico");
+        Mesa mesa = new Mesa(4, true);
+        Requisicao requisicao = new Requisicao(4, jogador, LocalDate.now(), LocalTime.now(), null, restaurante);
+        requisicao.setMesa(mesa);
+        List<Requisicao> historicoRequisicao = new ArrayList<>();
+        LocalTime horaSaida = requisicao.fecharRequisicao(requisicao, historicoRequisicao);
+        assertNotNull(horaSaida);
+    }
 
     @Test
     public void testGetHoraEntradaEquals() {
@@ -120,7 +119,8 @@ public void testFecharRequisicao() {
     @Test
     public void testExibirHistoricoDeRequisicoesVazio() {
         Restaurante restaurante = new Restaurante();
-        Requisicao requisicao = new Requisicao(4, new Cliente("Zico"), LocalDate.now(), LocalTime.now(), null, restaurante);
+        Requisicao requisicao = new Requisicao(4, new Cliente("Zico"), LocalDate.now(), LocalTime.now(), null,
+                restaurante);
         String resultado = requisicao.exibirHistoricoDeRequisicoes();
         assertEquals("Não há requisições no histórico.", resultado);
     }
@@ -144,10 +144,11 @@ public void testFecharRequisicao() {
     public void testAdicionarPedidoNovo() {
         Requisicao requisicao = new Requisicao(4, new Cliente("Zico"), LocalDate.now(), LocalTime.now(), null, null);
         List<Produto> produtos = Arrays.asList(new Produto("Produto1", 10.0), new Produto("Produto2", 15.0));
-        requisicao.adicionarPedido(produtos);
+        assertTrue(requisicao.adicionarPedido(produtos));
 
         assertNotNull(requisicao.getPedido());
         assertEquals(2, requisicao.getPedido().getProdutos().size());
+        assertTrue(requisicao.getPedido().getProdutos().containsAll(produtos));
     }
 
     @Test
@@ -155,11 +156,13 @@ public void testFecharRequisicao() {
         Requisicao requisicao = new Requisicao(4, new Cliente("Zico"), LocalDate.now(), LocalTime.now(), null, null);
         List<Produto> produtos1 = Arrays.asList(new Produto("Produto1", 10.0));
         List<Produto> produtos2 = Arrays.asList(new Produto("Produto2", 15.0));
-        requisicao.adicionarPedido(produtos1);
-        requisicao.adicionarPedido(produtos2);
+        assertTrue(requisicao.adicionarPedido(produtos1));
+        assertTrue(requisicao.adicionarPedido(produtos2));
 
         assertNotNull(requisicao.getPedido());
         assertEquals(2, requisicao.getPedido().getProdutos().size());
+        assertTrue(requisicao.getPedido().getProdutos().containsAll(produtos1));
+        assertTrue(requisicao.getPedido().getProdutos().containsAll(produtos2));
     }
 
 }

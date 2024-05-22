@@ -136,7 +136,7 @@ public class Requisicao {
      * Exibe o histórico de requisições.
      * 
      * @return Uma string contendo o histórico de requisições ou uma mensagem
-     * indicando que não há requisições no histórico.
+     *         indicando que não há requisições no histórico.
      */
     public String exibirHistoricoDeRequisicoes() {
         List<Requisicao> historicoDeRequisicao = restaurante.getHistoricoDeRequisicao();
@@ -158,18 +158,24 @@ public class Requisicao {
         }
     }
 
-     /**
+    /**
      * Adiciona um pedido à requisição. Se já houver um pedido, os produtos
-     * são adicionados ao pedido existente. Caso contrário, um novo pedido é
-     * criado.
+     * são adicionados ao pedido existente.
+     * Caso contrário, um novo pedido é criado.
      *
      * @param produtos A lista de produtos a serem adicionados ao pedido.
+     * @return true se os produtos foram adicionados com sucesso e a lista aumentou
+     *         de tamanho, false caso contrário.
      */
-    public void adicionarPedido(List<Produto> produtos) {
+    public boolean adicionarPedido(List<Produto> produtos) {
+
+        int tamanhoAntes = this.pedido.getProdutos().size();
+
         if (this.pedido == null) {
             this.pedido = new Pedido();
         }
         this.pedido.addProdutos(produtos);
+
+        return this.pedido.getProdutos().size() > tamanhoAntes;
     }
 }
- 
