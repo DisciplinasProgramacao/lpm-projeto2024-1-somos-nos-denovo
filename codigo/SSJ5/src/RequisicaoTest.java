@@ -49,7 +49,7 @@ public void testFecharRequisicao() {
     Requisicao requisicao = new Requisicao(4, jogador, LocalDate.now(), LocalTime.now(), null, restaurante);
     requisicao.setMesa(mesa); 
     List<Requisicao> historicoRequisicao = new ArrayList<>();
-    LocalTime horaSaida = requisicao.fecharRequisicao(requisicao, historicoRequisicao);
+    LocalTime horaSaida = requisicao.fecharRequisicao(historicoRequisicao);
     assertNotNull(horaSaida);
 }
 

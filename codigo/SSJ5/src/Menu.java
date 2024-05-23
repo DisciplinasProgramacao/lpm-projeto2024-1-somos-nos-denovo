@@ -29,17 +29,17 @@ public class Menu {
         }
     }
 
-    public int retornaIdProduto(String nomeProduto){
-        for(Produto p : menu){
-            if(nomeProduto.equals(p.getNomeProduto()))
-            return p.getIdProduto();
-        }
-        return 0;
-    }
+//    public int retornaIdProduto(String nomeProduto){
+//        for(Produto p : menu){
+//            if(nomeProduto.equals(p.getNomeProduto()))
+//            return p.getIdProduto();
+//        }
+//        return 0;
+//    }
 
     public void exibirMenu(){
         for(Produto p : menu){
-            System.out.println(p.getIdProduto()+" "+p.getNomeProduto()+"- R$"+ p.getPrecoProduto());
+           // System.out.println(p.getIdProduto()+" "+p.getNomeProduto()+"- R$"+ p.getPrecoProduto()); mudar para string
         }
     }
 

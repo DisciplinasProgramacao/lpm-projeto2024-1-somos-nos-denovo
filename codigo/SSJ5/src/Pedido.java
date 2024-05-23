@@ -28,33 +28,33 @@ public class Pedido {
         return calcularValorTotal() * taxa;
     }
 
-    public double dividirConta(){
-        return (valorTotal / requisicao.getQuantidade()) * taxa;
+    public double dividirConta(int qtd pessoas){
+        return (valorTotal / requisicao.getQuantidade()) * taxa; //remover a requisicao
     }
 
-    public void addProdutos(List<Produto> produtos){
+    public void addProdutos(List<Produto> produtos){ //add somente 1 unico produto
         this.produtos.addAll(produtos);
     }
 
-    public void setProdutos(List<Produto> produtos){
+   public void setProdutos(List<Produto> produtos){
         this.produtos = produtos;
-    }
+  }
 
-    public int getValorProduto() {
-        return valorProduto;
-    }
-
-    public void setValorProduto(int valorProduto) {
-        this.valorProduto = valorProduto;
-    }
-
-    public Requisicao getRequisicao() {
-        return requisicao;
-    }
-
-    public void setRequisicao(Requisicao requisicao) {
-        this.requisicao = requisicao;
-    }
+//    public int getValorProduto() {
+//        return valorProduto;
+//    }
+//
+//    public void setValorProduto(int valorProduto) {
+//        this.valorProduto = valorProduto;
+//    }
+//
+//    public Requisicao getRequisicao() {
+//        return requisicao;
+//    }
+//
+//    public void setRequisicao(Requisicao requisicao) {
+//        this.requisicao = requisicao;
+//    }
 
     public String formatPedido() {
         StringBuilder sb = new StringBuilder();

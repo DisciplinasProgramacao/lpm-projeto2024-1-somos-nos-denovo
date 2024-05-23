@@ -33,11 +33,12 @@ public class Requisicao {
         this.pedido = new Pedido(this); // Ensure that the Pedido is associated with this Requisicao
     }
 
-    public LocalTime fecharRequisicao(List<Requisicao> historicoRequisicao){
+    public LocalTime fecharRequisicao(List<Requisicao> historicoRequisicao) {
         this.horaSaida = LocalTime.now();
         if (mesa != null) {
-            restaurante.fecharConta(this);
-            restaurante.desocuparMesa(this, mesa);
+            pedido.fecharconta();
+            mesa.setDisponibilidade(true);
+
         }
         return horaSaida;
     }
@@ -78,6 +79,7 @@ public class Requisicao {
         return horaSaida;
     }
 
+    //#region gets e sets
     public void setHoraSaida(LocalTime horaSaida) {
         this.horaSaida = horaSaida;
     }
