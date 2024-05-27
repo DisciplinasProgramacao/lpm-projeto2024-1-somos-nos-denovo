@@ -4,14 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Menu {
-
     private List<Produto> menu;
 
-    /**
-     * Construtor
-     */
     public Menu() {
-        this.menu = new ArrayList<Produto>();
+        this.menu = new ArrayList<>();
         String[] comidas = { "Moqueca de Pamito", "Falafel Assado", "Salada Primavera com Macarrão Konjac",
                 "Escondidinho de Inhame", "Strogonoff de Cogumelos", "Caçarola de legumes" };
         String[] bebidas = { "Água", "Copo de Suco", "Refrigerante orgânico", "Cerveja vegana",
@@ -29,18 +25,12 @@ public class Menu {
         }
     }
 
-//    public int retornaIdProduto(String nomeProduto){
-//        for(Produto p : menu){
-//            if(nomeProduto.equals(p.getNomeProduto()))
-//            return p.getIdProduto();
-//        }
-//        return 0;
-//    }
-
-    public void exibirMenu(){
-        for(Produto p : menu){
-           // System.out.println(p.getIdProduto()+" "+p.getNomeProduto()+"- R$"+ p.getPrecoProduto()); mudar para string
+    public String exibirMenu() {
+        StringBuilder sb = new StringBuilder();
+        for (Produto p : menu) {
+            sb.append(p.getIdProduto()).append(" ").append(p.getNomeProduto()).append(" - R$").append(p.getPrecoProduto()).append("\n");
         }
+        return sb.toString();
     }
 
     public Produto getProdutoById(int id) {

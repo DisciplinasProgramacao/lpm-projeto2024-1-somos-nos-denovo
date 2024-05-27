@@ -1,8 +1,8 @@
 package codigo.SSJ5.src;
 
 public class Produto {
-    private int idProduto;
     private static int nextId = 0;
+    private int idProduto;
     private String nomeProduto;
     private double precoProduto;
 
@@ -12,27 +12,15 @@ public class Produto {
         this.precoProduto = precoProduto;
     }
 
-    public void setIdProduto(int idProduto) {
-        this.idProduto = idProduto;
-    }
-
-    public void setNomeProduto(String nomeProduto) {
-        this.nomeProduto = nomeProduto;
-    }
-
-    public void setPrecoProduto(double precoProduto) {
-        this.precoProduto = precoProduto;
-    }
-
-    public double getPrecoProduto() {
-        return precoProduto;
+    public int getIdProduto() {
+        return idProduto;
     }
 
     public String getNomeProduto() {
         return nomeProduto;
     }
 
-    public int getIdProduto() {
-        return idProduto;
-    }  
+    public double getPrecoProduto() {
+        return precoProduto;
+    }
 }

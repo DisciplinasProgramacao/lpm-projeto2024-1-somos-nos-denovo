@@ -6,11 +6,6 @@ public class Mesa {
     private static int nextId = 0;
     private int id;
 
-    /**
-     * Construtor da classe mesa.
-     * @param capacidade Capacidade da mesa.
-     * @param disponibilidade Disponibilidade da mesa (Livre ou ocupada).
-     */
     public Mesa(int capacidade, boolean disponibilidade) {
         this.capacidade = capacidade;
         this.disponibilidade = disponibilidade;
@@ -35,5 +30,9 @@ public class Mesa {
 
     public int getId() {
         return id;
+    }
+
+    public void desocupar() {
+        this.disponibilidade = true;
     }
 }

@@ -6,40 +6,31 @@ import java.util.*;
 
 public class Restaurante {
     private List<Mesa> listaDeMesas;
-    public Queue<Requisicao> filaDeEspera;
-    public List<Requisicao> historicoDeRequisicao;
-    public List<Cliente> listaDeClientes;
+    private Queue<Requisicao> filaDeEspera;
+    private List<Requisicao> historicoDeRequisicao;
+    private List<Cliente> listaDeClientes;
+    private Menu menu;
 
-    public Restaurante() {
+    public Restaurante(Menu menu) {
+        this.menu = menu;
         filaDeEspera = new LinkedList<>();
         listaDeClientes = new ArrayList<>();
         historicoDeRequisicao = new ArrayList<>();
         listaDeMesas = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
-            listaDeMesas.add(new Mesa(4 , true));
+            listaDeMesas.add(new Mesa(4, true));
         }
         for (int i = 0; i < 4; i++) {
-            listaDeMesas.add(new Mesa(6 , true));
+            listaDeMesas.add(new Mesa(6, true));
         }
         for (int i = 0; i < 2; i++) {
             listaDeMesas.add(new Mesa(8, true));
         }
     }
 
-    public List<Mesa> getListaDeMesas() {
-        return listaDeMesas;
-    }
-
-    public Queue<Requisicao> getFilaDeEspera() {
-        return filaDeEspera;
-    }
-
-    public List<Requisicao> getHistoricoDeRequisicao() {
-        return historicoDeRequisicao;
-    }
-
-    public List<Cliente> getListaDeClientes() {
-        return listaDeClientes;
+    public void adicionarCliente(String nome) {
+        Cliente novoCliente = new Cliente(nome);
+        listaDeClientes.add(novoCliente);
     }
 
     public boolean alocarNaRequisicao(Requisicao requisicao) {
@@ -70,30 +61,35 @@ public class Restaurante {
         return listaDeEspera;
     }
 
-    public boolean desocuparMesa(Requisicao requisicao, Mesa mesa){
+    public void desocuparMesa(Mesa mesa) {
         if (!mesa.isDisponibilidade()) {
             mesa.setDisponibilidade(true);
         }
-        return true;
     }
 
-    public boolean fecharConta(Requisicao requisicao) {
-        Mesa mesa = requisicao.getMesa();
-        mesa.setDisponibilidade(true);
-        filaDeEspera.remove(requisicao);
-
-        for (Requisicao r : filaDeEspera) {
-            if (mesa.getCapacidade() >= r.getQuantidade()) {
-                r.setMesa(mesa);
-                mesa.setDisponibilidade(false);
-                filaDeEspera.remove(r);
+    public boolean fecharConta(int idMesa) {
+        Requisicao requisicaoFechar = null;
+        for (Requisicao r : historicoDeRequisicao) {
+            if (r.getMesa().getId() == idMesa && r.getHoraSaida() == null) {
+                requisicaoFechar = r;
                 break;
             }
         }
-        return true;
+        if (requisicaoFechar != null) {
+            requisicaoFechar.fecharRequisicao();
+            for (Requisicao r : filaDeEspera) {
+                if (requisicaoFechar.getMesa().getCapacidade() >= r.getQuantidade()) {
+                    alocarNaRequisicao(r);
+                    filaDeEspera.remove(r);
+                    break;
+                }
+            }
+            return true;
+        }
+        return false;
     }
 
-    public Requisicao gerarRequisicao(int quantidade, String nome){
+    public Requisicao gerarRequisicao(int quantidade, String nome) {
         Cliente clienteExistente = null;
         for (Cliente cliente : listaDeClientes) {
             if (cliente.getNome().equals(nome)) {
@@ -103,31 +99,41 @@ public class Restaurante {
         }
         Requisicao requisicao;
         if (clienteExistente != null) {
-            requisicao = new Requisicao(quantidade, clienteExistente, LocalDate.now(), LocalTime.now(), null, this);
+            requisicao = new Requisicao(quantidade, clienteExistente, LocalDate.now(), LocalTime.now());
         } else {
             Cliente novoCliente = new Cliente(nome);
             listaDeClientes.add(novoCliente);
-            requisicao = new Requisicao(quantidade, novoCliente, LocalDate.now(), LocalTime.now(), null, this);
+            requisicao = new Requisicao(quantidade, novoCliente, LocalDate.now(), LocalTime.now());
         }
         if (alocarNaRequisicao(requisicao)) {
             historicoDeRequisicao.add(requisicao);
         } else {
             entrarNaFilaDeEspera(requisicao);
+            System.out.println("Mesas cheias! Cliente adicionado à lista de espera.");
         }
-
         return requisicao;
     }
 
-    public Pedido fazerPedido(List<Produto> produtos, Requisicao requisicao){
-        Pedido pedido = requisicao.getPedido();
-        if (pedido == null) {
-            pedido = new Pedido(requisicao);
-            pedido.setProdutos(produtos);
-            requisicao.setPedido(pedido);
-        } else {
-            pedido.addProdutos(produtos);
+    public void fazerPedido(int idRequisicao, int idProduto) {
+        Requisicao requisicao = null;
+        for (Requisicao r : historicoDeRequisicao) {
+            if (r.getId() == idRequisicao) {
+                requisicao = r;
+                break;
+            }
         }
-        return pedido;
+        if (requisicao != null) {
+            Produto produto = menu.getProdutoById(idProduto);
+            if (produto != null) {
+                Pedido pedido = requisicao.getPedido();
+                pedido.addProduto(produto);
+                System.out.println("Pedido criado com sucesso!");
+            } else {
+                System.out.println("Produto não encontrado.");
+            }
+        } else {
+            System.out.println("Requisição não encontrada.");
+        }
     }
 
     public String exibirHistoricoDeRequisicoes() {
@@ -138,7 +144,20 @@ public class Restaurante {
         return sb.toString();
     }
 
-    public List<Pedido> getPedidos() {
+    public String exibirPedidos() {
+        StringBuilder sb = new StringBuilder();
+        List<Pedido> pedidos = getPedidos();
+        if (pedidos.isEmpty()) {
+            sb.append("Não há pedidos no momento.");
+        } else {
+            for (Pedido pedido : pedidos) {
+                sb.append(pedido.formatPedido()).append("\n");
+            }
+        }
+        return sb.toString();
+    }
+
+    private List<Pedido> getPedidos() {
         List<Pedido> pedidos = new ArrayList<>();
         for (Requisicao requisicao : historicoDeRequisicao) {
             if (requisicao.getPedido() != null) {

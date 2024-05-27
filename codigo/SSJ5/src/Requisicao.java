@@ -2,10 +2,8 @@ package codigo.SSJ5.src;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
 
 public class Requisicao {
-
     private int quantidade;
     private Cliente cliente;
     private LocalDate data;
@@ -14,31 +12,22 @@ public class Requisicao {
     private static int nextId = 0;
     private int id;
     private Mesa mesa;
-    private boolean status;
-    private Restaurante restaurante;
     private Pedido pedido;
 
-    /**
-     * Construtor da classe Requisicao.
-     */
-    public Requisicao(int quantidade, Cliente cliente, LocalDate data, LocalTime horaEntrada, LocalTime horaSaida, Restaurante restaurante) {
+    public Requisicao(int quantidade, Cliente cliente, LocalDate data, LocalTime horaEntrada) {
         this.quantidade = quantidade;
         this.cliente = cliente;
         this.data = data;
         this.horaEntrada = horaEntrada;
-        this.horaSaida = horaSaida;
         this.id = nextId++;
-        this.status = true;
-        this.restaurante = restaurante;
-        this.pedido = new Pedido(this); // Ensure that the Pedido is associated with this Requisicao
+        this.pedido = new Pedido(this);
     }
 
-    public LocalTime fecharRequisicao(List<Requisicao> historicoRequisicao) {
+    public LocalTime fecharRequisicao() {
         this.horaSaida = LocalTime.now();
         if (mesa != null) {
-            pedido.fecharconta();
+            pedido.fecharConta();
             mesa.setDisponibilidade(true);
-
         }
         return horaSaida;
     }
@@ -79,7 +68,6 @@ public class Requisicao {
         return horaSaida;
     }
 
-    //#region gets e sets
     public void setHoraSaida(LocalTime horaSaida) {
         this.horaSaida = horaSaida;
     }
@@ -96,14 +84,6 @@ public class Requisicao {
         this.mesa = mesa;
     }
 
-    public boolean isStatus() {
-        return status;
-    }
-
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
-
     public Pedido getPedido() {
         return pedido;
     }
@@ -113,7 +93,8 @@ public class Requisicao {
     }
 
     public String getRequisicaoInfo() {
-        return String.format("ID: %d, Cliente: %s, Quantidade: %d, Data: %s, Hora de Entrada: %s, Hora de Saída: %s, Mesa ID: %d",
-                id, cliente.getNome(), quantidade, data, horaEntrada, horaSaida, (mesa != null ? mesa.getId() : -1));
+        String mesaId = (mesa != null) ? String.valueOf(mesa.getId()) : "N/A";
+        return String.format("ID: %d, Cliente: %s, Quantidade: %d, Data: %s, Hora de Entrada: %s, Hora de Saída: %s, Mesa ID: %s",
+                id, cliente.getNome(), quantidade, data, horaEntrada, horaSaida, mesaId);
     }
 }

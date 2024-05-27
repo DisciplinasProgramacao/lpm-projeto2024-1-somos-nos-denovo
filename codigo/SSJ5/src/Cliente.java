@@ -5,9 +5,6 @@ public class Cliente {
     private static int nextId = 0;
     private int id;
 
-    /**
-     * Construtor da classe Cliente.
-     */
     public Cliente(String nome) {
         this.nome = nome;
         this.id = nextId++;
