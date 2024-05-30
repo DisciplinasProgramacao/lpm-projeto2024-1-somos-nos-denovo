@@ -27,12 +27,13 @@ public class Requisicao {
         this.horaSaida = LocalTime.now();
         if (mesa != null) {
             pedido.fecharConta();
-            mesa.setDisponibilidade(true);
+            mesa.desocupar();
         }
         return horaSaida;
     }
 
     public int getQuantidade() {
+        
         return quantidade;
     }
 

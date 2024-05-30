@@ -15,6 +15,9 @@ public class Menu {
         Integer[] precoComida = { 32, 20, 25, 18, 35, 22 };
         Integer[] precoBebida = { 3, 7, 7, 9, 18 };
 
+        Produto primeiro = new Produto("vazio", 0);
+        menu.add(primeiro);
+        
         for (int i = 0; i < comidas.length; i++) {
             Produto novoProduto = new Produto(comidas[i], precoComida[i]);
             menu.add(novoProduto);
@@ -34,12 +37,10 @@ public class Menu {
     }
 
     public Produto getProdutoById(int id) {
-        for (Produto p : menu) {
-            if (p.getIdProduto() == id) {
-                return p;
-            }
-        }
-        return null;
+        if(id>=0 && id<menu.size())
+            return menu.get(id);
+        else 
+            return null;
     }
 
     public Produto getProdutoByName(String nome) {

@@ -125,16 +125,11 @@ public class Restaurante {
         if (requisicao != null) {
             Produto produto = menu.getProdutoById(idProduto);
             if (produto != null) {
-                Pedido pedido = requisicao.getPedido();
-                pedido.addProduto(produto);
-                System.out.println("Pedido criado com sucesso!");
-            } else {
-                System.out.println("Produto não encontrado.");
+               requisicao.adicionarItem(produto);
             }
-        } else {
-            System.out.println("Requisição não encontrada.");
         }
     }
+    
     //Verificar se essa logica esta correta 
     public void ordenarMenuFechado(int idRequisicao, int comida, int bebida1, int bebida2) {
         Requisicao requisicao = null;
