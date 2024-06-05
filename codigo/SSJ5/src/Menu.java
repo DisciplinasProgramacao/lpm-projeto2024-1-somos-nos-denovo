@@ -8,7 +8,7 @@ public class Menu {
 
     public Menu() {
         this.menu = new ArrayList<>();
-        String[] comidas = { "Moqueca de Pamito", "Falafel Assado", "Salada Primavera com Macarrão Konjac",
+        String[] comidas = { "Moqueca de Palmito", "Falafel Assado", "Salada Primavera com Macarrão Konjac",
                 "Escondidinho de Inhame", "Strogonoff de Cogumelos", "Caçarola de legumes" };
         String[] bebidas = { "Água", "Copo de suco", "Refrigerante orgânico", "Cerveja vegana",
                 "Taça de vinho vegano" };

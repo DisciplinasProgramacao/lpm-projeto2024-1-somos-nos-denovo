@@ -8,6 +8,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 public class MenuTest {
+    
     @Test
     public void testExibirMenuCorreto() {
         Menu menu = new Menu();
