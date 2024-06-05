@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 import static org.junit.jupiter.api.Assertions.*;
+import java.time.Duration;
 
 public class RequisicaoTest {
 
@@ -41,14 +42,13 @@ public class RequisicaoTest {
 
     @Test
     public void testFecharRequisicao() {
-    Cliente jogador = new Cliente("Zico");
-    Mesa mesa = new Mesa(4, true); 
-    Requisicao requisicao = new Requisicao(4, jogador, LocalDate.now(), LocalTime.now());
-    requisicao.setMesa(mesa); 
-    LocalTime horaSaida = requisicao.fecharRequisicao();
-    assertNotNull(horaSaida);
-}
-
+        Cliente jogador = new Cliente("Zico");
+        Mesa mesa = new Mesa(4, true);
+        Requisicao requisicao = new Requisicao(4, jogador, LocalDate.now(), LocalTime.now());
+        requisicao.setMesa(mesa);
+        LocalTime horaSaida = requisicao.fecharRequisicao();
+        assertNotNull(horaSaida);
+    }
 
     @Test
     public void testGetHoraEntradaEquals() {
@@ -69,9 +69,17 @@ public class RequisicaoTest {
     @Test
     public void testGetHoraSaidaEquals() {
         Cliente cliente = new Cliente("Zico");
-        LocalTime horaSaida = LocalTime.now();
         Requisicao requisicao = new Requisicao(4, cliente, LocalDate.now(), LocalTime.now());
-        assertEquals(horaSaida, requisicao.getHoraSaida());
+        requisicao.fecharRequisicao();
+
+        LocalTime horaEsperada = LocalTime.now();
+        LocalTime horaReal = requisicao.getHoraSaida();
+
+        Duration intervalo = Duration.ofSeconds(1);
+
+        Duration durationBetween = Duration.between(horaEsperada, horaReal).abs();
+
+        assertTrue(durationBetween.compareTo(intervalo) <= 0);
     }
 
     @Test
