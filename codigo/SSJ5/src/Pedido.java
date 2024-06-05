@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Pedido {
-    protected double valorTotal;
+    protected double valorTotal = 0.0;
     protected List<Produto> produtos;
     protected final static double taxa = 1.1;
     protected Requisicao requisicao;
@@ -28,7 +28,12 @@ public class Pedido {
     }
 
     public double dividirConta() {
-        return (valorTotal / requisicao.getQuantidade()) * taxa;
+        if(valorTotal == 0){
+            return 0.0;
+        }
+        else{
+            return (valorTotal / requisicao.getQuantidade()) * taxa;
+        }
     }
 
     public void addProduto(Produto produto) {
@@ -42,7 +47,10 @@ public class Pedido {
     public String formatPedido() {
         StringBuilder sb = new StringBuilder();
         sb.append(String.format("ID Requisição: %d\n", requisicao.getId()));
-        sb.append(String.format("ID Mesa: %d\n", requisicao.getMesa().getId()));
+        Mesa mesa = requisicao.getMesa();
+        if (mesa != null) {
+            sb.append(String.format("ID Mesa: %d\n", mesa.getId()));
+        }
         sb.append(String.format("Nome do Dono da Requisição: %s\n", requisicao.getCliente().getNome()));
         sb.append("Itens do Pedido:\n");
         for (Produto p : produtos) {
@@ -50,7 +58,7 @@ public class Pedido {
         }
         sb.append(String.format("Preço Total: R$%.2f\n", calcularValorFinal()));
         return sb.toString();
-    }
+    }    
 
     public void fecharConta() {
         valorTotal = calcularValorFinal();
