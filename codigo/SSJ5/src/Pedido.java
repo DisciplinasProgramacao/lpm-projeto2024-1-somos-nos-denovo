@@ -28,12 +28,7 @@ public class Pedido {
     }
 
     public double dividirConta() {
-        if(valorTotal == 0){
-            return 0.0;
-        }
-        else{
             return (valorTotal / requisicao.getQuantidade()) * taxa;
-        }
     }
 
     public void addProduto(Produto produto) {
@@ -48,9 +43,7 @@ public class Pedido {
         StringBuilder sb = new StringBuilder();
         sb.append(String.format("ID Requisição: %d\n", requisicao.getId()));
         Mesa mesa = requisicao.getMesa();
-        if (mesa != null) {
             sb.append(String.format("ID Mesa: %d\n", mesa.getId()));
-        }
         sb.append(String.format("Nome do Dono da Requisição: %s\n", requisicao.getCliente().getNome()));
         sb.append("Itens do Pedido:\n");
         for (Produto p : produtos) {
