@@ -1,63 +1,90 @@
 package codigo.SSJ5.src;
 
-import java.util.List;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+/**
+ * Representa uma requisição feita por um cliente em um restaurante.
+ */
 public class Requisicao {
+    private static int nextId = 0;
 
-    private int quantidadePessoas;
+    private int id;
+    private int quantidade;
     private Cliente cliente;
     private LocalDate data;
     private LocalTime horaEntrada;
     private LocalTime horaSaida;
-    private static int nextId = 0;
-    private int id;
     private Mesa mesa;
-    private boolean status;
-    private Restaurante restaurante;
     private Pedido pedido;
 
     /**
-     * Construtor da classe Requisicao.
+     * Constrói uma nova Requisicao.
+     *
+     * @param quantidade  a quantidade de pessoas na requisição
+     * @param cliente     o cliente que fez a requisição
+     * @param data        a data da requisição
+     * @param horaEntrada a hora de entrada da requisição
      */
-    public Requisicao(int quantidadePessoas, Cliente cliente, LocalDate data, LocalTime horaEntrada,
-            LocalTime horaSaida, Restaurante restaurante) {
-        this.quantidadePessoas = quantidadePessoas;
+    public Requisicao(int quantidade, Cliente cliente, LocalDate data, LocalTime horaEntrada) {
+        this.id = nextId++;
+        this.quantidade = quantidade;
         this.cliente = cliente;
         this.data = data;
         this.horaEntrada = horaEntrada;
-        this.horaSaida = horaSaida;
-        this.id = nextId++;
-        this.status = true;
-        this.restaurante = restaurante;
-        this.pedido = new Pedido();
+        this.pedido = new Pedido(this);
+    }
+
+/**
+ * Fecha a requisição, registrando a hora de saída, fechando o pedido e
+ * desocupando a mesa.
+ *
+ * @return a hora de saída registrada
+ */
+public LocalTime fecharRequisicao() {
+    this.horaSaida = LocalTime.now();
+    // Fecha o pedido e desocupa a mesa
+    if (mesa != null) {
+        pedido.fecharConta();
+        mesa.desocupar();
+    }
+
+    return horaSaida;
+}
+
+
+    /**
+     * Adiciona um item ao pedido da requisição.
+     *
+     * @param produto o produto a ser adicionado ao pedido
+     */
+    public void adicionarItem(Produto produto) {
+        if (pedido != null) {
+            pedido.addProduto(produto);
+        }
     }
 
     /**
-     * Fecha uma requisição, desocupa a mesa e adiciona a requisição ao histórico.
-     * 
-     * @param requisicao          A requisição que vai ser fechada.
-     * @param historicoRequisicao A lista de historico das requisicoes.
-     * @return A hora de saída.
+     * Obtém informações detalhadas da requisição.
+     *
+     * @return uma string contendo informações da requisição
      */
-    public LocalTime fecharRequisicao(Requisicao requisicao, List<Requisicao> historicoRequisicao) {
-        this.horaSaida = LocalTime.now();
-        if (mesa != null) {
-            restaurante.fecharConta(requisicao);
-            restaurante.desocuparMesa(requisicao, mesa);
-        } else {
-            System.out.println("Erro: A mesa associada à requisição não foi definida.");
-        }
-        return horaSaida;
+    public String getRequisicaoInfo() {
+        String mesaId = (mesa != null) ? String.valueOf(mesa.getId()) : "N/A";
+        return String.format(
+                "ID: %d, Cliente: %s, Quantidade: %d, Data: %s, Hora de Entrada: %s, Hora de Saída: %s, Mesa ID: %s",
+                id, cliente.getNome(), quantidade, data, horaEntrada, horaSaida, mesaId);
     }
 
-    public int getQuantidadePessoas() {
-        return quantidadePessoas;
+    // Getters e setters
+    // #region
+
+    public int getQuantidade() {
+        return quantidade;
     }
 
-    public void setquantidadePessoas(int quantidadePessoas) {
-        this.quantidadePessoas = quantidadePessoas;
+    public void setQuantidade(int quantidade) {
+        this.quantidade = quantidade;
     }
 
     public Cliente getCliente() {
@@ -104,14 +131,6 @@ public class Requisicao {
         this.mesa = mesa;
     }
 
-    public boolean isStatus() {
-        return status;
-    }
-
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
-
     public Pedido getPedido() {
         return pedido;
     }
@@ -119,63 +138,6 @@ public class Requisicao {
     public void setPedido(Pedido pedido) {
         this.pedido = pedido;
     }
+    // #endregion
 
-    public int getQuantidade() {
-        return this.quantidadePessoas;
-    }
-
-    public int setQuantidade(int quantidade) {
-        return this.quantidadePessoas = quantidade;
-    }
-
-    public List<Produto> getProdutos() {
-        return this.pedido.getProdutos();
-    }
-
-    /**
-     * Exibe o histórico de requisições.
-     * 
-     * @return Uma string contendo o histórico de requisições ou uma mensagem
-     *         indicando que não há requisições no histórico.
-     */
-    public String exibirHistoricoDeRequisicoes() {
-        List<Requisicao> historicoDeRequisicao = restaurante.getHistoricoDeRequisicao();
-        if (historicoDeRequisicao.isEmpty()) {
-            return "Não há requisições no histórico.";
-        } else {
-            StringBuilder sb = new StringBuilder();
-            sb.append("Histórico de Requisições:\n");
-            for (Requisicao requisicao : historicoDeRequisicao) {
-                sb.append("ID: ").append(requisicao.getId())
-                  .append(", Cliente: ").append(requisicao.getCliente().getNome())
-                  .append(", Quantidade: ").append(requisicao.getQuantidadePessoas())
-                  .append(", Data: ").append(requisicao.getData())
-                  .append(", Hora de Entrada: ").append(requisicao.getHoraEntrada())
-                  .append(", Hora de Saída: ").append(requisicao.getHoraSaida())
-                  .append("\n");
-            }
-            return sb.toString();
-        }
-    }
-
-    /**
-     * Adiciona um pedido à requisição. Se já houver um pedido, os produtos
-     * são adicionados ao pedido existente.
-     * Caso contrário, um novo pedido é criado.
-     *
-     * @param produtos A lista de produtos a serem adicionados ao pedido.
-     * @return true se os produtos foram adicionados com sucesso e a lista aumentou
-     *         de tamanho, false caso contrário.
-     */
-    public boolean adicionarPedido(List<Produto> produtos) {
-
-        int tamanhoAntes = this.pedido.getProdutos().size();
-
-        if (this.pedido == null) {
-            this.pedido = new Pedido();
-        }
-        this.pedido.addProdutos(produtos);
-
-        return this.pedido.getProdutos().size() > tamanhoAntes;
-    }
 }
