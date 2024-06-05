@@ -1,38 +1,59 @@
-package com.br.lpmssj5.ssj5.Model;
+package codigo.SSJ5.src;
 
-import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table
 public class Menu {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private List<Produto> menu;
 
-    @ManyToMany
-    private List<Produto> produtos = new ArrayList<>();
+    public Menu() {
+        this.menu = new ArrayList<>();
+        String[] comidas = { "Moqueca de Palmito", "Falafel Assado", "Salada Primavera com Macarrão Konjac",
+                "Escondidinho de Inhame", "Strogonoff de Cogumelos", "Caçarola de legumes" };
+        String[] bebidas = { "Água", "Copo de suco", "Refrigerante orgânico", "Cerveja vegana",
+                "Taça de vinho vegano" };
+        Integer[] precoComida = { 32, 20, 25, 18, 35, 22 };
+        Integer[] precoBebida = { 3, 7, 7, 9, 18 };
 
-    public Menu() {}
-
-    public Menu(List<Produto> produtos) {
-        this.produtos = produtos;
+        Produto primeiro = new Produto("vazio", 0);
+        menu.add(primeiro);
+        
+        for (int i = 0; i < comidas.length; i++) {
+            Produto novoProduto = new Produto(comidas[i], precoComida[i]);
+            menu.add(novoProduto);
+        }
+        for (int i = 0; i < bebidas.length; i++) {
+            Produto novoProduto = new Produto(bebidas[i], precoBebida[i]);
+            menu.add(novoProduto);
+        }
     }
 
-    public int getId() {
-        return id;
+    public String exibirMenu() {
+        StringBuilder sb = new StringBuilder();
+        for (Produto p : menu) {
+            sb.append(p.getIdProduto()).append(" ").append(p.getNomeProduto()).append(" - R$").append(p.getPrecoProduto()).append("\n");
+        }
+        return sb.toString();
+    }    
+
+    public Produto getProdutoById(int id) {
+        if(id>=0 && id<menu.size())
+            return menu.get(id);
+        else 
+            return null;
     }
 
-    public List<Produto> getProdutos() {
-        return produtos;
+    public Produto getProdutoByName(String nome) {
+        for (Produto p : menu) {
+            if (p.getNomeProduto().equalsIgnoreCase(nome)) {
+                return p;
+            }
+        }
+        return null;
     }
 
-    public void setProdutos(List<Produto> produtos) {
-        this.produtos = produtos;
-    }
-
-    public void addProduto(Produto produto) {
-        this.produtos.add(produto);
+    public void adicionarProduto(Produto produto) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'adicionarProduto'");
     }
 }

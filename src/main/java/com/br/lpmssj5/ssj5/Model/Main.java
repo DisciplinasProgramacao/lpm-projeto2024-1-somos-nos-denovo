@@ -1,4 +1,4 @@
-package codigo.SSJ5.src;
+package com.br.lpmssj5.ssj5.Model;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
