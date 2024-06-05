@@ -81,6 +81,7 @@ public class Restaurante {
                 if (requisicaoFechar.getMesa().getCapacidade() >= r.getQuantidade()) {
                     alocarNaRequisicao(r);
                     filaDeEspera.remove(r);
+                    historicoDeRequisicao.add(r);
                     break;
                 }
             }
@@ -114,7 +115,7 @@ public class Restaurante {
         return requisicao;
     }
 
-    public void fazerPedido(int idRequisicao, int idProduto) {
+    public boolean fazerPedido(int idRequisicao, int idProduto) {
         Requisicao requisicao = null;
         for (Requisicao r : historicoDeRequisicao) {
             if (r.getId() == idRequisicao) {
@@ -126,12 +127,13 @@ public class Restaurante {
             Produto produto = menu.getProdutoById(idProduto);
             if (produto != null) {
                requisicao.adicionarItem(produto);
+                return true;
             }
         }
+        return false;
     }
-    
-    //Verificar se essa logica esta correta 
-    public void ordenarMenuFechado(int idRequisicao, int comida, int bebida1, int bebida2) {
+
+    public boolean menuFechado(int idRequisicao, int comida, int bebida1, int bebida2) {
         Requisicao requisicao = null;
         for (Requisicao r : historicoDeRequisicao) {
             if (r.getId() == idRequisicao) {
@@ -140,35 +142,58 @@ public class Restaurante {
             }
         }
         if (requisicao != null) {
-            Produto comida1 = (comida == 1) ? menu.getProdutoByName("Falafel Assado") : (comida == 2) ?menu.getProdutoByName("Caçarola de legumes") : null;
-            Produto drink1 = (bebida1 == 1) ? menu.getProdutoByName("Copo de suco") : (bebida1 == 2) ? menu.getProdutoByName("Refrigerante orgânico") : (bebida1 == 3) ? menu.getProdutoByName("Cerveja vegana") : null;
-            Produto drink2 = (bebida2 == 1) ? menu.getProdutoByName("Copo de suco") : (bebida2 == 2) ? menu.getProdutoByName("Refrigerante orgânico") : (bebida2 == 3) ? menu.getProdutoByName("Cerveja vegana") : null;
+            Produto comida1 = getComidaByOption(comida);
+            Produto drink1 = getDrinkByOption(bebida1);
+            Produto drink2 = getDrinkByOption(bebida2);
 
             if (comida1 != null && drink1 != null && drink2 != null) {
-                Pedido pedido = requisicao.getPedido();
-                pedido.addProduto(comida1);
-                pedido.addProduto(drink1);
-                pedido.addProduto(drink2);
-                pedido.addMenuFixoPreco(requisicao.getQuantidade());
-                System.out.println("Menu fechado criado com sucesso!");
+                PedidoFechado pedidoFechado = new PedidoFechado(requisicao);
+                pedidoFechado.addProduto(comida1);
+                pedidoFechado.addProduto(drink1);
+                pedidoFechado.addProduto(drink2);
+                pedidoFechado.addMenuFixoPreco(requisicao.getQuantidade());
+                requisicao.setPedido(pedidoFechado);
+                
+                return true;
             } else {
-                System.out.println("Erro ao criar o menu fechado. Selecione os itens corretamente.");
+                return false;
             }
         } else {
-            System.out.println("Requisição não encontrada.");
+           return false;
         }
     }
 
-    public String exibirHistoricoDeRequisicoes() {
+    private Produto getComidaByOption(int option) {
+        switch (option) {
+            case 1:
+                return menu.getProdutoByName("Falafel Assado");
+            case 2:
+                return menu.getProdutoByName("Caçarola de legumes");
+            default:
+                return null;
+        }
+    }
+
+    private Produto getDrinkByOption(int option) {
+        switch (option) {
+            case 1:
+                return menu.getProdutoByName("Copo de suco");
+            case 2:
+                return menu.getProdutoByName("Refrigerante orgânico");
+            case 3:
+                return menu.getProdutoByName("Cerveja vegana");
+            default:
+                return null;
+        }
+    }
+
+    public String exibirHistorico() {
         StringBuilder sb = new StringBuilder();
+        sb.append("Histórico de Requisições:\n");
         for (Requisicao requisicao : historicoDeRequisicao) {
             sb.append(requisicao.getRequisicaoInfo()).append("\n");
         }
-        return sb.toString();
-    }
-
-    public String exibirPedidos() {
-        StringBuilder sb = new StringBuilder();
+        sb.append("Pedidos:\n");
         List<Pedido> pedidos = getPedidos();
         if (pedidos.isEmpty()) {
             sb.append("Não há pedidos no momento.");

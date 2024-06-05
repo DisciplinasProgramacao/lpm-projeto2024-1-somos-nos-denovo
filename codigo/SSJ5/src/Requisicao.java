@@ -33,7 +33,6 @@ public class Requisicao {
     }
 
     public int getQuantidade() {
-        
         return quantidade;
     }
 
@@ -91,6 +90,10 @@ public class Requisicao {
 
     public void setPedido(Pedido pedido) {
         this.pedido = pedido;
+    }
+
+    public void adicionarItem(Produto produto) {
+        this.pedido.addProduto(produto);
     }
 
     public String getRequisicaoInfo() {

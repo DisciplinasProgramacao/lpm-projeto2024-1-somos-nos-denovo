@@ -23,4 +23,17 @@ public class Produto {
     public double getPrecoProduto() {
         return precoProduto;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Produto produto = (Produto) obj;
+        return nomeProduto.equalsIgnoreCase(produto.nomeProduto);
+    }
+
+    @Override
+    public int hashCode() {
+        return nomeProduto.toLowerCase().hashCode();
+    }
 }

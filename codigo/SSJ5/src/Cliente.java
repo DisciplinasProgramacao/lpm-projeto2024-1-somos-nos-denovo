@@ -21,4 +21,17 @@ public class Cliente {
     public int getId() {
         return id;
     }
+
+    @Override
+    public boolean equals(Object cli) {
+        if (this == cli) return true;
+        if (cli == null || getClass() != cli.getClass()) return false;
+        Cliente cliente = (Cliente) cli;
+        return nome.equals(cliente.nome);
+    }
+
+    @Override
+    public int hashCode() {
+        return nome.hashCode();
+    }
 }

@@ -4,18 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Pedido {
-    private double valorTotal;
-    private List<Produto> produtos;
-    private final static double taxa = 1.1;
-    private Requisicao requisicao;
-    private static final double MENU_FIXO_PRECO = 32.0;
+    protected double valorTotal;
+    protected List<Produto> produtos;
+    protected final static double taxa = 1.1;
+    protected Requisicao requisicao;
+    protected static final double MENU_FIXO_PRECO = 32.0;
 
     public Pedido(Requisicao requisicao) {
         this.produtos = new ArrayList<>();
         this.requisicao = requisicao;
     }
 
-    private double calcularValorTotal() {
+    protected double calcularValorTotal() {
         valorTotal = 0;
         for (Produto p : produtos) {
             valorTotal += p.getPrecoProduto();
