@@ -17,6 +17,7 @@ public class Produto {
     public Produto(String nomeProduto, double precoProduto) {
         this.nomeProduto = nomeProduto;
         this.precoProduto = precoProduto;
+        this.idProduto = nextId++;
     }
 
     public int getIdProduto() {
