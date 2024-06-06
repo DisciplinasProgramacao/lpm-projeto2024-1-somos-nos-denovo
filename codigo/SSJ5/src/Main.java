@@ -73,7 +73,6 @@ public class Main {
                     System.out.println(menu.exibirMenu());
                     System.out.print("Qual item você deseja? ");
                     int idItem = scanner.nextInt();
-                    restaurante.fazerPedido(idRequisicao, idItem);
                     boolean pedidoCriado = restaurante.fazerPedido(idRequisicao, idItem);
                     if (pedidoCriado) {
                         System.out.println("Pedido criado com sucesso!");
@@ -100,7 +99,6 @@ public class Main {
                     int comida = scanner.nextInt();
                     int bebida1 = scanner.nextInt();
                     int bebida2 = scanner.nextInt();
-                    restaurante.menuFechado(idRequisicao, comida, bebida1, bebida2);
                     boolean pedidoFechado = restaurante.menuFechado(idRequisicao, comida, bebida1, bebida2);
                     if (pedidoFechado) {
                         System.out.println("Pedido fechado criado com sucesso!");

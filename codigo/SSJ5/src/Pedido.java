@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Pedido {
-    protected double valorTotal = 0.0;
+    protected double valorTotal;
     protected List<Produto> produtos;
     protected final static double taxa = 1.1;
     protected Requisicao requisicao;
