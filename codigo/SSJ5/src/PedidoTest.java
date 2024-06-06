@@ -18,7 +18,7 @@ public class PedidoTest {
     @BeforeEach
     public void setup() {
         Cliente cliente = new Cliente("Zico");
-        requisicao = new Requisicao(0, cliente, LocalDate.now(), LocalTime.now());
+        requisicao = new Requisicao(2, cliente, LocalDate.now(), LocalTime.now());
         pedido = requisicao.getPedido();
     }
 
@@ -48,7 +48,7 @@ public class PedidoTest {
 
     @Test
     public void testDividirContaEquals() {
-        assertEquals(0.0, pedido.dividirConta());
+        assertEquals((pedido.calcularValorFinal()/0), pedido.dividirConta());
     }
 
     @Test
@@ -75,7 +75,7 @@ public class PedidoTest {
     @Test
     public void testFecharContaEquals() {
         pedido.fecharConta();
-        assertEquals(0.0, pedido.getValorTotal());
+        assertEquals(0.0, pedido.calcularValorTotal());
     }
 
     @Test
@@ -83,17 +83,17 @@ public class PedidoTest {
         Produto produto = new Produto("Pizza", 20);
         pedido.addProduto(produto);
         pedido.fecharConta();
-        assertNotEquals(0.0, pedido.getValorTotal());
+        assertNotEquals(0.0, pedido.());
     }
 
     @Test
-    public void testGetValorTotalEquals() {
-        assertEquals(0.0, pedido.getValorTotal());
+    public void testcalcularValorTotalEquals() {
+        assertEquals(0.0, pedido.calcularValorTotal());
     }
 
     @Test
-    public void testGetValorTotalNotEquals() {
-        assertNotEquals(1.0, pedido.getValorTotal());
+    public void testcalcularValorTotalNotEquals() {
+        assertNotEquals(1.0, pedido.calcularValorTotal());
     }
 
 

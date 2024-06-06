@@ -8,6 +8,19 @@ public class Main {
         System.out.flush();
     }
 
+    //fazer herança do pedido, pedido aberto e fechado.
+    //arrumar menu principal
+    //case 6, ele add qqr produto, se vai aceitar pelo tipo de pedido ou nao vai depender da validaçãpo do adicionar produto no pedido
+    //Arrumar a rquisicao com o metodo que ele criou(Criar menu fechado) e criar o metodo criar menu aberto, usando os filhos do pedido
+    //criar metodo que localiza a requ
+    //no exibir hit de pedido, tem que chamar o metodo de dividir a conta entre a qnt de pessoas
+    //fazer tratamento de exceção (Try catch) para os inputs
+    //melhorar a exibição do menu, ela vai exibir o menu aberto e o menu fechado
+    //arrumar testes, estao com baixa qualidade
+    //Arrumar o exibir pedido e o exibir historico, juntar os dois(TALVEZ) e arrumar formatação da hora e da data
+     //tirar o sout do gerar requisicao
+     //no main, os souts tem que ser melhorados de acordo com a exception(Try catch)
+     
     public static void main(String[] args) {
         Menu menu = new Menu();
         Restaurante restaurante = new Restaurante(menu);
@@ -16,13 +29,13 @@ public class Main {
 
         do {
             System.out.println("1 - Cadastrar Cliente");
-            System.out.println("2 - Criar requisição");
+            System.out.println("2 - Criar requisição aberta");
             System.out.println("3 - Fechar conta");
             System.out.println("4 - Exibir histórico de requisições e pedidos");
             System.out.println("5 - Exibir lista de espera");
-            System.out.println("6 - Criar pedido");
+            System.out.println("6 - Pedir um produto");
             System.out.println("7 - Exibir menu");
-            System.out.println("8 - Criar pedido fechado");
+            System.out.println("8 - Criar requisição fechada");
             System.out.println("9 - Sair");
             System.out.print("Escolha uma opção: ");
 
@@ -85,27 +98,33 @@ public class Main {
                     System.out.println(menu.exibirMenu());
                     break;
                 case 8:
+                    
                     System.out.print("Digite o ID da requisição: ");
                     idRequisicao = scanner.nextInt();
-                    System.out.println(
-                            "Escolha uma comida:\n" +
-                            "1 - Falafel Assado\n" +
-                            "2 - Caçarola de legumes\n" +
-                            "Escolha duas bebidas:\n" +
-                            "1 - Copo de suco\n" +
-                            "2 - Refrigerante orgânico\n" +
-                            "3 - Cerveja vegana"
-                    );
-                    int comida = scanner.nextInt();
-                    int bebida1 = scanner.nextInt();
-                    int bebida2 = scanner.nextInt();
-                    boolean pedidoFechado = restaurante.menuFechado(idRequisicao, comida, bebida1, bebida2);
-                    if (pedidoFechado) {
-                        System.out.println("Pedido fechado criado com sucesso!");
-                    } else {
-                        System.out.println("Erro ao criar o pedido fechado.");
-                    }
-                    break;
+                    Requisicao req = restaurante.localizarRequisicao(idRequisicao);
+
+                    req.criarMenuFechado();
+                    
+                    //Criar classe cardapio pra fazer isso
+                    // System.out.println(
+                    //         "Escolha uma comida:\n" +
+                    //         "1 - Falafel Assado\n" +
+                    //         "2 - Caçarola de legumes\n" +
+                    //         "Escolha duas bebidas:\n" +
+                    //         "1 - Copo de suco\n" +
+                    //         "2 - Refrigerante orgânico\n" +
+                    //         "3 - Cerveja vegana"
+                    // );
+                    // int comida = scanner.nextInt();
+                    // int bebida1 = scanner.nextInt();
+                    // int bebida2 = scanner.nextInt();
+                    // boolean pedidoFechado = restaurante.menuFechado(idRequisicao, comida, bebida1, bebida2);
+                    // if (pedidoFechado) {
+                    //     System.out.println("Pedido fechado criado com sucesso!");
+                    // } else {
+                    //     System.out.println("Erro ao criar o pedido fechado.");
+                    // }
+                    // break;
                 case 9:
                     System.out.println("Fechando sistema!");
                     break;

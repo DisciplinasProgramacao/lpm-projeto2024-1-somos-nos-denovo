@@ -89,7 +89,7 @@ public class Restaurante {
         }
         return false;
     }
-
+   
     public Requisicao gerarRequisicao(int quantidade, String nome) {
         Cliente clienteExistente = null;
         for (Cliente cliente : listaDeClientes) {
@@ -133,59 +133,62 @@ public class Restaurante {
         return false;
     }
 
-    public boolean menuFechado(int idRequisicao, int comida, int bebida1, int bebida2) {
-        Requisicao requisicao = null;
-        for (Requisicao r : historicoDeRequisicao) {
-            if (r.getId() == idRequisicao) {
-                requisicao = r;
-                break;
-            }
-        }
-        if (requisicao != null) {
-            Produto comida1 = getComidaByOption(comida);
-            Produto drink1 = getDrinkByOption(bebida1);
-            Produto drink2 = getDrinkByOption(bebida2);
+    //TODO: ISSO NAO VAI EXISTIR AQUI DESSE JEITO MAIS
 
-            if (comida1 != null && drink1 != null && drink2 != null) {
-                PedidoFechado pedidoFechado = new PedidoFechado(requisicao);
-                pedidoFechado.addProduto(comida1);
-                pedidoFechado.addProduto(drink1);
-                pedidoFechado.addProduto(drink2);
-                pedidoFechado.addMenuFixoPreco(requisicao.getQuantidade());
-                requisicao.setPedido(pedidoFechado);
+    // public boolean menuFechado(int idRequisicao, int comida, int bebida1, int bebida2) {
+    //     // Requisicao requisicao = null;
+    //     // for (Requisicao r : historicoDeRequisicao) {
+    //     //     if (r.getId() == idRequisicao) {
+    //     //         requisicao = r;
+    //     //         break;
+    //     //     }
+    //     // }
+    //     // if (requisicao != null) {
+    //     //     Produto comida1 = getComidaByOption(comida);
+    //     //     Produto drink1 = getDrinkByOption(bebida1);
+    //     //     Produto drink2 = getDrinkByOption(bebida2);
+
+    //     //     if (comida1 != null && drink1 != null && drink2 != null) {
+    //     //         PedidoFechado pedidoFechado = new PedidoFechado(requisicao);
+    //     //         pedidoFechado.addProduto(comida1);
+    //     //         pedidoFechado.addProduto(drink1);
+    //     //         pedidoFechado.addProduto(drink2);
+    //     //         pedidoFechado.addMenuFixoPreco(requisicao.getQuantidade());
+    //     //         requisicao.setPedido(pedidoFechado);
                 
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-           return false;
-        }
-    }
+    //     //         return true;
+    //     //     } else {
+    //     //         return false;
+    //     //     }
+    //     // } else {
+    //     //    return false;
+    //     // }
+    // }
 
-    private Produto getComidaByOption(int option) {
-        switch (option) {
-            case 1:
-                return menu.getProdutoByName("Falafel Assado");
-            case 2:
-                return menu.getProdutoByName("Caçarola de legumes");
-            default:
-                return null;
-        }
-    }
+    // private Produto getComidaByOption(int option) {
+    //     // switch (option) {
+    //     //     case 1:
+    //     //         return menu.getProdutoByName("Falafel Assado");
+    //     //     case 2:
+    //     //         return menu.getProdutoByName("Caçarola de legumes");
+    //     //     default:
+    //     //         return null;
+    //     // }
+    //     menu.getProdutoById(option);
+    // }
 
-    private Produto getDrinkByOption(int option) {
-        switch (option) {
-            case 1:
-                return menu.getProdutoByName("Copo de suco");
-            case 2:
-                return menu.getProdutoByName("Refrigerante orgânico");
-            case 3:
-                return menu.getProdutoByName("Cerveja vegana");
-            default:
-                return null;
-        }
-    }
+    // // private Produto getDrinkByOption(int option) {
+    // //     switch (option) {
+    // //         case 1:
+    // //             return menu.getProdutoByName("Copo de suco");
+    // //         case 2:
+    // //             return menu.getProdutoByName("Refrigerante orgânico");
+    // //         case 3:
+    // //             return menu.getProdutoByName("Cerveja vegana");
+    // //         default:
+    // //             return null;
+    // //     }
+    // // }
 
     public String exibirHistorico() {
         StringBuilder sb = new StringBuilder();

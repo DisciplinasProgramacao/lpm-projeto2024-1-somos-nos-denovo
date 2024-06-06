@@ -101,4 +101,8 @@ public class Requisicao {
         return String.format("ID: %d, Cliente: %s, Quantidade: %d, Data: %s, Hora de Entrada: %s, Hora de Saída: %s, Mesa ID: %s",
                 id, cliente.getNome(), quantidade, data, horaEntrada, horaSaida, mesaId);
     }
+
+    public void criarMenuFechado() {
+       this.pedido = new PedidoFechado();
+    }
 }
