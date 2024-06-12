@@ -89,7 +89,7 @@ public class Restaurante {
         }
         return false;
     }
-   
+
     public Requisicao gerarRequisicao(int quantidade, String nome) {
         Cliente clienteExistente = null;
         for (Cliente cliente : listaDeClientes) {
@@ -115,80 +115,37 @@ public class Restaurante {
         return requisicao;
     }
 
-    public boolean fazerPedido(int idRequisicao, int idProduto) {
-        Requisicao requisicao = null;
-        for (Requisicao r : historicoDeRequisicao) {
-            if (r.getId() == idRequisicao) {
-                requisicao = r;
-                break;
-            }
-        }
+    public boolean fazerPedido(int idRequisicao, int idProduto, boolean fechado) {
+        Requisicao requisicao = localizarRequisicao(idRequisicao);
         if (requisicao != null) {
             Produto produto = menu.getProdutoById(idProduto);
             if (produto != null) {
-               requisicao.adicionarItem(produto);
-                return true;
+                try {
+                    Pedido pedido;
+                    if (fechado) {
+                        pedido = new PedidoFechado(requisicao);
+                    } else {
+                        pedido = new PedidoAberto(requisicao);
+                    }
+                    pedido.addProduto(produto);
+                    requisicao.addPedido(pedido);
+                    return true;
+                } catch (IllegalArgumentException e) {
+                    System.out.println(e.getMessage());
+                }
             }
         }
         return false;
     }
 
-    //TODO: ISSO NAO VAI EXISTIR AQUI DESSE JEITO MAIS
-
-    // public boolean menuFechado(int idRequisicao, int comida, int bebida1, int bebida2) {
-    //     // Requisicao requisicao = null;
-    //     // for (Requisicao r : historicoDeRequisicao) {
-    //     //     if (r.getId() == idRequisicao) {
-    //     //         requisicao = r;
-    //     //         break;
-    //     //     }
-    //     // }
-    //     // if (requisicao != null) {
-    //     //     Produto comida1 = getComidaByOption(comida);
-    //     //     Produto drink1 = getDrinkByOption(bebida1);
-    //     //     Produto drink2 = getDrinkByOption(bebida2);
-
-    //     //     if (comida1 != null && drink1 != null && drink2 != null) {
-    //     //         PedidoFechado pedidoFechado = new PedidoFechado(requisicao);
-    //     //         pedidoFechado.addProduto(comida1);
-    //     //         pedidoFechado.addProduto(drink1);
-    //     //         pedidoFechado.addProduto(drink2);
-    //     //         pedidoFechado.addMenuFixoPreco(requisicao.getQuantidade());
-    //     //         requisicao.setPedido(pedidoFechado);
-                
-    //     //         return true;
-    //     //     } else {
-    //     //         return false;
-    //     //     }
-    //     // } else {
-    //     //    return false;
-    //     // }
-    // }
-
-    // private Produto getComidaByOption(int option) {
-    //     // switch (option) {
-    //     //     case 1:
-    //     //         return menu.getProdutoByName("Falafel Assado");
-    //     //     case 2:
-    //     //         return menu.getProdutoByName("Caçarola de legumes");
-    //     //     default:
-    //     //         return null;
-    //     // }
-    //     menu.getProdutoById(option);
-    // }
-
-    // // private Produto getDrinkByOption(int option) {
-    // //     switch (option) {
-    // //         case 1:
-    // //             return menu.getProdutoByName("Copo de suco");
-    // //         case 2:
-    // //             return menu.getProdutoByName("Refrigerante orgânico");
-    // //         case 3:
-    // //             return menu.getProdutoByName("Cerveja vegana");
-    // //         default:
-    // //             return null;
-    // //     }
-    // // }
+    public Requisicao localizarRequisicao(int idRequisicao) {
+        for (Requisicao r : historicoDeRequisicao) {
+            if (r.getId() == idRequisicao) {
+                return r;
+            }
+        }
+        return null;
+    }
 
     public String exibirHistorico() {
         StringBuilder sb = new StringBuilder();
@@ -211,9 +168,7 @@ public class Restaurante {
     private List<Pedido> getPedidos() {
         List<Pedido> pedidos = new ArrayList<>();
         for (Requisicao requisicao : historicoDeRequisicao) {
-            if (requisicao.getPedido() != null) {
-                pedidos.add(requisicao.getPedido());
-            }
+            pedidos.addAll(requisicao.getPedidos());
         }
         return pedidos;
     }

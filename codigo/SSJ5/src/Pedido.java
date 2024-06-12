@@ -3,12 +3,11 @@ package codigo.SSJ5.src;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Pedido {
+public abstract class Pedido {
     protected double valorTotal = 0;
     protected List<Produto> produtos;
     protected final static double taxa = 1.1;
     protected Requisicao requisicao;
-    protected static final double MENU_FIXO_PRECO = 32.0;
 
     public Pedido(Requisicao requisicao) {
         this.produtos = new ArrayList<>();
@@ -23,21 +22,14 @@ public class Pedido {
         return valorTotal;
     }
 
-    public double calcularValorFinal() {
-        return calcularValorTotal() * taxa;
-    }
+    public abstract double calcularValorFinal();
 
     public double dividirConta() {
-
-        return (valorTotal / requisicao.getQuantidade()) * taxa;
+        return calcularValorFinal() / requisicao.getQuantidade();
     }
 
     public void addProduto(Produto produto) {
         this.produtos.add(produto);
-    }
-
-    public void addMenuFixoPreco(int quantidade) {
-        valorTotal += quantidade * MENU_FIXO_PRECO;
     }
 
     public String formatPedido() {
@@ -55,8 +47,5 @@ public class Pedido {
         return sb.toString();
     }
 
-    public void fecharConta() {
-        valorTotal = calcularValorFinal();
-    }
+    public abstract void fecharConta();
 }
-
