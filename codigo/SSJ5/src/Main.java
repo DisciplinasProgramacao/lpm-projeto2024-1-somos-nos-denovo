@@ -16,7 +16,7 @@ public class Main {
             System.out.println("3 - Fechar conta");
             System.out.println("4 - Exibir histórico de requisições e pedidos");
             System.out.println("5 - Exibir lista de espera");
-            System.out.println("6 - Pedir um produto");
+            System.out.println("6 - Atender mesa");
             System.out.println("7 - Exibir menu");
             System.out.println("8 - Sair");
             System.out.print("Escolha uma opção: ");
@@ -45,7 +45,7 @@ public class Main {
                         exibirListaDeEspera(restaurante);
                         break;
                     case 6:
-                        pedirProduto(scanner, restaurante, menu);
+                        atenderMesa(scanner, restaurante, menu);
                         break;
                     case 7:
                         exibirMenu(menu);
@@ -104,26 +104,91 @@ public class Main {
         System.out.println(restaurante.exibirListaDeEspera());
     }
 
-    private static void pedirProduto(Scanner scanner, Restaurante restaurante, Menu menu) {
-        System.out.print("Digite o ID da requisição: ");
-        int idRequisicao = scanner.nextInt();
-        System.out.print("O pedido é fechado? (true/false): ");
-        boolean fechado = scanner.nextBoolean();
+    private static void atenderMesa(Scanner scanner, Restaurante restaurante, Menu menu) {
+        System.out.print("Digite o ID da mesa: ");
+        int idMesa = scanner.nextInt();
+        Requisicao requisicao = restaurante.localizarRequisicao(idMesa);
 
-        if (fechado) {
-            System.out.println(menu.exibirMenuFechado());
-        } else {
-            System.out.println(menu.exibirMenu());
+        if (requisicao == null) {
+            System.out.println("Mesa não encontrada.");
+            return;
         }
 
-        System.out.print("Qual item você deseja? ");
-        int idItem = scanner.nextInt();
+        int opcao;
+        do {
+            System.out.println("1 - Gerar pedido");
+            System.out.println("2 - Pedir produto do menu aberto");
+            System.out.println("3 - Pedir produto do menu fechado");
+            System.out.println("4 - Voltar");
+            System.out.print("Escolha uma opção: ");
 
-        boolean pedidoCriado = restaurante.fazerPedido(idRequisicao, idItem, fechado);
-        if (pedidoCriado) {
-            System.out.println("Pedido criado com sucesso!");
+            while (!scanner.hasNextInt()) {
+                System.out.println("Entrada inválida. Por favor, insira um número.");
+                scanner.next();
+            }
+            opcao = scanner.nextInt();
+
+            switch (opcao) {
+                case 1:
+                    gerarPedido(requisicao);
+                    break;
+                case 2:
+                    pedirProdutoAberto(scanner, restaurante, menu, requisicao);
+                    break;
+                case 3:
+                    pedirProdutoFechado(scanner, restaurante, menu, requisicao);
+                    break;
+                case 4:
+                    System.out.println("Voltando ao menu principal.");
+                    break;
+                default:
+                    System.out.println("Opção inválida. Tente novamente.");
+                    break;
+            }
+        } while (opcao != 4);
+    }
+
+    private static void gerarPedido(Requisicao requisicao) {
+        if (requisicao.getPedidoAtual() == null) {
+            Pedido pedido = new PedidoAberto();
+            requisicao.addPedido(pedido);
+            System.out.println("Pedido gerado com sucesso!");
         } else {
-            System.out.println("Erro ao criar o pedido.");
+            System.out.println("Já existe um pedido aberto para esta requisição.");
+        }
+    }
+
+    private static void pedirProdutoAberto(Scanner scanner, Restaurante restaurante, Menu menu, Requisicao requisicao) {
+        System.out.println(menu.exibirMenu());
+        System.out.print("Digite o ID do produto: ");
+        int idProduto = scanner.nextInt();
+        int[] idsProdutos = { idProduto };
+
+        boolean produtoAdicionado = restaurante.adicionarProduto(requisicao.getId(), idsProdutos, false);
+        if (produtoAdicionado) {
+            System.out.println("Produto adicionado com sucesso!");
+        } else {
+            System.out.println("Erro ao adicionar o produto.");
+        }
+    }
+
+    private static void pedirProdutoFechado(Scanner scanner, Restaurante restaurante, Menu menu, Requisicao requisicao) {
+        int[] idsProdutos = new int[3];
+        System.out.println(menu.exibirMenuFechado());
+
+        System.out.print("Escolha uma comida (ID): ");
+        idsProdutos[0] = scanner.nextInt();
+
+        for (int i = 1; i < 3; i++) {
+            System.out.print("Escolha uma bebida (ID): ");
+            idsProdutos[i] = scanner.nextInt();
+        }
+
+        boolean produtoAdicionado = restaurante.adicionarProduto(requisicao.getId(), idsProdutos, true);
+        if (produtoAdicionado) {
+            System.out.println("Produto adicionado com sucesso!");
+        } else {
+            System.out.println("Erro ao adicionar o produto.");
         }
     }
 

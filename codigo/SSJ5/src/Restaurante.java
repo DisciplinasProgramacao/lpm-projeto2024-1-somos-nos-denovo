@@ -23,7 +23,7 @@ public class Restaurante {
         for (int i = 0; i < 4; i++) {
             listaDeMesas.add(new Mesa(6, true));
         }
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0;  i < 2; i++) {
             listaDeMesas.add(new Mesa(8, true));
         }
     }
@@ -31,6 +31,38 @@ public class Restaurante {
     public void adicionarCliente(String nome) {
         Cliente novoCliente = new Cliente(nome);
         listaDeClientes.add(novoCliente);
+    }
+
+    private Optional<Cliente> buscarCliente(String nome) {
+        return listaDeClientes.stream()
+                              .filter(cliente -> cliente.getNome().equals(nome))
+                              .findFirst();
+    }
+
+    public Requisicao gerarRequisicao(int quantidade, String nome) {
+        if (nome == null || nome.isEmpty()) {
+            throw new IllegalArgumentException("Nome do cliente não pode ser nulo ou vazio.");
+        }
+        if (quantidade <= 0) {
+            throw new IllegalArgumentException("Quantidade de pessoas deve ser maior que zero.");
+        }
+
+        Cliente cliente = buscarCliente(nome).orElseGet(() -> {
+            Cliente novoCliente = new Cliente(nome);
+            listaDeClientes.add(novoCliente);
+            return novoCliente;
+        });
+
+        Requisicao requisicao = new Requisicao(quantidade, cliente, LocalDate.now(), LocalTime.now());
+
+        if (alocarNaRequisicao(requisicao)) {
+            historicoDeRequisicao.add(requisicao);
+        } else {
+            entrarNaFilaDeEspera(requisicao);
+            System.out.println("Mesas cheias! Cliente adicionado à lista de espera.");
+        }
+
+        return requisicao;
     }
 
     public boolean alocarNaRequisicao(Requisicao requisicao) {
@@ -49,22 +81,57 @@ public class Restaurante {
         return true;
     }
 
-    public List<String> exibirListaDeEspera() {
-        List<String> listaDeEspera = new ArrayList<>();
-        if (filaDeEspera.isEmpty()) {
-            listaDeEspera.add("Não há clientes na lista de espera.");
-        } else {
-            for (Requisicao requisicao : filaDeEspera) {
-                listaDeEspera.add(String.format("Cliente: %s, Quantidade: %d", requisicao.getCliente().getNome(), requisicao.getQuantidade()));
+    public boolean adicionarProduto(int idRequisicao, int[] idsProdutos, boolean fechado) {
+        Requisicao requisicao = localizarRequisicao(idRequisicao);
+        if (requisicao != null) {
+            List<Produto> produtos = new ArrayList<>();
+            for (int idProduto : idsProdutos) {
+                Produto produto = menu.getProdutoById(idProduto);
+                if (produto == null) {
+                    return false;
+                }
+                produtos.add(produto);
             }
+
+            Pedido pedido = requisicao.getPedidoAtual();
+            if (pedido == null) {
+                if (fechado) {
+                    pedido = new PedidoFechado();
+                } else {
+                    pedido = new PedidoAberto();
+                }
+                requisicao.addPedido(pedido);
+            }
+
+            if (fechado && pedido instanceof PedidoFechado) {
+                if (!validarProdutosFechado(produtos)) {
+                    System.out.println("Seleção inválida para pedido fechado.");
+                    return false;
+                }
+            }
+
+            for (Produto produto : produtos) {
+                pedido.addProduto(produto);
+            }
+
+            return true;
         }
-        return listaDeEspera;
+        return false;
     }
 
-    public void desocuparMesa(Mesa mesa) {
-        if (!mesa.isDisponibilidade()) {
-            mesa.setDisponibilidade(true);
+    private boolean validarProdutosFechado(List<Produto> produtos) {
+        long countComida = produtos.stream().filter(p -> EProdutoMenuFechado.isComida(p.getIdProduto())).count();
+        long countBebida = produtos.stream().filter(p -> EProdutoMenuFechado.isBebida(p.getIdProduto())).count();
+        return countComida == 1 && countBebida == 2;
+    }
+
+    public Requisicao localizarRequisicao(int idRequisicao) {
+        for (Requisicao r : historicoDeRequisicao) {
+            if (r.getId() == idRequisicao) {
+                return r;
+            }
         }
+        return null;
     }
 
     public boolean fecharConta(int idMesa) {
@@ -90,61 +157,16 @@ public class Restaurante {
         return false;
     }
 
-    public Requisicao gerarRequisicao(int quantidade, String nome) {
-        Cliente clienteExistente = null;
-        for (Cliente cliente : listaDeClientes) {
-            if (cliente.getNome().equals(nome)) {
-                clienteExistente = cliente;
-                break;
-            }
-        }
-        Requisicao requisicao;
-        if (clienteExistente != null) {
-            requisicao = new Requisicao(quantidade, clienteExistente, LocalDate.now(), LocalTime.now());
+    public List<String> exibirListaDeEspera() {
+        List<String> listaDeEspera = new ArrayList<>();
+        if (filaDeEspera.isEmpty()) {
+            listaDeEspera.add("Não há clientes na lista de espera.");
         } else {
-            Cliente novoCliente = new Cliente(nome);
-            listaDeClientes.add(novoCliente);
-            requisicao = new Requisicao(quantidade, novoCliente, LocalDate.now(), LocalTime.now());
-        }
-        if (alocarNaRequisicao(requisicao)) {
-            historicoDeRequisicao.add(requisicao);
-        } else {
-            entrarNaFilaDeEspera(requisicao);
-            System.out.println("Mesas cheias! Cliente adicionado à lista de espera.");
-        }
-        return requisicao;
-    }
-
-    public boolean fazerPedido(int idRequisicao, int idProduto, boolean fechado) {
-        Requisicao requisicao = localizarRequisicao(idRequisicao);
-        if (requisicao != null) {
-            Produto produto = menu.getProdutoById(idProduto);
-            if (produto != null) {
-                try {
-                    Pedido pedido;
-                    if (fechado) {
-                        pedido = new PedidoFechado(requisicao);
-                    } else {
-                        pedido = new PedidoAberto(requisicao);
-                    }
-                    pedido.addProduto(produto);
-                    requisicao.addPedido(pedido);
-                    return true;
-                } catch (IllegalArgumentException e) {
-                    System.out.println(e.getMessage());
-                }
+            for (Requisicao requisicao : filaDeEspera) {
+                listaDeEspera.add(String.format("Cliente: %s, Quantidade: %d", requisicao.getCliente().getNome(), requisicao.getQuantidade()));
             }
         }
-        return false;
-    }
-
-    public Requisicao localizarRequisicao(int idRequisicao) {
-        for (Requisicao r : historicoDeRequisicao) {
-            if (r.getId() == idRequisicao) {
-                return r;
-            }
-        }
-        return null;
+        return listaDeEspera;
     }
 
     public String exibirHistorico() {
@@ -153,23 +175,6 @@ public class Restaurante {
         for (Requisicao requisicao : historicoDeRequisicao) {
             sb.append(requisicao.getRequisicaoInfo()).append("\n");
         }
-        sb.append("Pedidos:\n");
-        List<Pedido> pedidos = getPedidos();
-        if (pedidos.isEmpty()) {
-            sb.append("Não há pedidos no momento.");
-        } else {
-            for (Pedido pedido : pedidos) {
-                sb.append(pedido.formatPedido()).append("\n");
-            }
-        }
         return sb.toString();
-    }
-
-    private List<Pedido> getPedidos() {
-        List<Pedido> pedidos = new ArrayList<>();
-        for (Requisicao requisicao : historicoDeRequisicao) {
-            pedidos.addAll(requisicao.getPedidos());
-        }
-        return pedidos;
     }
 }

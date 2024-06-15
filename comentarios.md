@@ -9,11 +9,11 @@ Todos os comentários referem-se ao código do ramo "master" ou "main". É obrig
 
 ## Revisão
   
-  - ⚠️ o método add produto do Pedido deve ser abstrato e implementado nas filhas.
-  - ⚠️ vários if --> switch case no PedidoFechado
-  - ⚠️ Pedido não tem requisição: requisição já contém pedido
-  - ⚠️ Por que uma requisição de vocês está com vários pedidos?
-  - 🚨 requisição não pode ter "get pedidos" (para que isso serve?)
-  - 🚨 como inserimos um produto em uma requisiçao atendida? Vocês estão confundindo pedido com produto (e complicando uma regra)
+  - ⚠️ o método add produto do Pedido deve ser abstrato e implementado nas filhas. (ARRUMADO)
+  - ⚠️ vários if --> switch case no PedidoFechado (SEMI-ARRUMADO)
+  - ⚠️ Pedido não tem requisição: requisição já contém pedido(ARRUMADO)
+  - ⚠️ Por que uma requisição de vocês está com vários pedidos? (ARRUMADO)
+  - 🚨 requisição não pode ter "get pedidos" (para que isso serve?) (ARRUMADO)
+  - 🚨 como inserimos um produto em uma requisiçao atendida? Vocês estão confundindo pedido com produto (e complicando uma regra) (ARRUMADO)
   - ❕❕ apesar disso tudo, já melhorou bastante do que era antes!
   - 💣 já sabemos, faltando Spring / controllers

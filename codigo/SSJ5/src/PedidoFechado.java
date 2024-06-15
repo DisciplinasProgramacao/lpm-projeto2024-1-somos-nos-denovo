@@ -2,30 +2,31 @@ package codigo.SSJ5.src;
 
 public class PedidoFechado extends Pedido {
     private static final double MENU_FIXO_PRECO = 32;
-    private static final double TAXA = 1.1;
 
-    public PedidoFechado(Requisicao requisicao) {
-        super(requisicao);
+    public PedidoFechado() {
+        super();
     }
 
     @Override
     public double calcularValorFinal() {
-        return MENU_FIXO_PRECO * TAXA;
-    }
-
-    @Override
-    public void fecharConta() {
-        valorTotal = calcularValorFinal();
+        return MENU_FIXO_PRECO * produtos.size() / 3 * taxa;
     }
 
     @Override
     public void addProduto(Produto produto) {
-        String nome = produto.getNomeProduto();
-        if (nome.equals("FALAFEL_ASSADO") || nome.equals("CACAROLA_LEGUMES") ||
-            nome.equals("COPO_SUCO") || nome.equals("REFRIGERANTE_ORGANICO") || nome.equals("CERVEJA_VEGANA")) {
-            super.addProduto(produto);
+        if (EProdutoMenuFechado.isProdutoValido(produto.getIdProduto())) {
+            produtos.add(produto);
         } else {
             throw new IllegalArgumentException("Opção não está disponível no menu fechado.");
         }
+    }
+
+    @Override
+    public String formatPedido() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Itens do Pedido (Menu Fechado):\n");
+        sb.append(String.format(" - Comida e Bebidas (Preço Fixo): R$%.2f\n", MENU_FIXO_PRECO));
+        sb.append(String.format("Preço Total: R$%.2f\n", calcularValorFinal()));
+        return sb.toString();
     }
 }

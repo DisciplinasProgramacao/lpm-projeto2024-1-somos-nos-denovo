@@ -2,6 +2,7 @@ package codigo.SSJ5.src;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +16,7 @@ public class Requisicao {
     private int id;
     private Mesa mesa;
     private List<Pedido> pedidos;
+    private Pedido pedidoAtual;
 
     public Requisicao(int quantidade, Cliente cliente, LocalDate data, LocalTime horaEntrada) {
         this.quantidade = quantidade;
@@ -28,9 +30,6 @@ public class Requisicao {
     public LocalTime fecharRequisicao() {
         this.horaSaida = LocalTime.now();
         if (mesa != null) {
-            for (Pedido pedido : pedidos) {
-                pedido.fecharConta();
-            }
             mesa.desocupar();
         }
         return horaSaida;
@@ -89,7 +88,12 @@ public class Requisicao {
     }
 
     public void addPedido(Pedido pedido) {
+        this.pedidoAtual = pedido;
         this.pedidos.add(pedido);
+    }
+
+    public Pedido getPedidoAtual() {
+        return pedidoAtual;
     }
 
     public List<Pedido> getPedidos() {
@@ -109,8 +113,25 @@ public class Requisicao {
     }
 
     public String getRequisicaoInfo() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        String horaEntradaFormatada = horaEntrada.format(formatter);
+        String horaSaidaFormatada = (horaSaida != null ? horaSaida.format(formatter) : "N/A");
         String mesaId = (mesa != null) ? String.valueOf(mesa.getId()) : "N/A";
-        return String.format("ID: %d, Cliente: %s, Quantidade: %d, Data: %s, Hora de Entrada: %s, Hora de Saída: %s, Mesa ID: %s",
-                id, cliente.getNome(), quantidade, data, horaEntrada, horaSaida, mesaId);
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format(
+                "ID: %02d\nCliente: %s\nQuantidade: %02d\nData: %s\nHora de Entrada: %s\nHora de Saída: %s\nMesa ID: %s\n",
+                id, cliente.getNome(), quantidade, data, horaEntradaFormatada, horaSaidaFormatada, mesaId));
+
+        if (pedidos.isEmpty()) {
+            sb.append("Não há pedidos no momento.\n");
+        } else {
+            sb.append("Pedidos:\n");
+            for (Pedido pedido : pedidos) {
+                sb.append(pedido.formatPedido()).append("\n");
+            }
+        }
+
+        return sb.toString();
     }
 }
