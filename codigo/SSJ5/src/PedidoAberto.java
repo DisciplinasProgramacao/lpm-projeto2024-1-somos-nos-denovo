@@ -3,13 +3,17 @@ package codigo.SSJ5.src;
 /**
  * Classe que representa um Pedido Aberto, herda da classe abstrata Pedido.
  */
-public class PedidoAberto extends Pedido {
+public class PedidoAberto implements IPedido {
+
+    private double valorTotal = 0;
+    private List<Produto> produtos;
+    private final static double taxa = 1.1;
 
     /**
      * Construtor que inicializa um pedido aberto.
      */
-    public PedidoAberto() {
-        super();
+    public PedidoAberto(List<Produto> produtos) {
+        this.produtos = produtos;
     }
 
     /**

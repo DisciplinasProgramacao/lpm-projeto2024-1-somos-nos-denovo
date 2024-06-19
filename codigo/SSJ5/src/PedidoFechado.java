@@ -3,16 +3,20 @@ package codigo.SSJ5.src;
 /**
  * Classe que representa um Pedido Fechado, herda da classe abstrata Pedido.
  */
-public class PedidoFechado extends Pedido {
+public class PedidoFechado implements IPedido{
 
+    private double valorTotal = 0;
+    private List<Produto> produtos;
+    private final static double taxa = 1.1;
     private static final double MENU_FIXO_PRECO = 32;
 
     /**
      * Construtor que inicializa um pedido fechado.
      */
-    public PedidoFechado() {
-        super();
+    public PedidoFechado( List<Produto> produtos) {
+        this.produtos = produtos;
     }
+
 
     /**
      * Calcula o valor final do pedido fechado, considerando o preço fixo do menu, o número de produtos e a taxa.
