@@ -18,6 +18,14 @@ public class Requisicao {
     private List<Pedido> pedidos;
     private Pedido pedidoAtual;
 
+    /**
+     * Construtor da classe Requisicao.
+     * 
+     * @param quantidade  Quantidade de pessoas na requisição.
+     * @param cliente     Cliente associado à requisição.
+     * @param data        Data da requisição.
+     * @param horaEntrada Hora de entrada da requisição.
+     */
     public Requisicao(int quantidade, Cliente cliente, LocalDate data, LocalTime horaEntrada) {
         this.quantidade = quantidade;
         this.cliente = cliente;
@@ -27,6 +35,12 @@ public class Requisicao {
         this.pedidos = new ArrayList<>();
     }
 
+    /**
+     * Fecha a requisição, registrando o horário de saída e desocupando a mesa
+     * associada, se houver.
+     * 
+     * @return Horário de saída da requisição.
+     */
     public LocalTime fecharRequisicao() {
         this.horaSaida = LocalTime.now();
         if (mesa != null) {
@@ -34,6 +48,68 @@ public class Requisicao {
         }
         return horaSaida;
     }
+
+    /**
+     * Adiciona um pedido à requisição.
+     * 
+     * @param pedido Pedido a ser adicionado.
+     */
+    public void addPedido(Pedido pedido) {
+        this.pedidoAtual = pedido;
+        this.pedidos.add(pedido);
+    }
+
+    /**
+     * Calcula o valor final da requisição somando o valor de todos os pedidos.
+     * 
+     * @return Valor final da requisição.
+     */
+    public double calcularValorFinal() {
+        double valorFinal = 0;
+        for (Pedido pedido : pedidos) {
+            valorFinal += pedido.calcularValorFinal();
+        }
+        return valorFinal;
+    }
+
+    /**
+     * Calcula o valor por pessoa na requisição.
+     * 
+     * @return Valor dividido por pessoa na requisição.
+     */
+    public double calcularValorPorPessoa() {
+        return calcularValorFinal() / quantidade;
+    }
+
+    /**
+     * Retorna uma representação em texto com iformaçoes da requisição.
+     * 
+     * @return Informações da requisição.
+     */
+    public String getRequisicaoInfo() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        String horaEntradaFormatada = horaEntrada.format(formatter);
+        String horaSaidaFormatada = (horaSaida != null ? horaSaida.format(formatter) : "N/A");
+        String mesaId = (mesa != null) ? String.valueOf(mesa.getId()) : "N/A";
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format(
+                "ID: %02d\nCliente: %s\nQuantidade: %02d\nData: %s\nHora de Entrada: %s\nHora de Saída: %s\nMesa ID: %s\n",
+                id, cliente.getNome(), quantidade, data, horaEntradaFormatada, horaSaidaFormatada, mesaId));
+
+        if (pedidos.isEmpty()) {
+            sb.append("Não há pedidos no momento.\n");
+        } else {
+            sb.append("Pedidos:\n");
+            for (Pedido pedido : pedidos) {
+                sb.append(pedido.formatPedido()).append("\n");
+            }
+        }
+
+        return sb.toString();
+    }
+
+    // #region Getters & Setters
 
     public int getQuantidade() {
         return quantidade;
@@ -87,11 +163,6 @@ public class Requisicao {
         this.mesa = mesa;
     }
 
-    public void addPedido(Pedido pedido) {
-        this.pedidoAtual = pedido;
-        this.pedidos.add(pedido);
-    }
-
     public Pedido getPedidoAtual() {
         return pedidoAtual;
     }
@@ -100,38 +171,6 @@ public class Requisicao {
         return pedidos;
     }
 
-    public double calcularValorFinal() {
-        double valorFinal = 0;
-        for (Pedido pedido : pedidos) {
-            valorFinal += pedido.calcularValorFinal();
-        }
-        return valorFinal;
-    }
+    // #endregion
 
-    public double calcularValorPorPessoa() {
-        return calcularValorFinal() / quantidade;
-    }
-
-    public String getRequisicaoInfo() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-        String horaEntradaFormatada = horaEntrada.format(formatter);
-        String horaSaidaFormatada = (horaSaida != null ? horaSaida.format(formatter) : "N/A");
-        String mesaId = (mesa != null) ? String.valueOf(mesa.getId()) : "N/A";
-
-        StringBuilder sb = new StringBuilder();
-        sb.append(String.format(
-                "ID: %02d\nCliente: %s\nQuantidade: %02d\nData: %s\nHora de Entrada: %s\nHora de Saída: %s\nMesa ID: %s\n",
-                id, cliente.getNome(), quantidade, data, horaEntradaFormatada, horaSaidaFormatada, mesaId));
-
-        if (pedidos.isEmpty()) {
-            sb.append("Não há pedidos no momento.\n");
-        } else {
-            sb.append("Pedidos:\n");
-            for (Pedido pedido : pedidos) {
-                sb.append(pedido.formatPedido()).append("\n");
-            }
-        }
-
-        return sb.toString();
-    }
 }
