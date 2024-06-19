@@ -22,37 +22,13 @@ public abstract class Pedido {
         this.produtos = new ArrayList<>();
     }
 
-    //Está como override nas duas filhas
-
     /**
      * Formata o pedido em uma string detalhada.
      *
      * @return String com os itens do pedido e o preço total formatado.
      */
-    public String formatPedido() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Itens do Pedido:\n");
-        for (Produto p : produtos) {
-            sb.append(String.format(" - %s: R$%.2f\n", p.getNomeProduto(), p.getPrecoProduto()));
-        }
-        sb.append(String.format("Preço Total: R$%.2f\n", calcularValorFinal()));
-        return sb.toString();
-    }
+    public abstract String formatPedido();
 
-    //Está sendo utilizado apenas por uma filha
-
-    /**
-     * Calcula o valor total dos produtos no pedido.
-     *
-     * @return Valor total dos produtos no pedido.
-     */
-    protected double calcularValorTotal() {
-        valorTotal = 0d;
-        for (Produto p : produtos) {
-            valorTotal += p.getPrecoProduto();
-        }
-        return valorTotal;
-    }
 
     /**
      * Método abstrato para calcular o valor final do pedido.

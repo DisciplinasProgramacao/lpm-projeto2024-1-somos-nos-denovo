@@ -22,6 +22,20 @@ public class PedidoAberto extends Pedido {
         produtos.add(produto);
     }
 
+     /**
+     * Calcula o valor total dos produtos no pedido.
+     *
+     * @return Valor total dos produtos no pedido.
+     */
+    private double calcularValorTotal() {
+        valorTotal = 0d;
+        for (Produto p : produtos) {
+            valorTotal += p.getPrecoProduto();
+        }
+        return valorTotal;
+    }
+
+
     /**
      * Calcula o valor final do pedido aberto, considerando a taxa.
      *
