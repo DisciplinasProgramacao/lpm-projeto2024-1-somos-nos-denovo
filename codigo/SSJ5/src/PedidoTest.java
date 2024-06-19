@@ -83,7 +83,7 @@
 //         Produto produto = new Produto("Pizza", 20);
 //         pedido.addProduto(produto);
 //         pedido.fecharConta();
-//         assertNotEquals(0.0, pedido.());
+//         assertNotEquals(0.0, pedido());
 //     }
 
 //     @Test

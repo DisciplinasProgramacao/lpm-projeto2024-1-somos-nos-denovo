@@ -3,6 +3,9 @@ package codigo.SSJ5.src;
 import java.util.ArrayList;
 import java.util.List;
 
+
+//Interface?
+
 /**
  * Classe abstrata que representa um Pedido.
  */
@@ -19,6 +22,8 @@ public abstract class Pedido {
         this.produtos = new ArrayList<>();
     }
 
+    //Está como override nas duas filhas
+
     /**
      * Formata o pedido em uma string detalhada.
      *
@@ -33,6 +38,8 @@ public abstract class Pedido {
         sb.append(String.format("Preço Total: R$%.2f\n", calcularValorFinal()));
         return sb.toString();
     }
+
+    //Está sendo utilizado apenas por uma filha
 
     /**
      * Calcula o valor total dos produtos no pedido.
