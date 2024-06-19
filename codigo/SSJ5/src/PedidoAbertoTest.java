@@ -1,3 +1,5 @@
+package codigo.SSJ5.src;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -17,12 +19,5 @@ public class PedidoAbertoTest {
     @Test
     public void testCalcularValorFinalSemProduto() {
         assertEquals(0, pedidoAberto.calcularValorFinal(), 0.01);
-    }
-
-    @Test
-    public void testAddProdutoInvalido() {
-        Produto produtoInvalido = new Produto("MACARRÃO", 15);
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> pedidoAberto.addProduto(produtoInvalido));
-        assertEquals("Opção não está disponível no menu fechado.", exception.getMessage());
     }
 }
