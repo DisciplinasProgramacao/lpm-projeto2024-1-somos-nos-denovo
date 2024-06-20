@@ -33,29 +33,26 @@ public class Restaurante {
         listaDeClientes.add(novoCliente);
     }
 
-    private Optional<Cliente> buscarCliente(String nome) {
-        return listaDeClientes.stream()
-                              .filter(cliente -> cliente.getNome().equals(nome))
-                              .findFirst();
+    private Cliente buscarCliente(String nome) {
+        Cliente ze = new Cliente(nome);
+        int pos = listaDeClientes.indexOf(ze);
+        return listaDeClientes.get(pos);
+        
     }
 
     public Requisicao gerarRequisicao(int quantidade, String nome) {
-        if (nome == null || nome.isEmpty()) {
-            throw new IllegalArgumentException("Nome do cliente não pode ser nulo ou vazio.");
-        }
-        if (quantidade <= 0) {
-            throw new IllegalArgumentException("Quantidade de pessoas deve ser maior que zero.");
-        }
+        // if (nome == null || nome.isEmpty()) {
+        //     throw new IllegalArgumentException("Nome do cliente não pode ser nulo ou vazio.");
+        // }
+         if (quantidade <= 0) {
+             throw new IllegalArgumentException("Quantidade de pessoas deve ser maior que zero.");
+         }
 
-        Cliente cliente = buscarCliente(nome).orElseGet(() -> {
-            Cliente novoCliente = new Cliente(nome);
-            listaDeClientes.add(novoCliente);
-            return novoCliente;
-        });
+        Cliente cliente = buscarCliente(nome);
+        
+        Requisicao requisicao = new Requisicao(quantidade, cliente);
 
-        Requisicao requisicao = new Requisicao(quantidade, cliente, LocalDate.now(), LocalTime.now());
-
-        if (alocarNaRequisicao(requisicao)) {
+        if (alocarNaRequisicao(requisicao)) {s
             historicoDeRequisicao.add(requisicao);
         } else {
             entrarNaFilaDeEspera(requisicao);
@@ -67,9 +64,9 @@ public class Restaurante {
 
     public boolean alocarNaRequisicao(Requisicao requisicao) {
         for (Mesa mesaDisponivel : listaDeMesas) {
-            if (mesaDisponivel.getCapacidade() >= requisicao.getQuantidade() && mesaDisponivel.isDisponibilidade()) {
-                mesaDisponivel.setDisponibilidade(false);
-                requisicao.setMesa(mesaDisponivel);
+            if (mesaDisponivel.podeAtender(requisicao.getQuantidade())) {
+            
+                requisicao.iniciarAtendimento(mesaDisponivel);
                 return true;
             }
         }
@@ -81,49 +78,20 @@ public class Restaurante {
         return true;
     }
 
-    public boolean adicionarProduto(int idRequisicao, int[] idsProdutos, boolean fechado) {
+    public boolean adicionarProduto(int idRequisicao, int idProdutos, boolean fechado) {
         Requisicao requisicao = localizarRequisicao(idRequisicao);
-        if (requisicao != null) {
-            List<Produto> produtos = new ArrayList<>();
-            for (int idProduto : idsProdutos) {
-                Produto produto = menu.getProdutoById(idProduto);
-                if (produto == null) {
-                    return false;
-                }
-                produtos.add(produto);
-            }
+        Produto p = menu.getProdutoById(idProdutos);
+        
+        return requisicao.addProduto(p);
 
-            Pedido pedido = requisicao.getPedidoAtual();
-            if (pedido == null) {
-                if (fechado) {
-                    pedido = new PedidoFechado();
-                } else {
-                    pedido = new PedidoAberto();
-                }
-                requisicao.addPedido(pedido);
-            }
-
-            if (fechado && pedido instanceof PedidoFechado) {
-                if (!validarProdutosFechado(produtos)) {
-                    System.out.println("Seleção inválida para pedido fechado.");
-                    return false;
-                }
-            }
-
-            for (Produto produto : produtos) {
-                pedido.addProduto(produto);
-            }
-
-            return true;
-        }
-        return false;
+        //return false;
     }
 
-    private boolean validarProdutosFechado(List<Produto> produtos) {
-        long countComida = produtos.stream().filter(p -> EProdutoMenuFechado.isComida(p.getIdProduto())).count();
-        long countBebida = produtos.stream().filter(p -> EProdutoMenuFechado.isBebida(p.getIdProduto())).count();
-        return countComida == 1 && countBebida == 2;
-    }
+    // private boolean validarProdutosFechado(List<Produto> produtos) {
+    //     long countComida = produtos.stream().filter(p -> EProdutoMenuFechado.isComida(p.getIdProduto())).count();
+    //     long countBebida = produtos.stream().filter(p -> EProdutoMenuFechado.isBebida(p.getIdProduto())).count();
+    //     return countComida == 1 && countBebida == 2;
+    // }
 
     public Requisicao localizarRequisicao(int idRequisicao) {
         for (Requisicao r : historicoDeRequisicao) {
@@ -135,23 +103,19 @@ public class Restaurante {
     }
 
     public boolean fecharConta(int idMesa) {
-        Requisicao requisicaoFechar = null;
-        for (Requisicao r : historicoDeRequisicao) {
-            if (r.getMesa().getId() == idMesa && r.getHoraSaida() == null) {
-                requisicaoFechar = r;
-                break;
-            }
-        }
+        Requisicao requisicaoFechar = localizarRequisicao(idMesa);
+       
         if (requisicaoFechar != null) {
             requisicaoFechar.fecharRequisicao();
-            for (Requisicao r : filaDeEspera) {
-                if (requisicaoFechar.getMesa().getCapacidade() >= r.getQuantidade()) {
-                    alocarNaRequisicao(r);
-                    filaDeEspera.remove(r);
-                    historicoDeRequisicao.add(r);
-                    break;
-                }
-            }
+            verificarfila();
+            // for (Requisicao r : filaDeEspera) {
+            //     if (requisicaoFechar.getMesa().getCapacidade() >= r.getQuantidade()) {
+            //         alocarNaRequisicao(r);
+            //         filaDeEspera.remove(r);
+            //         historicoDeRequisicao.add(r);
+            //         break;
+            //     }
+            // }
             return true;
         }
         return false;
@@ -163,8 +127,7 @@ public class Restaurante {
             listaDeEspera.add("Não há clientes na lista de espera.");
         } else {
             for (Requisicao requisicao : filaDeEspera) {
-                listaDeEspera.add(String.format("Cliente: %s, Quantidade: %d", requisicao.getCliente().getNome(), requisicao.getQuantidade()));
-            }
+                listaDeEspera.add(String.format("Cliente: %s, Quantidade: %d", requisicao.algumacoisa()
         }
         return listaDeEspera;
     }
