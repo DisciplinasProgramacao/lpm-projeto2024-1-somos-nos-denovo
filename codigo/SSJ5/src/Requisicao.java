@@ -15,8 +15,8 @@ public class Requisicao {
     private static int nextId = 0;
     private int id;
     private Mesa mesa;
-    private List<Pedido> pedidos;
-    private Pedido pedidoAtual;
+    private List<IPedido> pedidos;
+    private IPedido pedidoAtual;
 
     /**
      * Construtor da classe Requisicao.
@@ -26,11 +26,11 @@ public class Requisicao {
      * @param data        Data da requisição.
      * @param horaEntrada Hora de entrada da requisição.
      */
-    public Requisicao(int quantidade, Cliente cliente, LocalDate data, LocalTime horaEntrada) {
+    public Requisicao(int quantidade, Cliente cliente) {
         this.quantidade = quantidade;
         this.cliente = cliente;
-        this.data = data;
-        this.horaEntrada = horaEntrada;
+        this.data = LocalDate.now();
+        this.horaEntrada = LocalTime.now();
         this.id = nextId++;
         this.pedidos = new ArrayList<>();
     }
@@ -54,7 +54,7 @@ public class Requisicao {
      * 
      * @param pedido Pedido a ser adicionado.
      */
-    public void addPedido(Pedido pedido) {
+    public void addPedido(PedidoAberto pedido) {
         this.pedidoAtual = pedido;
         this.pedidos.add(pedido);
     }
@@ -66,7 +66,7 @@ public class Requisicao {
      */
     public double calcularValorFinal() {
         double valorFinal = 0;
-        for (Pedido pedido : pedidos) {
+        for (IPedido pedido : pedidos) {
             valorFinal += pedido.calcularValorFinal();
         }
         return valorFinal;
@@ -75,7 +75,7 @@ public class Requisicao {
     /**
      * Calcula o valor por pessoa na requisição.
      * 
-     * @return Valor dividido por pessoa na requisição.
+     * @return Valor dividido por pessoa na requisição.s
      */
     public double calcularValorPorPessoa() {
         return calcularValorFinal() / quantidade;
@@ -101,7 +101,7 @@ public class Requisicao {
             sb.append("Não há pedidos no momento.\n");
         } else {
             sb.append("Pedidos:\n");
-            for (Pedido pedido : pedidos) {
+            for (IPedido pedido : pedidos) {
                 sb.append(pedido.formatPedido()).append("\n");
             }
         }
@@ -163,13 +163,18 @@ public class Requisicao {
         this.mesa = mesa;
     }
 
-    public Pedido getPedidoAtual() {
-        return pedidoAtual;
+    public boolean addProduto(Produto p) {
+        pedidoAtual.addProduto(p);
+        return true;
     }
 
-    public List<Pedido> getPedidos() {
-        return pedidos;
-    }
+    // public PedidoAberto getPedidoAtual() {
+    //     return pedidoAtual;
+    // }
+
+    // public List<PedidoAberto> getPedidos() {
+    //     return pedidos;
+    // }
 
     // #endregion
 
