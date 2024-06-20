@@ -1,5 +1,7 @@
 package codigo.SSJ5.src;
 
+import java.util.List;
+
 /**
  * Classe que representa um Pedido Aberto, herda da classe abstrata Pedido.
  */

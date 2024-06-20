@@ -1,11 +1,12 @@
 package codigo.SSJ5.src;
 
+import java.util.List;
+
 /**
  * Classe que representa um Pedido Fechado, herda da classe abstrata Pedido.
  */
 public class PedidoFechado implements IPedido{
 
-    private double valorTotal = 0;
     private List<Produto> produtos;
     private final static double taxa = 1.1;
     private static final double MENU_FIXO_PRECO = 32;
@@ -25,7 +26,7 @@ public class PedidoFechado implements IPedido{
      */
     @Override
     public double calcularValorFinal() {
-        return MENU_FIXO_PRECO * produtos.size() / 3 * taxa;
+        return MENU_FIXO_PRECO *  taxa;
     }
 
     /**
@@ -36,11 +37,8 @@ public class PedidoFechado implements IPedido{
      */
     @Override
     public void addProduto(Produto produto) {
-        if (EProdutoMenuFechado.isProdutoValido(produto.getIdProduto())) {
-            produtos.add(produto);
-        } else {
-            throw new IllegalArgumentException("Opção não está disponível no menu fechado.");
-        }
+        if !MenuFechado.contem(Produto)
+            excecao
     }
 
     /**
