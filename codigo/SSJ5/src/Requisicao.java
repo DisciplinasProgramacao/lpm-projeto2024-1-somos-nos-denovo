@@ -30,9 +30,9 @@ public class Requisicao {
 
     public void fecharRequisicao() {
         this.horaSaida = LocalDateTime.now();
-        if (mesa != null) {
-            mesa.desocupar();
-        };
+        mesa.desocupar();
+    
+    }
     }
     public boolean sendoAtendida(){
         return emAtendimento;
