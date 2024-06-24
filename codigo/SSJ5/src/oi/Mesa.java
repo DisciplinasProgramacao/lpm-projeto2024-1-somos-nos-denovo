@@ -1,4 +1,4 @@
-package codigo.SSJ5.src;
+package codigo.SSJ5.src.oi;
 
 public class Mesa {
     private int capacidade;

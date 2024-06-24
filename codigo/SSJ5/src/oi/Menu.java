@@ -1,25 +1,23 @@
-package codigo.SSJ5.src;
+package codigo.SSJ5.src.oi;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Menu {
-    private List<Produto> menu;
+    protected List<Produto> menu;
 
     protected Menu() {
-     
-
+        this.menu = new ArrayList<>();
     }
 
     public String exibirMenu() {
         StringBuilder sb = new StringBuilder();
         for (Produto p : menu) {
-            sb.append(p+"\n");
+            sb.append(p).append("\n");
         }
         return sb.toString();
     }
 
-  
     public Produto getProdutoById(int id) {
         for (Produto p : menu) {
             if (p.getIdProduto() == id) {
