@@ -2,8 +2,19 @@ package codigo.SSJ5.src.oi;
 
 import java.util.Scanner;
 
+/**
+ * A classe Main é a classe principal que executa a aplicação de gerenciamento de um restaurante.
+ * Ela oferece um menu interativo para cadastrar clientes, criar requisições, fechar contas,
+ * exibir histórico de pedidos, gerenciar lista de espera, atender clientes e exibir menus.
+ */
 public class Main {
 
+    /**
+     * O método main inicia a execução do programa.
+     * Ele exibe o menu principal e trata as opções selecionadas pelo usuário.
+     *
+     * @param args os argumentos da linha de comando (não utilizados).
+     */
     public static void main(String[] args) {
         Restaurante restaurante = new Restaurante();
         Scanner scanner = new Scanner(System.in);
@@ -37,6 +48,9 @@ public class Main {
         scanner.close();
     }
 
+    /**
+     * Exibe o menu principal do sistema.
+     */
     private static void exibirMenuPrincipal() {
         System.out.println("1 - Cadastrar Cliente");
         System.out.println("2 - Criar requisição");
@@ -49,6 +63,12 @@ public class Main {
         System.out.print("Escolha uma opção: ");
     }
 
+    /**
+     * Cadastra um novo cliente no restaurante.
+     *
+     * @param scanner    O scanner para entrada do usuário.
+     * @param restaurante O objeto Restaurante onde o cliente será cadastrado.
+     */
     private static void cadastrarCliente(Scanner scanner, Restaurante restaurante) {
         System.out.print("Digite o nome do cliente: ");
         String nome = scanner.next();
@@ -56,6 +76,12 @@ public class Main {
         System.out.println("Cliente cadastrado com sucesso!");
     }
 
+    /**
+     * Cria uma nova requisição para o cliente.
+     *
+     * @param scanner    O scanner para entrada do usuário.
+     * @param restaurante O objeto Restaurante onde a requisição será criada.
+     */
     private static void criarRequisicao(Scanner scanner, Restaurante restaurante) {
         System.out.print("Digite o nome do cliente: ");
         String nome = scanner.next();
@@ -65,6 +91,12 @@ public class Main {
         System.out.println("Requisição criada com sucesso!");
     }
 
+    /**
+     * Fecha a conta de uma mesa específica.
+     *
+     * @param scanner    O scanner para entrada do usuário.
+     * @param restaurante O objeto Restaurante onde a conta será fechada.
+     */
     private static void fecharConta(Scanner scanner, Restaurante restaurante) {
         System.out.print("Digite o ID da mesa: ");
         int idMesa = scanner.nextInt();
@@ -76,6 +108,11 @@ public class Main {
         }
     }
 
+    /**
+     * Exibe o histórico de requisições e pedidos do restaurante.
+     *
+     * @param restaurante O objeto Restaurante do qual o histórico será exibido.
+     */
     private static void exibirHistorico(Restaurante restaurante) {
         String historico = restaurante.exibirHistorico();
         if (historico.isEmpty()) {
@@ -85,11 +122,22 @@ public class Main {
         }
     }
 
+    /**
+     * Exibe a lista de espera do restaurante.
+     *
+     * @param restaurante O objeto Restaurante do qual a lista de espera será exibida.
+     */
     private static void exibirListaDeEspera(Restaurante restaurante) {
         String listaDeEspera = String.join("\n", restaurante.exibirListaDeEspera());
         System.out.println(listaDeEspera);
     }
 
+    /**
+     * Atende um cliente específico.
+     *
+     * @param scanner    O scanner para entrada do usuário.
+     * @param restaurante O objeto Restaurante onde o cliente será atendido.
+     */
     private static void atenderCliente(Scanner scanner, Restaurante restaurante) {
         System.out.print("Digite o ID da requisição: ");
         int idRequisicao = scanner.nextInt();
@@ -107,6 +155,13 @@ public class Main {
         }
     }
 
+    /**
+     * Cria um novo pedido para uma requisição específica.
+     *
+     * @param scanner      O scanner para entrada do usuário.
+     * @param restaurante  O objeto Restaurante onde o pedido será criado.
+     * @param idRequisicao O ID da requisição para a qual o pedido será criado.
+     */
     private static void criarPedido(Scanner scanner, Restaurante restaurante, int idRequisicao) {
         System.out.print("O pedido é fechado? (true/false): ");
         boolean fechado = scanner.nextBoolean();
@@ -118,6 +173,13 @@ public class Main {
         }
     }
 
+    /**
+     * Adiciona um produto a um pedido aberto.
+     *
+     * @param scanner      O scanner para entrada do usuário.
+     * @param restaurante  O objeto Restaurante onde o produto será adicionado.
+     * @param idRequisicao O ID da requisição para a qual o produto será adicionado.
+     */
     private static void adicionarProdutoAberto(Scanner scanner, Restaurante restaurante, int idRequisicao) {
         System.out.println(restaurante.exibirMenuAberto());
         System.out.print("Qual item você deseja? ");
@@ -130,6 +192,13 @@ public class Main {
         }
     }
 
+    /**
+     * Adiciona um produto a um pedido fechado.
+     *
+     * @param scanner      O scanner para entrada do usuário.
+     * @param restaurante  O objeto Restaurante onde o produto será adicionado.
+     * @param idRequisicao O ID da requisição para a qual o produto será adicionado.
+     */
     private static void adicionarProdutoFechado(Scanner scanner, Restaurante restaurante, int idRequisicao) {
         System.out.println(restaurante.exibirMenuFechado());
         System.out.print("Qual item você deseja? ");
@@ -142,6 +211,11 @@ public class Main {
         }
     }
 
+    /**
+     * Exibe os menus aberto e fechado do restaurante.
+     *
+     * @param restaurante O objeto Restaurante cujos menus serão exibidos.
+     */
     private static void exibirMenu(Restaurante restaurante) {
         System.out.println("Menu Aberto:");
         System.out.println(restaurante.exibirMenuAberto());
