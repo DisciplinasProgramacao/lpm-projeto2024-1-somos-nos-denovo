@@ -51,3 +51,26 @@ Controllers - somente estrutura. - Lucas - 7,2
 Main - confusão app x controllers - Arthur 
 
 Restaurante - Sem cardápio - Arthur - 8,4
+
+## Sprint 3 - Até 05/junho
+  - Nota de grupo (6 pontos)
+    - Modelo atualizado - menu fechado
+  
+  - Nota individual (14 pontos)	
+    - Implementações menu fechado e app
+    - Correções anteriores
+
+### Revisão 12 junho
+**Nota coletiva: 8,4**
+
+Diagrama - desatualizado, sem menu fechado - Todos - 0 
+
+Pedido - addProduto deve ser abstrato e implementado nas filhas. Não tem requisicao
+
+PedidoFechado - vários if --> switch case
+
+Requisição não pode ter "get pedidos". não insere produto  
+
+Ainda sem Spring / controllers
+
+Main - melhorou. Menu fechado x aberto (OCP/LSP)
