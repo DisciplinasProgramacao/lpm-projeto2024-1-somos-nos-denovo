@@ -8,12 +8,18 @@ import com.ssj5.lpm.repository.ProdutoRepository;
 import jakarta.annotation.PostConstruct;
 import java.util.ArrayList;
 
+/**
+ * Representa o menu aberto de um restaurante, inicializando os produtos disponíveis.
+ */
 @Component
 public class MenuAberto extends Menu {
 
     @Autowired
     private ProdutoRepository produtoRepository;
 
+    /**
+     * Método executado após a inicialização da classe para inicializar os produtos do menu aberto.
+     */
     @PostConstruct
     public void initProdutos() {
         menu = new ArrayList<>();
@@ -28,7 +34,7 @@ public class MenuAberto extends Menu {
         Produto p9 = new Produto(15L, "REFRIGERANTE_ORGANICO", 7D);
         Produto p10 = new Produto(16L, "CERVEJA_VEGANA", 9D);
         Produto p11 = new Produto(17L, "TACA_DE_VINHO_VEGANO", 18D);
-    
+
         menu.add(produtoRepository.save(p1));
         menu.add(produtoRepository.save(p2));
         menu.add(produtoRepository.save(p3));
@@ -41,5 +47,4 @@ public class MenuAberto extends Menu {
         menu.add(produtoRepository.save(p10));
         menu.add(produtoRepository.save(p11));
     }
-    
 }

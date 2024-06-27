@@ -22,6 +22,7 @@ import jakarta.persistence.OneToOne;
  */
 @Entity
 public class Requisicao {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -43,9 +44,19 @@ public class Requisicao {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Pedido pedido;
 
+    /**
+     * Construtor padrão sem parâmetros.
+     */
     public Requisicao() {
     }
 
+    /**
+     * Construtor para inicializar uma requisição com cliente, data e quantidade.
+     *
+     * @param cliente    O cliente associado à requisição.
+     * @param dataHora   A data e hora em que a requisição foi feita.
+     * @param quantidade A quantidade de pessoas na requisição.
+     */
     public Requisicao(Cliente cliente, LocalDateTime dataHora, int quantidade) {
         this.quantidade = quantidade;
         this.cliente = cliente;
@@ -54,53 +65,112 @@ public class Requisicao {
         this.pedidos = new ArrayList<>();
     }
 
+    /**
+     * Obtém o ID da requisição.
+     *
+     * @return O ID da requisição.
+     */
     public Long getId() {
         return id;
     }
 
+    /**
+     * Define o ID da requisição.
+     *
+     * @param id O novo ID da requisição.
+     */
     public void setId(Long id) {
         this.id = id;
     }
 
+    /**
+     * Obtém o cliente associado à requisição.
+     *
+     * @return O cliente associado à requisição.
+     */
     public Cliente getCliente() {
         return cliente;
     }
 
+    /**
+     * Obtém a data e hora em que a requisição foi feita.
+     *
+     * @return A data e hora da requisição.
+     */
     public LocalDateTime getDataHora() {
         return dataHora;
     }
 
+    /**
+     * Obtém a quantidade de pessoas na requisição.
+     *
+     * @return A quantidade de pessoas na requisição.
+     */
     public int getQuantidade() {
         return quantidade;
     }
 
+    /**
+     * Verifica se a requisição foi atendida.
+     *
+     * @return true se a requisição foi atendida, false caso contrário.
+     */
     public boolean isFoiAtendida() {
         return foiAtendida;
     }
 
+    /**
+     * Obtém a mesa associada à requisição.
+     *
+     * @return A mesa associada à requisição.
+     */
     public Mesa getMesa() {
         return mesa;
     }
 
+    /**
+     * Obtém o pedido associado à requisição.
+     *
+     * @return O pedido associado à requisição.
+     */
     public Pedido getPedido() {
         return pedido;
     }
 
+    /**
+     * Define o pedido associado à requisição.
+     *
+     * @param pedido O novo pedido associado à requisição.
+     */
     public void setPedido(Pedido pedido) {
         this.pedido = pedido;
     }
 
+    /**
+     * Define a mesa associada à requisição.
+     *
+     * @param mesa A nova mesa associada à requisição.
+     */
     public void setMesa(Mesa mesa) {
         this.mesa = mesa;
     }
 
+    /**
+     * Marca a requisição como atendida, liberando a mesa, se houver.
+     */
     public void fecharRequisicao() {
         this.foiAtendida = true;
         if (mesa != null) {
+            this.horaSaida = LocalTime.now();
             mesa.setDisponibilidade(true);
         }
     }
 
+    /**
+     * Obtém informações formatadas da requisição.
+     *
+     * @return Uma string com informações formatadas da requisição.
+     */
     public String getRequisicaoInfo() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
         String horaEntradaFormatada = "N/A";
@@ -129,24 +199,44 @@ public class Requisicao {
                 id, (cliente != null ? cliente.getNome() : "N/A"), quantidade, dataHora, horaEntradaFormatada,
                 horaSaidaFormatada, mesaId));
 
-        if (pedidos.isEmpty()) {
-            sb.append("Não há pedidos no momento.\n");
-        } else {
-            sb.append("Pedidos:\n");
-            for (Pedido pedido : pedidos) {
-                sb.append(pedido.formatPedido()).append("\n");
-            }
-        }
-
         return sb.toString();
     }
 
+    /**
+     * Obtém a hora de saída estimada da requisição.
+     *
+     * @return A hora de saída estimada da requisição.
+     */
     public LocalDateTime getHoraSaida() {
         return foiAtendida ? dataHora.plusHours(2) : null;
     }
 
+    /**
+     * Obtém a lista de pedidos associados à requisição.
+     *
+     * @return A lista de pedidos associados à requisição.
+     */
     public List<Pedido> getPedidos() {
         return pedidos;
     }
 
+    /**
+     * Calcula o valor total da conta para a requisição.
+     *
+     * @return O valor total da conta para a requisição.
+     */
+    public double valorConta() {
+        return pedido.calcularValorTotal();
+    }
+
+    /**
+     * Obtém informações detalhadas da conta para a requisição.
+     *
+     * @return Uma string com informações detalhadas da conta para a requisição.
+     */
+    public String infoConta() {
+        double valorTotal = valorConta();
+        double valorPorQuantidade = valorTotal / quantidade;
+        return "Valor Total: " + valorTotal + ", Valor por pessoa: " + valorPorQuantidade;
+    }
 }

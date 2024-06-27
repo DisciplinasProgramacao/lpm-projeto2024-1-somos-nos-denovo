@@ -16,6 +16,9 @@ import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Representa um restaurante com funcionalidades para gerenciar mesas, pedidos, clientes e menu.
+ */
 @Component
 public class Restaurante {
 
@@ -30,26 +33,37 @@ public class Restaurante {
 
     @Autowired
     private PedidoFechadoRepository pedidoFechadoRepository;
+
     @Autowired
     private ClienteRepository clienteRepository;
 
+    @Autowired
     private MenuAberto menuAberto;
+
+    @Autowired
     private MenuFechado menuFechado;
+
     private Queue<Requisicao> filaDeEspera;
     private List<Requisicao> historicoDeRequisicao;
     private List<Cliente> listaDeClientes;
     private Map<Mesa, Requisicao> mesas = new HashMap<>();
 
-    @Autowired
-    public Restaurante(MenuAberto menuAberto, MenuFechado menuFechado) {
-        this.menuAberto = menuAberto;
-        this.menuFechado = menuFechado;
+    /**
+     * Inicializa o restaurante, incluindo mesas, fila de espera, histórico de requisições e clientes.
+     */
+    @PostConstruct
+    public void init() {
         filaDeEspera = new LinkedList<>();
         historicoDeRequisicao = new ArrayList<>();
         listaDeClientes = new ArrayList<>();
+        initMesasIfNotExists();
+        System.out.println("Restaurante inicializado com sucesso.");
     }
 
-     private void initMesasIfNotExists() {
+    /**
+     * Inicializa as mesas se não existirem no banco de dados.
+     */
+    public void initMesasIfNotExists() {
         if (mesaRepository.count() == 0) {
             int[] capacidades = { 4, 6, 8 };
             int[] quant = { 4, 4, 2 };
@@ -63,19 +77,16 @@ public class Restaurante {
                 }
             }
         } else {
-
             List<Mesa> mesasFromDB = mesaRepository.findAll();
             mesasFromDB.forEach(mesa -> mesas.put(mesa, null));
         }
     }
 
-    // Método chamado no construtor para inicializar as mesas
-    @PostConstruct
-    public void initMesas() {
-        initMesasIfNotExists();
-    }
-
-
+    /**
+     * Adiciona um cliente ao restaurante se não existir.
+     *
+     * @param nome O nome do cliente a ser adicionado.
+     */
     public void adicionarCliente(String nome) {
         Cliente clienteExistente = buscarCliente(nome);
         if (clienteExistente == null) {
@@ -85,6 +96,12 @@ public class Restaurante {
         }
     }
 
+    /**
+     * Aloca uma mesa para uma requisição, se houver uma mesa disponível com capacidade suficiente.
+     *
+     * @param requisicao A requisição para alocar mesa.
+     * @return true se a mesa foi alocada com sucesso, false caso contrário.
+     */
     public boolean alocarNaRequisicao(Requisicao requisicao) {
         return mesaRepository.findAll().stream()
             .filter(mesa -> mesa.getCapacidade() >= requisicao.getQuantidade() && mesa.isDisponibilidade())
@@ -98,10 +115,21 @@ public class Restaurante {
             .orElse(false);
     }
 
+    /**
+     * Adiciona uma requisição à fila de espera.
+     *
+     * @param requisicao A requisição a ser adicionada à fila de espera.
+     * @return true se a requisição foi adicionada com sucesso, false caso contrário.
+     */
     public boolean entrarNaFilaDeEspera(Requisicao requisicao) {
         return filaDeEspera.offer(requisicao);
     }
 
+    /**
+     * Exibe a lista de espera atual.
+     *
+     * @return Uma lista de strings representando os clientes na lista de espera.
+     */
     public List<String> exibirListaDeEspera() {
         return filaDeEspera.isEmpty() ?
             Collections.singletonList("Não há clientes na lista de espera.") :
@@ -110,6 +138,11 @@ public class Restaurante {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Desocupa uma mesa especificada, tornando-a disponível.
+     *
+     * @param mesa A mesa a ser desocupada.
+     */
     public void desocuparMesa(Mesa mesa) {
         if (!mesa.isDisponibilidade()) {
             mesa.desocupar();
@@ -117,23 +150,39 @@ public class Restaurante {
         }
     }
 
+    /**
+     * Fecha a conta de uma mesa especificada, desocupando-a e realocando da lista de espera, se necessário.
+     *
+     * @param idMesa O ID da mesa cuja conta será fechada.
+     * @return true se a conta foi fechada com sucesso, false caso contrário.
+     */
     public boolean fecharConta(int idMesa) {
         Optional<Requisicao> requisicaoOpt = requisicaoRepository.findAll().stream()
             .filter(r -> r.getMesa().getId() == idMesa && r.getHoraSaida() == null)
             .findFirst();
-        
+    
         if (requisicaoOpt.isPresent()) {
             Requisicao requisicao = requisicaoOpt.get();
             requisicao.fecharRequisicao();
-            desocuparMesa(requisicao.getMesa());
-            alocarDaListaDeEspera(requisicao.getMesa().getCapacidade());
+    
+            Mesa mesa = requisicao.getMesa();
+            mesa.desocupar();
+            mesaRepository.save(mesa);
+    
+            alocarDaListaDeEspera(mesa.getCapacidade());
             requisicaoRepository.save(requisicao);
+    
             return true;
         } else {
             return false;
         }
     }
 
+    /**
+     * Realoca uma requisição da lista de espera para uma mesa disponível.
+     *
+     * @param capacidadeMesa A capacidade mínima da mesa para realocar a requisição.
+     */
     private void alocarDaListaDeEspera(int capacidadeMesa) {
         filaDeEspera.stream()
             .filter(r -> capacidadeMesa >= r.getQuantidade())
@@ -141,6 +190,11 @@ public class Restaurante {
             .ifPresent(this::realocarRequisicao);
     }
 
+    /**
+     * Realoca uma requisição da lista de espera para uma mesa disponível.
+     *
+     * @param requisicao A requisição a ser realocada.
+     */
     private void realocarRequisicao(Requisicao requisicao) {
         if (alocarNaRequisicao(requisicao)) {
             filaDeEspera.remove(requisicao);
@@ -150,6 +204,13 @@ public class Restaurante {
         }
     }
 
+    /**
+     * Gera uma nova requisição para o restaurante.
+     *
+     * @param quantidade A quantidade de pessoas na requisição.
+     * @param nome O nome do cliente para a requisição.
+     * @return A requisição gerada.
+     */
     public Requisicao gerarRequisicao(int quantidade, String nome) {
         Cliente clienteExistente = buscarCliente(nome);
         if (clienteExistente == null) {
@@ -168,6 +229,12 @@ public class Restaurante {
         return requisicao;
     }
 
+    /**
+     * Busca um cliente pelo nome.
+     *
+     * @param nome O nome do cliente a ser buscado.
+     * @return O cliente encontrado ou null se não encontrado.
+     */
     private Cliente buscarCliente(String nome) {
         return listaDeClientes.stream()
                 .filter(cliente -> cliente.getNome().equals(nome))
@@ -175,6 +242,13 @@ public class Restaurante {
                 .orElse(null);
     }
 
+    /**
+     * Cria um pedido para uma requisição existente.
+     *
+     * @param idRequisicao O ID da requisição para a qual o pedido será criado.
+     * @param fechado true se o pedido é fechado, false se é aberto.
+     * @return true se o pedido foi criado com sucesso, false caso contrário.
+     */
     public boolean criarPedido(int idRequisicao, boolean fechado) {
         Optional<Requisicao> requisicaoOpt = localizarRequisicao(idRequisicao);
         if (requisicaoOpt.isPresent()) {
@@ -194,11 +268,19 @@ public class Restaurante {
         return false;
     }
 
+    /**
+     * Adiciona um produto a um pedido existente em uma requisição.
+     *
+     * @param idRequisicao O ID da requisição onde o produto será adicionado.
+     * @param idProduto O ID do produto a ser adicionado.
+     * @param fechado true se o pedido é fechado, false se é aberto.
+     * @return true se o produto foi adicionado com sucesso, false caso contrário.
+     */
     public boolean adicionarProduto(int idRequisicao, Long idProduto, boolean fechado) {
         Optional<Requisicao> requisicaoOpt = localizarRequisicao(idRequisicao);
         if (requisicaoOpt.isPresent()) {
             Requisicao requisicao = requisicaoOpt.get();
-            Produto produto = (fechado ? menuFechado : menuAberto).getProdutoById( idProduto);
+            Produto produto = (fechado ? menuFechado : menuAberto).getProdutoById(idProduto);
             if (produto != null) {
                 Pedido pedido = requisicao.getPedido();
                 pedido.addProduto(produto);
@@ -214,10 +296,21 @@ public class Restaurante {
         return false;
     }
 
+    /**
+     * Localiza uma requisição pelo ID.
+     *
+     * @param idRequisicao O ID da requisição a ser localizada.
+     * @return Um Optional contendo a requisição encontrada, ou vazio se não encontrada.
+     */
     public Optional<Requisicao> localizarRequisicao(int idRequisicao) {
         return requisicaoRepository.findById((long) idRequisicao);
     }
 
+    /**
+     * Exibe o histórico de requisições e pedidos.
+     *
+     * @return Uma string representando o histórico de requisições e pedidos.
+     */
     public String exibirHistorico() {
         List<Requisicao> historicoDeRequisicao = requisicaoRepository.findAll();
         StringBuilder sb = new StringBuilder();
@@ -232,14 +325,34 @@ public class Restaurante {
         return sb.toString();
     }
     
-    public String exibirMenuAberto() {
-        return menuAberto.exibirMenu();
+    /**
+     * Exibe o menu especificado (aberto ou fechado).
+     *
+     * @param tipoMenu O tipo de menu a ser exibido ("aberto" ou "fechado").
+     * @return Uma string representando o menu especificado.
+     * @throws IllegalArgumentException Se o tipo de menu não for válido.
+     */
+    public String exibirMenu(String tipoMenu) {
+        Menu menu;
+        switch (tipoMenu) {
+            case "fechado":
+                menu = menuFechado;
+                break;
+            case "aberto":
+                menu = menuAberto;
+                break;
+            default:
+                throw new IllegalArgumentException("Tipo de menu inválido: " + tipoMenu);
+        }
+        return menu.exibirMenu();
     }
 
-    public String exibirMenuFechado() {
-        return menuFechado.exibirMenu();
-    }
-
+    /**
+     * Verifica se uma requisição foi atendida.
+     *
+     * @param idRequisicao O ID da requisição a ser verificada.
+     * @return true se a requisição foi atendida, false caso contrário.
+     */
     public boolean isRequisicaoAtendida(int idRequisicao) {
         Optional<Requisicao> requisicaoOpt = requisicaoRepository.findById((long) idRequisicao);
         return requisicaoOpt.map(Requisicao::isFoiAtendida).orElse(false);

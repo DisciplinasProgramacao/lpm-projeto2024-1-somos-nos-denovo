@@ -8,18 +8,24 @@ import com.ssj5.lpm.repository.ProdutoRepository;
 import jakarta.annotation.PostConstruct;
 import java.util.ArrayList;
 
+/**
+ * Representa o menu fechado de um restaurante, inicializando os produtos disponíveis.
+ */
 @Component
 public class MenuFechado extends Menu {
 
     @Autowired
     private ProdutoRepository produtoRepository;
 
+    /**
+     * Método executado após a inicialização da classe para inicializar os produtos do menu fechado.
+     */
     @PostConstruct
     public void initProdutos() {
         menu = new ArrayList<>();
         Produto p1 = new Produto(1L, "FALAFEL_ASSADO", 20D);
         Produto p2 = new Produto(2L, "CACAROLA_LEGUMES", 22D);
-        Produto p3 = new Produto(3L,"SALADA_PRIMAVERA", 25D);
+        Produto p3 = new Produto(3L, "SALADA_PRIMAVERA", 25D);
         Produto p4 = new Produto(4L, "COPO_DE_SUCO", 7D);
         Produto p5 = new Produto(5L, "REFRIGERANTE_ORGANICO", 7D);
         Produto p6 = new Produto(6L, "TACA_DE_VINHO_VEGANO", 18D);

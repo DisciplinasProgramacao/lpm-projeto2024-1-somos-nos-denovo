@@ -9,7 +9,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.Scanner;
 
 @Component
@@ -27,7 +26,7 @@ public void run(String... args) throws Exception {
     Scanner scanner = new Scanner(System.in);
     int opcao;
 
-    restaurante.initMesas();
+    restaurante.initMesasIfNotExists();
     menuAberto.initProdutos();
     menuFechado.initProdutos();
     do {
@@ -64,7 +63,7 @@ public void run(String... args) throws Exception {
         System.out.println("1 - Cadastrar Cliente");
         System.out.println("2 - Criar requisição");
         System.out.println("3 - Fechar conta");
-        System.out.println("4 - Exibir histórico de requisições e pedidos");
+        System.out.println("4 - Exibir histórico de requisições");
         System.out.println("5 - Exibir lista de espera");
         System.out.println("6 - Atender cliente");
         System.out.println("7 - Exibir menu");
@@ -161,10 +160,10 @@ public void run(String... args) throws Exception {
                     criarPedido(scanner, idRequisicao);
                     break;
                 case 2:
-                    adicionarProdutoAberto(scanner, idRequisicao);
+                    adicionarProduto(scanner, idRequisicao, "aberto");
                     break;
                 case 3:
-                    adicionarProdutoFechado(scanner, idRequisicao);
+                    adicionarProduto(scanner, idRequisicao, "fechado");
                     break;
                 default:
                     System.out.println("Opção inválida.");
@@ -192,9 +191,9 @@ public void run(String... args) throws Exception {
         }
     }
 
-    private void adicionarProdutoAberto(Scanner scanner, int idRequisicao) {
+    private void adicionarProduto(Scanner scanner, int idRequisicao, String tipo) {
         try {
-            System.out.println(restaurante.exibirMenuAberto());
+            System.out.println(restaurante.exibirMenu(tipo));
             System.out.print("Qual item você deseja? ");
             Long idItem = scanner.nextLong();
             boolean produtoAdicionado = restaurante.adicionarProduto(idRequisicao, idItem, false);
@@ -209,31 +208,14 @@ public void run(String... args) throws Exception {
             System.out.println("Erro ao salvar produto no pedido no banco de dados: " + e.getMessage());
         }
     }
-
-    private void adicionarProdutoFechado(Scanner scanner, int idRequisicao) {
-        try {
-            System.out.println(restaurante.exibirMenuFechado());
-            System.out.print("Qual item você deseja? ");
-            Long idItem = scanner.nextLong();
-            boolean produtoAdicionado = restaurante.adicionarProduto(idRequisicao, idItem, true);
-            if (produtoAdicionado) {
-                System.out.println("Produto adicionado com sucesso!");
-            } else {
-                System.out.println("Erro ao adicionar o produto.");
-            }
-        } catch (NoSuchElementException e) {
-            System.out.println("Erro ao adicionar produto: Requisição ou produto não encontrado.");
-        } catch (PersistenceException e) {
-            System.out.println("Erro ao salvar produto no pedido no banco de dados: " + e.getMessage());
-        }
-    }
+    
 
     private void exibirMenu() {
         try {
             System.out.println("Menu Aberto:");
-            System.out.println(restaurante.exibirMenuAberto());
+            restaurante.exibirMenu("aberto");
             System.out.println("Menu Fechado:");
-            System.out.println(restaurante.exibirMenuFechado());
+            System.out.println(restaurante.exibirMenu("fechado"));
         } catch (PersistenceException e) {
             System.out.println("Erro ao recuperar menus do banco de dados: " + e.getMessage());
         }
@@ -244,19 +226,16 @@ public void run(String... args) throws Exception {
         int idRequisicao = scanner.nextInt();
         
         try {
-            Optional<Requisicao> requisicaoOpt = restaurante.localizarRequisicao(idRequisicao);
-            if (requisicaoOpt.isPresent()) {
-                Requisicao requisicao = requisicaoOpt.get();
-                Pedido pedido = requisicao.getPedido();
-                double valorTotal = pedido.calcularValorTotal();
-                System.out.println("Valor total do pedido: R$" + valorTotal);
-            } else {
-                System.out.println("Requisição não encontrada.");
-            }
+            Requisicao requisicao = restaurante.localizarRequisicao(idRequisicao).orElse(null);
+
+                System.out.println(requisicao.infoConta());
+            
         } catch (NoSuchElementException e) {
             System.out.println("Erro ao calcular valor total do pedido: Requisição não encontrada.");
         } catch (PersistenceException e) {
             System.out.println("Erro ao calcular valor total do pedido: " + e.getMessage());
+        } catch(NullPointerException ne){
+            System.out.println("Requisicao nao encontrada");
         }
     }
     
