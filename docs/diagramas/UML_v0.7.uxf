@@ -1,0 +1,128 @@
+<diagram program="umletino" version="15.1"><zoom_level>7</zoom_level><help_text>Space for diagram notes</help_text><element><id>UMLClass</id><coordinates><x>77</x><y>133</y><w>357</w><h>287</h></coordinates><panel_attributes>Restaurante:
+--
+- mesas: Map&lt;Mesa, Requisicao&gt;
+- filaDeEspera: Queue&lt;Requisicao&gt;
+- historicoDeRequisicao: List&lt;Requisicao&gt;
+- listaDeClientes: List&lt;Cliente&gt;
+- menuAberto: MenuAberto
+- menuFechado: MenuFechado
+--
++ init() : void
++ initMesasIfNotExists() : void
++ adicionarCliente(String nome) : void
++ alocarNaRequisicao(Requisicao requisicao) : boolean
++ entrarNaFilaDeEspera(Requisicao requisicao) : boolean
++ exibirListaDeEspera() : List&lt;String&gt; 
++ desocuparMesa(Mesa mesa) : void
++ fecharConta(int idMesa) : boolean
+- alocarDaListaDeEspera(int capacidadeMesa) : void
+- realocarRequisicao(Requisicao requisicao) : void
++ gerarRequisicao(int quantidade, String nome) : Requisicao
+- buscarCliente(String nome) : Cliente
++ criarPedido(int idRequisicao, boolean fechado) : boolean
++ adicionarProduto(int idRequisicao, Long idProduto, boolean fechado) : boolean
++ localizarRequisicao(int idRequisicao) : Optional&lt;Requisicao&gt; 
++ exibirHistorico() : String
++ exibirMenu() : String
++ isRequisicaoAtendida(int idRequisicao) : boolean
+
+
+
+  
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>672</x><y>266</y><w>301</w><h>196</h></coordinates><panel_attributes>Requisicao
+--
+    - id: Long
+    - cliente: Cliente
+    - pedidos: List&lt;Pedido&gt;
+    - dataHora: LocalDateTime
+    - quantidade: int
+    - foiAtendida: boolean
+    - horaEntrada: LocalTime
+    - horaSaida: LocalTime
+    - mesa: Mesa
+    - Pedido : pedido
+--
+    + Requisicao(quantidade: int, cliente: Cliente, datahora: LocalDateTime)
+    + fecharRequisicao(): LocalTime
+    + getRequisicaoInfo(): String
+    + valorConta() : double
+    + infoConta() :String</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>224</x><y>609</y><w>161</w><h>77</h></coordinates><panel_attributes>Produto
+--
+- id: Long
+- nome: String
+- preco: double
+--
++ Produto(nome: String, preco: double)
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>721</x><y>126</y><w>217</w><h>84</h></coordinates><panel_attributes>Mesa
+--
+    - capacidade: int
+    - disponibilidade: boolean
+    - id: int
+--
+    + Mesa(capacidade: int, disponibilidade: boolean)
+    + desocupar() : void</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>756</x><y>525</y><w>147</w><h>140</h></coordinates><panel_attributes>&lt;&lt;abstract&gt;&gt;
+/Pedido/
+--
+# produtos : List&lt;Produto&gt;
+- id :Long
+- tipo  : enum
+- valor_total : double
+--
+/+ addProduto(produto: Produto) : void/
++ calcularValorTotal(): double
+/+ calcularValorFinal(): double/
+/+ valorIndividual(): double/
++ formatPedido(): String
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>245</x><y>490</y><w>112</w><h>70</h></coordinates><panel_attributes>&lt;&lt;abstract&gt;&gt;
+/Menu/
+--
+# menu: List&lt;Produto&gt;
+--
++ exibirMenu(): String
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>77</x><y>462</y><w>105</w><h>56</h></coordinates><panel_attributes>MenuFechado
+--
+# menu: List&lt;Produto&gt;
+--
++ initProdutos(): void
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>77</x><y>539</y><w>105</w><h>56</h></coordinates><panel_attributes>MenuFechado
+--
+# menu: List&lt;Produto&gt;
+--
++ initProdutos(): void
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>175</x><y>518</y><w>84</w><h>63</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>100;10;50;10;50;70;10;70</additional_attributes></element><element><id>UMLClass</id><coordinates><x>665</x><y>721</y><w>154</w><h>77</h></coordinates><panel_attributes>PedidoAberto
+--
+- TAXA : double
+--
++ calcularValorFinal(): double
++ valorIndividual(): double
++ addProduto(produto: Produto): void
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>833</x><y>721</y><w>154</w><h>77</h></coordinates><panel_attributes>PedidoFechado
+--
+- TAXA : double
+- PRECO_FIXO : double
+--
++ calcularValorFinal(): double
++ addProduto(produto: Produto): void
++ valorIndividual(): double
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>378</x><y>539</y><w>392</w><h>119</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m1=n..1
+</panel_attributes><additional_attributes>540;10;260;10;260;150;10;150</additional_attributes></element><element><id>Relation</id><coordinates><x>294</x><y>553</y><w>35</w><h>70</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1=1..n
+</panel_attributes><additional_attributes>10;10;10;80</additional_attributes></element><element><id>Relation</id><coordinates><x>819</x><y>455</y><w>35</w><h>84</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m1=1..1
+</panel_attributes><additional_attributes>10;10;10;100</additional_attributes></element><element><id>Relation</id><coordinates><x>966</x><y>315</y><w>98</w><h>35</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1=n..1
+</panel_attributes><additional_attributes>10;20;120;20</additional_attributes></element><element><id>Relation</id><coordinates><x>819</x><y>203</y><w>35</w><h>77</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m1=1..1
+</panel_attributes><additional_attributes>10;90;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1050</x><y>294</y><w>126</w><h>84</h></coordinates><panel_attributes>Cliente 
+--
+    - nome: String
+    - id: Long
+--
+    + Cliente(nome: String)
+    +public equals() : boolean 
+    +public hashCode() : int</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>427</x><y>168</y><w>308</w><h>28</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1=1..n
+m2=1..n</panel_attributes><additional_attributes>10;10;420;10</additional_attributes></element><element><id>Relation</id><coordinates><x>175</x><y>476</y><w>49</w><h>63</h></coordinates><panel_attributes>lt=-</panel_attributes><additional_attributes>50;70;50;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>742</x><y>658</y><w>98</w><h>77</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>120;10;120;50;10;50;10;90</additional_attributes></element><element><id>Relation</id><coordinates><x>819</x><y>686</y><w>98</w><h>49</h></coordinates><panel_attributes>lt=-</panel_attributes><additional_attributes>10;10;120;10;120;50</additional_attributes></element><element><id>Relation</id><coordinates><x>427</x><y>322</y><w>259</w><h>35</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m1=1..n
+</panel_attributes><additional_attributes>10;20;350;20</additional_attributes></element></diagram>
