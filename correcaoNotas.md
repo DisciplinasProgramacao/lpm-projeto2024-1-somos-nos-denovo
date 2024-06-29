@@ -74,3 +74,21 @@ Requisição não pode ter "get pedidos". não insere produto
 Ainda sem Spring / controllers
 
 Main - melhorou. Menu fechado x aberto (OCP/LSP)
+
+## Sprint 4 - Apresentação em 26/06
+  - Nota de grupo 6/6 pontos
+	- Modelo atualizado
+	- Apresentação
+	
+  - Nota individual 11,2/14 pontos
+    - Contribuições na última sprint
+
+### Comentários
+- Modelo atualizado e ok
+- PedidoFechado não valida os itens inseridos.
+- Exceção muito básica e provavelmente em lugar errado (requisicaoInfo)
+- Tratamento de exceções no main.
+- confusão de model/controller em alguns momentos(p.ex, restaurante chamando repositório de mesas; criarAberto e criarFechado com código igual, atualizar sem info específica)
+
+
+	
